@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{50FAC613-CC23-493B-AEF8-77277D5B3F3C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ServiceStack.Documentation</RootNamespace>
+    <AssemblyName>ServiceStack.Documentation</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ServiceStack, Version=4.0.56.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.4.0.56\lib\net40\ServiceStack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.0.56.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Client.4.0.56\lib\net40\ServiceStack.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Common, Version=4.0.56.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.4.0.56\lib\net40\ServiceStack.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Interfaces.4.0.56\lib\portable-wp80+sl5+net40+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.0.56.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.0.56\lib\net40\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractApiSpec\ApiDtoSpec.cs" />
+    <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
+    <Compile Include="Services\ApiSpecService.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Settings\ApiSpecConfig.cs" />
+    <Compile Include="ApiSpecFeature.cs" />
+    <Compile Include="AbstractApiSpec\RequestDtoSpec.cs" />
+    <Compile Include="AbstractApiSpec\IApiResource.cs" />
+    <Compile Include="AbstractApiSpec\IFluentInterface.cs" />
+    <Compile Include="AbstractApiSpec\IProperty.cs" />
+    <Compile Include="AbstractApiSpec\IPropertyMetadata.cs" />
+    <Compile Include="AbstractApiSpec\PropertyMetadata.cs" />
+    <Compile Include="Settings\DocumenterSettingsScope.cs" />
+    <Compile Include="Enrichers\AbstractClassEnricher.cs" />
+    <Compile Include="Enrichers\Infrastructure\ResourceEnricherManager.cs" />
+    <Compile Include="Enrichers\Infrastructure\EnricherCoordinator.cs" />
+    <Compile Include="Enrichers\Infrastructure\ResponseEnricherManager.cs" />
+    <Compile Include="Enrichers\Interfaces\IPropertyEnricher.cs" />
+    <Compile Include="Enrichers\Interfaces\IResourceEnricher.cs" />
+    <Compile Include="Enrichers\Interfaces\IResponseEnricher.cs" />
+    <Compile Include="Settings\EnrichmentStrategy.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\GetValueExtensions.cs" />
+    <Compile Include="Enrichers\Interfaces\IEnrich.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="ApiDocumentationGenerator.cs" />
+    <Compile Include="Enrichers\Infrastructure\PropertyEnricherManager.cs" />
+    <Compile Include="Enrichers\ReflectionEnricher.cs" />
+    <Compile Include="Enrichers\Interfaces\IApiResourceEnricher.cs" />
+    <Compile Include="IApiDocumentationGenerator.cs" />
+    <Compile Include="Validators\ApiContactValidator.cs" />
+    <Compile Include="Validators\ApiSpecConfigValidator.cs" />
+    <Compile Include="XmlDocumentation\IXmlDocumentationLookup.cs" />
+    <Compile Include="XmlDocumentation\IXmlDocumentationReader.cs" />
+    <Compile Include="XmlDocumentation\MemberInfoExtensions.cs" />
+    <Compile Include="XmlDocumentation\XmlDocumentationReader.cs" />
+    <Compile Include="XmlDocumentation\XmlDocumentationLookup.cs" />
+    <Compile Include="Enrichers\XmlEnricher.cs" />
+    <Compile Include="Models\ApiDocumentation.cs" />
+    <Compile Include="XmlDocumentation\XmlDocumentation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
