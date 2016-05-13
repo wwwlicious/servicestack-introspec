@@ -28,7 +28,7 @@
         public IApiDocumentationGenerator DocumentationGenerator { get; private set; }
         public Func<IEnumerable<IApiResourceEnricher>> Enrichers { get; private set; }
 
-        public Predicate<KeyValuePair<Type, Operation>> OperationsMapFilter { get; private set; } = kvp =>
+        public Func<KeyValuePair<Type, Operation>, bool> OperationsMapFilter { get; private set; } = kvp =>
             kvp.Value.RestrictTo == null &&
             !kvp.Key.ExcludesFeature(Feature.Metadata) &&
             !kvp.Key.ExcludesFeature(Feature.ServiceDiscovery);
@@ -78,7 +78,7 @@
         /// </summary>
         /// <param name="filter">Predicate to use to filter operations map</param>
         /// <returns>ApiSpecFeature object</returns>
-        public ApiSpecFeature WithOperationsFilter(Predicate<KeyValuePair<Type, Operation>> filter)
+        public ApiSpecFeature WithOperationsFilter(Func<KeyValuePair<Type, Operation>, bool> filter)
         {
             OperationsMapFilter = filter;
             return this;

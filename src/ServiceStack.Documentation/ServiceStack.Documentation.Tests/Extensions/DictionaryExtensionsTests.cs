@@ -13,7 +13,7 @@
         public void FilterValues_CallsProvidedFilter()
         {
             var predicateCalled = false;
-            Predicate<KeyValuePair<int, int>> filter = kvp => predicateCalled = true;
+            Func<KeyValuePair<int, int>, bool> filter = kvp => predicateCalled = true;
 
             var dictionary = new Dictionary<int, int> { { 1, 1 } };
             dictionary.FilterValues(filter).ToList();

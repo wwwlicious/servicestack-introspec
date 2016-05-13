@@ -15,11 +15,11 @@
         /// <param name="filter">Predicate to use to filter dictionary</param>
         /// <returns>Filtered values, or empty list of dictionary null</returns>
         public static IEnumerable<TValue> FilterValues<TKey, TValue>(this Dictionary<TKey, TValue> dictionary,
-            Predicate<KeyValuePair<TKey, TValue>> filter)
+            Func<KeyValuePair<TKey, TValue>, bool> filter)
         {
             return dictionary == null
                 ? Enumerable.Empty<TValue>()
-                : dictionary.Where(o => filter(o)).Select(o => o.Value);
+                : dictionary.Where(filter).Select(o => o.Value);
         }
 
         /// <summary>

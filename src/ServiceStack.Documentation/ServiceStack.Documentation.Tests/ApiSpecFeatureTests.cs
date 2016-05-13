@@ -19,7 +19,7 @@
         private readonly ApiSpecFeature feature;
         private readonly ApiSpecConfig apiSpecConfig;
         private readonly IApiDocumentationGenerator generator;
-        private readonly Predicate<KeyValuePair<Type, Operation>> filter;
+        private readonly Func<KeyValuePair<Type, Operation>, bool> filter;
         private ServiceStackHost appHost;
 
         public ApiSpecFeatureTests()
@@ -30,7 +30,8 @@
                 Description = "great api"
             };
             generator = A.Fake<IApiDocumentationGenerator>();
-            filter = A.Fake<Predicate<KeyValuePair<Type, Operation>>>();
+            
+            filter = A.Fake<Func<KeyValuePair<Type, Operation>, bool>>();
 
             feature = new ApiSpecFeature(apiSpecConfig)
                 .WithGenerator(generator)
