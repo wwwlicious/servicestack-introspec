@@ -69,7 +69,7 @@ _TODO: Full details of where each property comes from_
 ### AbstractClassEnricher
 This uses an approach similar to [FluentValidation](https://github.com/ServiceStack/ServiceStack/wiki/Validation#fluentvalidation-for-request-dtos). 
 
-The enricher scans for implementations of `RequestDtoSpec<T>` (for RequestDTOs) `ApiDtoSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
+The enricher scans for implementations of `RequestSpec<T>` (for RequestDTOs) `TypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
 
 ```charp
 public class DemoRequestDocumenter : RequestDtoSpec<DemoRequest>
@@ -99,7 +99,7 @@ public class DemoRequestDocumenter : RequestDtoSpec<DemoRequest>
             .With(p => p.IsRequired, true)
             .With(p => p.Description, "This is a description of name");
 
-        For(t => t.Optional)
+        For(t => t.Age)
             .With(p => p.Title, "This is an optional thing.")
             .With(p => p.IsRequired, false);
     }

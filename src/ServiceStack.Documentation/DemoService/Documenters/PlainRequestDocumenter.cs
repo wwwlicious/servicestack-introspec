@@ -4,7 +4,7 @@ namespace DemoService.Documenters
     using ServiceStack.Documentation.AbstractApiSpec;
     using ServiceStack.Documentation.Models;
 
-    public class PlainRequestDocumenter : RequestDtoSpec<PlainRequest>
+    public class PlainRequestDocumenter : RequestSpec<PlainRequest>
     {
         public PlainRequestDocumenter()
         {
@@ -45,7 +45,7 @@ namespace DemoService.Documenters
         }
     }
 
-    public class GlassesRequestDocumenter : RequestDtoSpec<GlassesRequest>
+    public class GlassesRequestDocumenter : RequestSpec<GlassesRequest>
     {
         public GlassesRequestDocumenter()
         {
@@ -57,7 +57,7 @@ namespace DemoService.Documenters
         }
     }
 
-    public class DemoResponseDocumenter : ApiDtoSpec<DemoResponse>
+    public class DemoResponseDocumenter : TypeSpec<DemoResponse>
     {
         public DemoResponseDocumenter()
         {

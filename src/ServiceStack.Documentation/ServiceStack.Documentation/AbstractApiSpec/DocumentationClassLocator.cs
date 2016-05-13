@@ -30,7 +30,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
 
         private static IEnumerable<Type> FindAllTypes()
         {
-            var target = typeof (ApiDtoSpec<>);
+            var target = typeof (TypeSpec<>);
 
             var foundTypes = from t in DocumenterSettings.Assemblies.SelectMany(a => a.GetTypes())
                 let h = t.GetInheritanceHierarchy().Where(b => b.IsGenericType)

@@ -4,7 +4,7 @@
     using Models;
 
     // NOTE Is the new() constraint really required?
-    public abstract class RequestDtoSpec<T> : ApiDtoSpec<T>, IApiRequest
+    public abstract class RequestSpec<T> : TypeSpec<T>, IApiRequest
         where T : class, new()
     {
         public List<string> Verbs { get; }
@@ -17,7 +17,7 @@
         protected void AddTags(params string[] tags) => Tags.AddRange(tags);
         protected void AddStatusCodes(params StatusCode[] statusCodes) => StatusCodes.AddRange(statusCodes);
 
-        protected RequestDtoSpec()
+        protected RequestSpec()
         {
             Verbs = new List<string>();
             StatusCodes = new List<StatusCode>();

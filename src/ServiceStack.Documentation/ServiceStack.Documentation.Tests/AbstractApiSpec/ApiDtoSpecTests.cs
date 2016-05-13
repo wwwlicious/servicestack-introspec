@@ -36,7 +36,7 @@
         }
     }
 
-    public class Documenter : ApiDtoSpec<ToDocument>
+    public class Documenter : TypeSpec<ToDocument>
     {
         public Documenter() {}
         public Documenter(bool addPropertyValue)

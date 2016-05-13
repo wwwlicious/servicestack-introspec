@@ -61,13 +61,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractApiSpec\ApiDtoSpec.cs" />
+    <Compile Include="AbstractApiSpec\TypeSpec.cs" />
     <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
     <Compile Include="Services\ApiSpecService.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Settings\ApiSpecConfig.cs" />
     <Compile Include="ApiSpecFeature.cs" />
-    <Compile Include="AbstractApiSpec\RequestDtoSpec.cs" />
+    <Compile Include="AbstractApiSpec\RequestSpec.cs" />
     <Compile Include="AbstractApiSpec\IApiResource.cs" />
     <Compile Include="AbstractApiSpec\IFluentInterface.cs" />
     <Compile Include="AbstractApiSpec\IProperty.cs" />

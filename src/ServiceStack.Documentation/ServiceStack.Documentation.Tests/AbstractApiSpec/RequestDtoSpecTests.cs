@@ -39,7 +39,7 @@
         }
     }
 
-    internal class RequestDocumenter : RequestDtoSpec<ToDocument>
+    internal class RequestDocumenter : RequestSpec<ToDocument>
     {
         internal void SetVerbs(params string[] verbs) => AddVerbs(verbs);
         internal void SetTags(params string[] tags) => AddTags(tags);

@@ -45,6 +45,6 @@ namespace ServiceStack.Documentation.Tests.AbstractApiSpec
     public class AnotherClassToDocument { }
     public class NotDocumented { }
 
-    public class DirectDescendant : ApiDtoSpec<ClassToDocument> { }
-    public class DeeperDescendant : RequestDtoSpec<AnotherClassToDocument> { }
+    public class DirectDescendant : TypeSpec<ClassToDocument> { }
+    public class DeeperDescendant : RequestSpec<AnotherClassToDocument> { }
 }

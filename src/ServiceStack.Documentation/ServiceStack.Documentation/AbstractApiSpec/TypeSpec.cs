@@ -6,7 +6,7 @@
     using System.Reflection;
     using Extensions;
 
-    public abstract class ApiDtoSpec<T> : IApiResource
+    public abstract class TypeSpec<T> : IApiResource
         where T : class, new()
     {
         public string Title { get; protected set; }
@@ -15,7 +15,7 @@
 
         private readonly Dictionary<MemberInfo, IProperty> parameterLookup;
 
-        protected ApiDtoSpec()
+        protected TypeSpec()
         {
             parameterLookup = new Dictionary<MemberInfo, IProperty>();
         }
