@@ -10,12 +10,12 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     public class EnricherCoordinator : IApiResourceEnricher
     {
         private readonly ResourceEnricherManager resourceEnricherManager;
-        private readonly ResponseEnricherManager responseEnricherManager;
+        private readonly RequestEnricherManager requestEnricherManager;
 
         public EnricherCoordinator(IEnrich enricher)
         {
             resourceEnricherManager = new ResourceEnricherManager(enricher as IResourceEnricher, enricher as IPropertyEnricher);
-            responseEnricherManager = new ResponseEnricherManager(enricher as IResponseEnricher, resourceEnricherManager.EnrichResource);
+            requestEnricherManager = new RequestEnricherManager(enricher as IRequestEnricher, resourceEnricherManager.EnrichResource);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
         public void Enrich(ApiResourceDocumentation resourceSpecification, Operation operation)
         {
             resourceEnricherManager.EnrichResource(resourceSpecification, operation);
-            responseEnricherManager.EnrichResponse(resourceSpecification, operation);
+            requestEnricherManager.EnrichRequest(resourceSpecification, operation);
         }
     }
 }

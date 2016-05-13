@@ -12,7 +12,7 @@
 
     public class ReflectionEnricherTests
     {
-        public ReflectionEnricher enricher = new ReflectionEnricher();
+        private ReflectionEnricher enricher = new ReflectionEnricher();
 
         private static PropertyInfo noPropertyInfo => typeof(SomeAttributes).GetProperty("NoAttr");
         private static PropertyInfo propertyInfo => typeof (SomeAttributes).GetProperty("Thing");
@@ -185,12 +185,40 @@
         [Fact]
         public void GetIsRequired_PI_Returns_ApiAttributeName()
             => enricher.GetIsRequired(propertyInfo).Should().BeTrue();
+
+        [Fact]
+        public void GetRelativePath_ReturnsPath_IfRouteAttribute()
+        {
+            var operation = new Operation { RequestType = typeof(AllAttributes) };
+            enricher.GetRelativePath(operation).Should().Be("/here");
+        }
+
+        [Fact]
+        public void GetRelativePath_ReturnsOneWayPath_IfNoRouteAttribute_AndOneWay()
+        {
+            var operation = new Operation { RequestType = typeof(SomeAttributes) };
+            enricher.GetRelativePath(operation).Should().Be("/json/oneway/SomeAttributes");
+        }
+
+        [Fact]
+        public void GetRelativePath_ReturnsReplyPath_IfNoRouteAttribute_AndNotOneWay()
+        {
+            var operation = new Operation { RequestType = typeof(SomeAttributes), ResponseType = typeof(OneAttribute) };
+            enricher.GetRelativePath(operation).Should().Be("/json/reply/SomeAttributes");
+        }
+
+        [Fact]
+        public void GetRelativePath_ReturnsOneWayPath_IfRouteAttributeWithEmptyPath_AndOneWay()
+        {
+            var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
+            enricher.GetRelativePath(operation).Should().Be("/json/oneway/EmptyRouteAttribute");
+        }
     }
 
     [Api("ApiDescription")]
     [Description("ComponentModelDescription")]
     [DataAnnotations.Description("ServiceStackDescription")]
-    [Route("/", Notes = "These are some notes")]
+    [Route("/here", Notes = "These are some notes")]
     [ApiResponse(201, "Thing created")]
     [ApiResponse(503, "Not available")]
     public class AllAttributes
@@ -215,4 +243,7 @@
 
         public string Response() => "travel is dangerous";
     }
+
+    [Route("")]
+    public class EmptyRouteAttribute { }
 }

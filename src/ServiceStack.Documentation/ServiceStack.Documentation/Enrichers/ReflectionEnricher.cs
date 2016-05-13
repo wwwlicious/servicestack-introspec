@@ -7,11 +7,14 @@
     using System.Reflection;
     using Host;
     using Interfaces;
+    using Logging;
     using Models;
     using Settings;
 
-    public class ReflectionEnricher : IResourceEnricher, IResponseEnricher, IPropertyEnricher
+    public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher
     {
+        private readonly ILog log = LogManager.GetLogger(typeof(ReflectionEnricher));
+
         // ConcurrentDictionary?
         private readonly Dictionary<string, ApiMemberAttribute> apiMemberLookup;
 
@@ -42,11 +45,9 @@
 
             // TODO Only instantiate if needed?
             var list = new List<StatusCode>(responseAttributes.Length + 1);
-            if (operation.IsOneWay || HasOneWayMethod(operation.RequestType, operation.ServiceType))
-            {
+            if (HasOneWayMethod(operation))
                 // add a 204
                 list.Add((StatusCode) HttpStatusCode.NoContent);
-            }
 
             if (responseAttributes.Length > 0)
             {
@@ -61,6 +62,20 @@
             return list.ToArray();
         }
 
+        public string GetRelativePath(Operation operation)
+        {
+            // TODO Handle multiple routes for same DTO. Anything accessing [Route] will be affected
+            var requestType = operation.RequestType;
+
+            // NOTE Routes aren't populated until service call. Get directly from [Route]
+            var routeFromAttribute = requestType.FirstAttribute<RouteAttribute>()?.Path;
+            if (!string.IsNullOrWhiteSpace(routeFromAttribute))
+                return routeFromAttribute;
+
+            // If no route then make one up
+            return operation.IsOneWay ? ToOneWayUrlOnly(requestType) : ToReplyUrlOnly(requestType);
+        } 
+            
         public string GetTitle(PropertyInfo pi) => GetApiMemberAttribute(pi)?.Name;
         public string GetDescription(PropertyInfo pi) => GetApiMemberAttribute(pi)?.Description;
         public string GetParamType(PropertyInfo pi) => GetApiMemberAttribute(pi)?.ParameterType;
@@ -71,13 +86,15 @@
         public string[] GetExternalLinks(PropertyInfo pi) => null;
         public string GetContraints(PropertyInfo pi) => null;
 
-        private static bool HasOneWayMethod(Type requestType, Type serviceType)
+        private static bool HasOneWayMethod(Operation operation)
         {
-            // NOTE This will need investivate to ensure it's not nonsense
-            return serviceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            if (operation.IsOneWay)
+                return true;
+
+            return operation.ServiceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Any(m =>
                     m.ReturnType == typeof (void)
-                    && m.GetParameters().Any(p => p.ParameterType == requestType));
+                    && m.GetParameters().Any(p => p.ParameterType == operation.RequestType));
         }
 
         private ApiMemberAttribute GetApiMemberAttribute(PropertyInfo pi)
@@ -102,5 +119,14 @@
         {
             return $"{pi.DeclaringType.FullName}.{pi.Name}";
         }
+
+        // TODO Find a better way of getting routes. Fallback routes. Changed predefined etc
+        // Based on method of same name from ServiceStack UrlExtensions
+        private string ToOneWayUrlOnly(Type dtoType, string format = "json")
+            => $"/{format}/oneway/{UrlExtensions.GetOperationName(dtoType)}";
+
+        // Based on method of same name from ServiceStack UrlExtensions
+        private string ToReplyUrlOnly(Type dtoType, string format = "json")
+            => $"/{format}/reply/{UrlExtensions.GetOperationName(dtoType)}";
     }
 }

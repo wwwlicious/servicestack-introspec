@@ -9,7 +9,7 @@
     using Interfaces;
     using Models;
 
-    public class AbstractClassEnricher : IResourceEnricher, IResponseEnricher, IPropertyEnricher
+    public class AbstractClassEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher
     {
         private readonly Dictionary<Type, IApiResource> lookup;
 
@@ -33,6 +33,7 @@
         public string GetDescription(PropertyInfo pi)
             => GetPropertyValue(pi, property => property.Description);
 
+        public string GetRelativePath(Operation operation) => null;
         public string GetNotes(PropertyInfo pi) => null;
         public bool? GetAllowMultiple(PropertyInfo pi) => null;
         public string[] GetExternalLinks(PropertyInfo pi) => null;

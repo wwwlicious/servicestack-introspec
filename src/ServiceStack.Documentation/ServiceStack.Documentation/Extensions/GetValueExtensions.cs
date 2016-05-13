@@ -9,7 +9,7 @@ namespace ServiceStack.Documentation.Extensions
     {
         public static string GetIfNullOrEmpty(this string value, Func<string> getValue)
         {
-            return value.IsNullOrEmpty() ? getValue() : value;
+            return string.IsNullOrEmpty(value) ? getValue() : value;
         }
 
         public static T GetIfNull<T>(this T value, Func<T> getValue)

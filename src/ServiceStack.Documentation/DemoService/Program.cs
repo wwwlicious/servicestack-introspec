@@ -89,7 +89,7 @@
     [ApiResponse(HttpStatusCode.OK, "Everything is hunky dory")]
     [ApiResponse(HttpStatusCode.InternalServerError, "Something went wrong")]
     // thrown exceptions. documentation.
-    [Route("/request/{Name}", "GET,POST", Summary = "Route summary", Notes = "Notes from route attr")]
+    [Route("/request", "GET,POST", Summary = "Route summary", Notes = "Notes from route attr")]
     public class DemoRequest : IReturn<DemoResponse>
     {
         [ApiMember(Name = "Name", Description = "This is a description of name", ParameterType = "body", DataType = "string", IsRequired = true)]

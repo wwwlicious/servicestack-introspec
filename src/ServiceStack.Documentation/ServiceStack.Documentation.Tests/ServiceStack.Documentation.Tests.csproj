@@ -105,7 +105,7 @@
     <Compile Include="ApiSpecFeatureTests.cs" />
     <Compile Include="Enrichers\Infrastructure\PropertyEnricherManagerTests.cs" />
     <Compile Include="Enrichers\Infrastructure\ResourceEnricherManagerTests.cs" />
-    <Compile Include="Enrichers\Infrastructure\ResponseEnricherManagerTests.cs" />
+    <Compile Include="Enrichers\Infrastructure\RequestEnricherManagerTests.cs" />
     <Compile Include="Enrichers\ReflectionEnricherTests.cs" />
     <Compile Include="Enrichers\XmlEnricherTests.cs" />
     <Compile Include="Extensions\CollectionExtensionsTests.cs" />

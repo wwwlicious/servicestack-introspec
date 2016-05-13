@@ -6,9 +6,10 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     /// <summary>
     /// Methods for populating a documentation response
     /// </summary>
-    public interface IResponseEnricher : IEnrich
+    public interface IRequestEnricher : IEnrich
     {
         string[] GetVerbs(Operation operation);
         StatusCode[] GetStatusCodes(Operation operation);
+        string GetRelativePath(Operation operation);
     }
 }

@@ -10,14 +10,14 @@
     /// <summary>
     /// Manages default logic for enriching response objects
     /// </summary>
-    public class ResponseEnricherManager
+    public class RequestEnricherManager
     {
-        private readonly IResponseEnricher responseEnricher;
+        private readonly IRequestEnricher requestEnricher;
         private readonly Action<IApiResourceType, Operation> enrichResource;
 
-        public ResponseEnricherManager(IResponseEnricher responseEnricher, Action<IApiResourceType, Operation> enrichResource)
+        public RequestEnricherManager(IRequestEnricher requestEnricher, Action<IApiResourceType, Operation> enrichResource)
         {
-            this.responseEnricher = responseEnricher;
+            this.requestEnricher = requestEnricher;
             this.enrichResource = enrichResource;
         }
 
@@ -26,20 +26,23 @@
         /// </summary>
         /// <param name="response">The object to be enriched</param>
         /// <param name="operation">Details of operation to use for enrichment</param>
-        public void EnrichResponse(IApiResponseStatus response, Operation operation)
+        public void EnrichRequest(IApiResponseStatus response, Operation operation)
         {
             bool unionCollections = DocumenterSettings.CollectionStrategy == EnrichmentStrategy.Union;
 
-            if (responseEnricher != null)
+            if (requestEnricher != null)
             {
                 // The object that has ResponseStatus is built up from request object
                 response.Verbs = unionCollections
-                    ? response.Verbs.SafeUnion(() => responseEnricher.GetVerbs(operation))
-                    : response.Verbs.GetIfNullOrEmpty(() => responseEnricher.GetVerbs(operation));
+                    ? response.Verbs.SafeUnion(() => requestEnricher.GetVerbs(operation))
+                    : response.Verbs.GetIfNullOrEmpty(() => requestEnricher.GetVerbs(operation));
 
                 response.StatusCodes = unionCollections
-                    ? response.StatusCodes.SafeUnion(() => responseEnricher.GetStatusCodes(operation))
-                    : response.StatusCodes.GetIfNullOrEmpty(() => responseEnricher.GetStatusCodes(operation));
+                    ? response.StatusCodes.SafeUnion(() => requestEnricher.GetStatusCodes(operation))
+                    : response.StatusCodes.GetIfNullOrEmpty(() => requestEnricher.GetStatusCodes(operation));
+
+                response.RelativePath =
+                    response.RelativePath.GetIfNullOrEmpty(() => requestEnricher.GetRelativePath(operation));
             }
 
             response.ReturnType = response.ReturnType.GetIfNull(() => new ApiResourceType());

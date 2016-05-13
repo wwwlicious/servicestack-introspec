@@ -77,10 +77,10 @@
     <Compile Include="Enrichers\AbstractClassEnricher.cs" />
     <Compile Include="Enrichers\Infrastructure\ResourceEnricherManager.cs" />
     <Compile Include="Enrichers\Infrastructure\EnricherCoordinator.cs" />
-    <Compile Include="Enrichers\Infrastructure\ResponseEnricherManager.cs" />
+    <Compile Include="Enrichers\Infrastructure\RequestEnricherManager.cs" />
     <Compile Include="Enrichers\Interfaces\IPropertyEnricher.cs" />
     <Compile Include="Enrichers\Interfaces\IResourceEnricher.cs" />
-    <Compile Include="Enrichers\Interfaces\IResponseEnricher.cs" />
+    <Compile Include="Enrichers\Interfaces\IRequestEnricher.cs" />
     <Compile Include="Settings\EnrichmentStrategy.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\GetValueExtensions.cs" />
