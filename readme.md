@@ -127,38 +127,36 @@ This uses the standard C# Xml Documentation Comments to generate documentation.
 For this to work the XML documentation file must be generated for the service. To do so RMC project -> Properties -> Build -> check "XML documentation file" box, _insert screenshot_.
 
 ```csharp
-
 /// <summary>
-/// 
+/// Demo Request Description
 /// </summary>
-[Api("Demo Request Description")]
-[ApiResponse(HttpStatusCode.OK, "Everything is hunky dory")]
-[ApiResponse(HttpStatusCode.InternalServerError, "Something went wrong")]
-[Route("/request/{Name}", "GET,POST", Summary = "Route summary", Notes = "Notes about request")]
+/// <remarks>Notes about request</remarks>
 public class DemoRequest : IReturn<DemoResponse>
 {
-    [ApiMember(Name = "Name parameter", Description = "This is a description of name", ParameterType = "body", DataType = "string", IsRequired = true)]
-    [ApiAllowableValues("Name", typeof(NameEnum))]
+	/// <summary>Name parameter</summary>
+	/// <remarks>This is a description of name</remarks>
     public string Name { get; set; }
 
-    [IgnoreDataMember]
     public string Ignored { get; set; }
 
-    [ApiMember(ExcludeInSchema = true)]
+    /// <summary>This is an optional thing.</summary>
     public int Optional { get; set; }
 }
 
-[Api("Demo Response Description")]
+/// <summary>
+/// Demo Response Description
+/// </summary>
 public class DemoResponse
 {
-	[ApiMember(Name="Response Message", Description = "The returned message")]
+	/// <summary>Response Message</summary>
+	/// <remarks>The returned message</remarks>
 	public string Message { get; set; }
 }
 ```
 
 The XML documentation comments are for general documentation about classes and not specifically for documentating APIs and DTOs but if need be these values can be used.
 
-_TODO: Full details of where each property comes from_
+_TODO: Full details of where each property comes from. Fuller example_
 
 ## Customising
 The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` objects that contain the requests to be documented. This filter can be customised by providing a predicate to the plugin using the `ApiSpecFeature.WithOperationsFilter()` method. The default filter excludes any types that have `[Exclude(Feature.Metadata]` or `[Exclude(Feature.ServiceDiscovery]` or any restrictions.
