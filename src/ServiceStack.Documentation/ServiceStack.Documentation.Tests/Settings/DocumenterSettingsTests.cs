@@ -4,121 +4,85 @@
 
 namespace ServiceStack.Documentation.Tests.Settings
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using Documentation.Enrichers.Interfaces;
-    using Documentation.Models;
     using Documentation.Settings;
-    using FakeItEasy;
     using FluentAssertions;
     using Xunit;
 
     public class DocumenterSettingsTests
     {
         [Fact]
-        public void Test()
+        public void AnyVerbs_HasDefault()
         {
-            /*var zz = DocumenterSettings.GetAnyVerbs();
-            using (var x = DocumenterSettings.BeginScope())
-            {
-                var p = x.GetAnyVerbs();
-                x.WithAnyVerbs(new[] { "PATCH" });
-                var xx = x.GetAnyVerbs();
-                var pp = DocumenterSettings.GetAnyVerbs();
-            }
-            var zsdz = DocumenterSettings.GetAnyVerbs();*/
-
-        }
-        /*private readonly ApiSpecConfig apiSpecConfig;
-        private readonly DocumenterSettingsScope documenter;
-
-        public DocumenterSettingsTests()
-        {
-            apiSpecConfig = new ApiSpecConfig
-            {
-                Contact = new ApiContact { Email = "ronald.macdonald@macdonalds.hq", Name = "ronnie mcd" },
-                Description = "great api"
-            };
-
-            documenter = new DocumenterSettingsScope(apiSpecConfig);
+            var verbs = new[] { "GET", "POST" };
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.AnyVerbs.Should().BeEquivalentTo(verbs);
         }
 
         [Fact]
-        public void Ctor_ThrowsIfConfigNull()
+        public void With_Verbs_SetsVerbs()
         {
-            Action action = () => new DocumenterSettingsScope(null);
-            action.ShouldThrow<ArgumentNullException>();
+            var verbs = new[] { "GET", "PUT" };
+            var settings = DocumenterSettings.With(verbs: verbs);
+            settings.AnyVerbs.Should().BeEquivalentTo(verbs);
         }
 
         [Fact]
-        public void Ctor_ThrowsIfConfigInvalid()
+        public void BeginScope_SetsVerbsForScope()
         {
-            Action action = () => new DocumenterSettingsScope(new ApiSpecConfig());
-            action.ShouldThrow<ArgumentException>();
+            var verbs = new[] { "DELETE", "OPTIONS" };
+            DocumenterSettings.AnyVerbs = verbs;
+
+            var scopeVerbs = new[] { "POST", "PATCH" };
+            using (var settings = DocumenterSettings.With(scopeVerbs))
+                settings.AnyVerbs.Should().BeEquivalentTo(scopeVerbs);
+
+            DocumenterSettings.AnyVerbs.Should().BeEquivalentTo(verbs);
         }
 
         [Fact]
-        public void GetSpecConfig_ReturnsConfig_FromConstructur()
+        public void With_Assemblies_SetsAssemblies()
         {
-            var actual = documenter.GetSpecConfig();
-            actual.ShouldBeEquivalentTo(apiSpecConfig);
+            var assemblies = new[] { typeof(DocumenterSettingsTests).Assembly };
+            var settings = DocumenterSettings.With(assemblies: assemblies);
+            settings.Assemblies.Should().BeEquivalentTo(assemblies);
         }
 
         [Fact]
-        public void GetAssemblies_ReturnsEntryAssembly_IfNotSet()
+        public void BeginScope_SetsAssembliesForScope()
         {
-            var assemblies = documenter.GetAssemblies();
-            assemblies.Count().Should().Be(1);
+            var assemblies = new[] { typeof(DocumenterSettings).Assembly };
+            DocumenterSettings.Assemblies = assemblies;
+
+            var scopeAssemblies = new[] { typeof(DocumenterSettingsTests).Assembly };
+            using (var settings = DocumenterSettings.With(assemblies: scopeAssemblies))
+                settings.Assemblies.Should().BeEquivalentTo(scopeAssemblies);
+
+            DocumenterSettings.Assemblies.Should().BeEquivalentTo(assemblies);
         }
 
         [Fact]
-        public void GetAssemblies_ReturnsAssemblies_SetViaWithDocumenterAssemblies()
+        public void CollectionStrategy_HasDefault()
         {
-            var assemblies = new[] { Assembly.GetAssembly(GetType()) };
-
-            var actual = documenter.WithDocumenterAssemblies(assemblies).GetAssemblies();
-            actual.ShouldBeEquivalentTo(assemblies);
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.CollectionStrategy.Should().Be(EnrichmentStrategy.Union);
         }
 
         [Fact]
-        public void GetAssemblies_ReturnsGetAndPost_IfNotSet()
+        public void With_CollectionStrategy_SetsStrategy()
         {
-            var expected = new[] { "GET", "POST" };
-            var actual = documenter.GetAnyVerbs();
-            actual.ShouldBeEquivalentTo(expected);
+            var settings = DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty);
+            settings.CollectionStrategy.Should().Be(EnrichmentStrategy.SetIfEmpty);
         }
 
         [Fact]
-        public void GetAssemblies_ReturnsVerbs_SetViaWithAnyVerbs()
+        public void BeginScope_SetsCollectionStrategyForScope()
         {
-            var expected = new[] { "GET", "POST", "PUT", "PATCH" };
+            DocumenterSettings.CollectionStrategy = EnrichmentStrategy.SetIfEmpty;
 
-            var actual = documenter.WithAnyVerbs(expected).GetAnyVerbs();
-            actual.ShouldBeEquivalentTo(expected);
+            using (var settings = DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
+                settings.CollectionStrategy.Should().Be(EnrichmentStrategy.Union);
+
+            DocumenterSettings.CollectionStrategy.Should().Be(EnrichmentStrategy.SetIfEmpty);
         }
-
-        [Fact]
-        public void GetCollectionStrategy_ReturnsUnion_IfNotSet()
-        {
-            var actual = documenter.GetCollectionStrategy();
-            actual.Should().Be(EnrichmentStrategy.Union);
-        }
-
-        [Fact]
-        public void GetCollectionStrategy_ReturnsStrategy_SetViaWithAnyVerbs()
-        {
-            var actual = documenter.WithCollectionStrategy(EnrichmentStrategy.SetIfEmpty).GetCollectionStrategy();
-            actual.Should().Be(EnrichmentStrategy.SetIfEmpty);
-        }
-
-        [Fact]
-        public void GetEnrichers_ReturnsEnrichers_SetViaWithEnrichers()
-        {
-            var expected = new[] { A.Fake<IApiResourceEnricher>(), A.Fake<IApiResourceEnricher>() };
-        
-            var actual = documenter.WithEnrichers(expected).GetEnrichers();
-            actual.ShouldBeEquivalentTo(expected);
-        }*/
     }
 }
