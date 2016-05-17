@@ -9,6 +9,9 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     using System.Reflection;
     using FluentValidation.Internal;
 
+    /// <summary>
+    /// Represents data about a property of a type exposed via API 
+    /// </summary>
     public class PropertyMetadata : IPropertyMetadata
     {
         public string Title { get; set; }

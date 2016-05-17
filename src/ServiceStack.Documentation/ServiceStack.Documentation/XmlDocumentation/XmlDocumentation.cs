@@ -79,7 +79,6 @@ namespace ServiceStack.Documentation.XmlDocumentation
         } 
     }
 
-    //[XmlType("exception")]
     public class XmlHasCref
     {
         /// <summary>
@@ -119,7 +118,6 @@ namespace ServiceStack.Documentation.XmlDocumentation
         public string Code { get; set; }
     }
 
-    //[XmlType("see")]
     public class See
     {
         [XmlAttribute("cref")]
@@ -184,7 +182,6 @@ namespace ServiceStack.Documentation.XmlDocumentation
         [XmlElement(ElementName = "paramref")]
         public XmlBase ParamRef { get; set; }
 
-        // TODO (DG) There could be multiple of these badboys
         [XmlElement(ElementName = "c")]
         public string[] RenderCode { get; set; }
 

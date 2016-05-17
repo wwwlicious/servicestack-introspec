@@ -8,6 +8,10 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     using Models;
 
     // NOTE Is the new() constraint really required?
+    /// <summary>
+    /// Documentation class for a request DTO, including Verbs, status codes etc
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class RequestSpec<T> : TypeSpec<T>, IApiRequest
         where T : class, new()
     {

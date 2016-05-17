@@ -16,12 +16,12 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     public class ResourceEnricherManager
     {
         private readonly IResourceEnricher resourceEnricher;
-        private readonly PropertyEnricherManager _propertyEnricherManager;
+        private readonly PropertyEnricherManager propertyEnricherManager;
 
         public ResourceEnricherManager(IResourceEnricher resourceEnricher, IPropertyEnricher propertyEnricher)
         {
             this.resourceEnricher = resourceEnricher;
-            _propertyEnricherManager = new PropertyEnricherManager(propertyEnricher, EnrichResource);
+            propertyEnricherManager = new PropertyEnricherManager(propertyEnricher, EnrichResource);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
                 resource.Notes = resource.Notes.GetIfNullOrEmpty(() => resourceEnricher.GetNotes(type));
             }
 
-            resource.Properties = _propertyEnricherManager.EnrichParameters(resource.Properties, type);
+            resource.Properties = propertyEnricherManager.EnrichParameters(resource.Properties, type);
         }
     }
 }
