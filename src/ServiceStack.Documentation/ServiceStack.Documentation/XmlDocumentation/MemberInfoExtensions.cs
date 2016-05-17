@@ -10,7 +10,6 @@ namespace ServiceStack.Documentation.XmlDocumentation
         private static readonly ILog log = LogManager.GetLogger(typeof(MemberInfoExtensions));
 
         // from http://www.brad-smith.info/blog/archives/220
-        // TODO Log error if generic
         public static string GetMemberElementName(this MemberInfo member)
         {
             member.ThrowIfNull(nameof(member));
