@@ -14,7 +14,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     /// Documentation class for default object exposed in API (nested type, return object etc)
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class TypeSpec<T> : IApiResource
+    public abstract class TypeSpec<T> : IApiResource, IApiPropertyResource
         where T : class, new()
     {
         public string Title { get; protected set; }

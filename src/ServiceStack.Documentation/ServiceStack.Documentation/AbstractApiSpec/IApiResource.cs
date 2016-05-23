@@ -13,8 +13,6 @@ namespace ServiceStack.Documentation.AbstractApiSpec
         string Title { get; }
         string Description { get; }
         string Notes { get; }
-
-        IProperty GetPropertySpec(PropertyInfo pi);
     }
 
     public interface IApiRequest : IApiResource
@@ -24,5 +22,10 @@ namespace ServiceStack.Documentation.AbstractApiSpec
 
         string Category { get; }
         List<string> Tags { get; }
+    }
+
+    public interface IApiPropertyResource
+    {
+        IProperty GetPropertySpec(PropertyInfo pi);
     }
 }

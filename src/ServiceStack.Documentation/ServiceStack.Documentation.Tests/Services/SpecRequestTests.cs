@@ -13,7 +13,9 @@ namespace ServiceStack.Documentation.Tests.Services
     {
         [Fact]
         public void HasExcludeAttribute()
-            => typeof (SpecRequest).FirstAttribute<ExcludeAttribute>().Feature.Should().Be(Feature.Metadata);
+            =>
+                typeof(SpecRequest).FirstAttribute<ExcludeAttribute>().Feature.Should().Be(Feature.Metadata |
+                                                                                           Feature.ServiceDiscovery);
 
         [Fact]
         public void HasRouteAttribute()

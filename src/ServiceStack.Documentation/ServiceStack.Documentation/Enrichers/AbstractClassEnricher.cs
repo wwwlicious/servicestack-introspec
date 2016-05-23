@@ -53,8 +53,12 @@ namespace ServiceStack.Documentation.Enrichers
             IApiResource spec;
             if (lookup.TryGetValue(pi.DeclaringType, out spec))
             {
-                var param = spec.GetPropertySpec(pi);
-                return getter(param);
+                var propertyResource = spec as IApiPropertyResource;
+                if (propertyResource != null)
+                {
+                    var param = propertyResource.GetPropertySpec(pi);
+                    return getter(param);
+                }
             }
 
             return default(T);

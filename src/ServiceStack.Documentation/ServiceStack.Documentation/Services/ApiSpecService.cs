@@ -20,7 +20,7 @@ namespace ServiceStack.Documentation.Services
     }
 
     [Route(Constants.SpecUri)]
-    [Exclude(Feature.Metadata)]
+    [Exclude(Feature.Metadata | Feature.ServiceDiscovery)]
     public class SpecRequest : IReturn<SpecResponse> { }
 
     public class SpecResponse

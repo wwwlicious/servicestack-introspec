@@ -7,7 +7,6 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     using System.Collections.Generic;
     using Models;
 
-    // NOTE Is the new() constraint really required?
     /// <summary>
     /// Documentation class for a request DTO, including Verbs, status codes etc
     /// </summary>
