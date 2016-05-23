@@ -54,8 +54,9 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichResource_CallsGetTitle_IfResourceHasNoTitle()
         {
-            manager.EnrichResource(new ApiResourceType(), new Operation());
-            A.CallTo(() => resourceEnricher.GetTitle(A<Type>.Ignored)).MustHaveHappened();
+            var responseType = typeof(int);
+            manager.EnrichResource(new ApiResourceType(), new Operation { ResponseType = responseType });
+            A.CallTo(() => resourceEnricher.GetTitle(responseType)).MustHaveHappened();
         }
 
         [Fact]
@@ -68,8 +69,9 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichResource_CallsGetDescription_IfResourceHasNoDescription()
         {
-            manager.EnrichResource(new ApiResourceType(), new Operation());
-            A.CallTo(() => resourceEnricher.GetDescription(A<Type>.Ignored)).MustHaveHappened();
+            var responseType = typeof(int);
+            manager.EnrichResource(new ApiResourceType(), new Operation { ResponseType = responseType });
+            A.CallTo(() => resourceEnricher.GetDescription(responseType)).MustHaveHappened();
         }
 
         [Fact]
@@ -82,8 +84,9 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichResource_CallsGetNotes_IfResourceHasNoNotes()
         {
-            manager.EnrichResource(new ApiResourceType(), new Operation());
-            A.CallTo(() => resourceEnricher.GetNotes(A<Type>.Ignored)).MustHaveHappened();
+            var responseType = typeof(int);
+            manager.EnrichResource(new ApiResourceType(), new Operation { ResponseType = responseType });
+            A.CallTo(() => resourceEnricher.GetNotes(responseType)).MustHaveHappened();
         }
 
         [Fact]

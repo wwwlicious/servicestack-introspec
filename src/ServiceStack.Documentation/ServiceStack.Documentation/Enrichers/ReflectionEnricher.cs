@@ -44,19 +44,31 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string[] GetContentTypes(Operation operation)
         {
+            // [Restrict] could come from the RequestDTO OR the Service. If we just look at RequestType then 
+            // will miss any that are set at the service level
+            var restrictedTo = operation.RestrictTo;
+
             var type = operation.RequestType;
+            var contentTypes = new List<string>(10);
 
-            var contentTypes = new List<string>(9);
+            if (type.HasXmlSupport(restrictedTo)) contentTypes.Add(MimeTypes.Xml);
+            if (type.HasJsonSupport(restrictedTo)) contentTypes.Add(MimeTypes.Json);
+            if (type.HasJsvSupport(restrictedTo)) contentTypes.Add(MimeTypes.Jsv);
+            if (type.HasSoap11Support(restrictedTo)) contentTypes.Add(MimeTypes.Soap11);
+            if (type.HasSoap12Support(restrictedTo)) contentTypes.Add(MimeTypes.Soap12);
+            if (type.HasCsvSupport(restrictedTo)) contentTypes.Add(MimeTypes.Csv);
+            if (type.HasHtmlSupport(restrictedTo)) contentTypes.Add(MimeTypes.Html);
+            if (type.HasProtoBufSupport(restrictedTo)) contentTypes.Add(MimeTypes.ProtoBuf);
+            if (type.HasMsgPackSupport(restrictedTo)) contentTypes.Add(MimeTypes.MsgPack);
 
-            if (type.HasXmlSupport()) contentTypes.Add(MimeTypes.Xml);
-            if (type.HasJsonSupport()) contentTypes.Add(MimeTypes.Json);
-            if (type.HasJsvSupport()) contentTypes.Add(MimeTypes.Jsv);
-            if (type.HasSoap11Support()) contentTypes.Add(MimeTypes.Soap11);
-            if (type.HasSoap12Support()) contentTypes.Add(MimeTypes.Soap12);
-            if (type.HasCsvSupport()) contentTypes.Add(MimeTypes.Csv);
-            if (type.HasHtmlSupport()) contentTypes.Add(MimeTypes.Html);
-            if (type.HasProtoBufSupport()) contentTypes.Add(MimeTypes.ProtoBuf);
-            if (type.HasMsgPackSupport()) contentTypes.Add(MimeTypes.MsgPack);
+            var addHeader = type.FirstAttribute<AddHeaderAttribute>();
+            if (addHeader != null)
+            {
+                var contentType = addHeader.ContentType ?? addHeader.DefaultContentType;
+                if (!string.IsNullOrEmpty(contentType))
+                    contentTypes.Add(contentType);
+
+            }
 
             return contentTypes.ToArray();
         }

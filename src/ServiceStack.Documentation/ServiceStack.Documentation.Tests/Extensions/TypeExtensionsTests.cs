@@ -96,7 +96,6 @@ namespace ServiceStack.Documentation.Tests.Extensions
         [Fact]
         public void HasHtmlSupport_True_IfExclude_NotHtml() => typeof(Soap11Restrict).HasHtmlSupport().Should().BeFalse();
         
-
         [Fact]
         public void HasMsgPackSupport_False_IfNoMsgPackFeature() => typeof(All).HasMsgPackSupport().Should().BeFalse();
 

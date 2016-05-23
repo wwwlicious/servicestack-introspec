@@ -31,12 +31,14 @@ namespace DemoService.Documenters
                     Description = "A more verbose explanation that won't be shown"
                 });
 
+            AddContentTypes("application/hal+json");
+
             For(t => t.Name)
                 .With(p => p.Title, "Name parameter abstract class definition")
                 .With(p => p.IsRequired, true)
                 .With(p => p.Description, "Description from abstract class");
 
-            For(t => t.Optional)
+            For(t => t.Age)
                 .With(p => p.Title, "This is an optional thing. AC")
                 .With(p => p.IsRequired, false);
 

@@ -86,6 +86,7 @@
         }
     }
 
+    [Restrict(RequestAttributes.Xml | RequestAttributes.Json)]
     public class DemoService : Service
     {
         //public object Any(DemoRequest demoRequest) => new DemoResponse { Message = "Response from Demo Service" };
@@ -126,6 +127,7 @@
     [Api("Glasses Request Description")]
     [ApiResponse(HttpStatusCode.OK, "Ok")]
     [Authenticate]
+    [Restrict(RequestAttributes.Xml | RequestAttributes.Json | RequestAttributes.Jsv)]
     public class GlassesRequest : IReturn<DemoResponse>, IGet, IPost //default if none
     {
         /// <summary>
@@ -196,7 +198,7 @@
     {
         public string Name { get; set; }
 
-        public int Optional { get; set; }
+        public int Age { get; set; }
 
         public Name MyName { get; set; }
     }

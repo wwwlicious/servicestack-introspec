@@ -227,7 +227,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         [Fact]
         public void GetContentTypes_ReturnsAllDefault()
         {
-            var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
+            var operation = new Operation { RequestType = typeof(SomeAttributes) };
             var contentTypes = enricher.GetContentTypes(operation);
 
             contentTypes.Length.Should().Be(7);
@@ -264,6 +264,15 @@ namespace ServiceStack.Documentation.Tests.Enrichers
                         .And.Contain(MimeTypes.Csv)
                         .And.Contain(MimeTypes.Html);
         }
+
+        [Fact]
+        public void GetContentTypes_ObeysAddHeader()
+        {
+            var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
+            var contentTypes = enricher.GetContentTypes(operation);
+
+            contentTypes.Should().Contain(MimeTypes.Bson);
+        }
     }
 
     [Api("ApiDescription")]
@@ -298,5 +307,6 @@ namespace ServiceStack.Documentation.Tests.Enrichers
     }
 
     [Route("")]
+    [AddHeader(ContentType = MimeTypes.Bson)]
     public class EmptyRouteAttribute { }
 }
