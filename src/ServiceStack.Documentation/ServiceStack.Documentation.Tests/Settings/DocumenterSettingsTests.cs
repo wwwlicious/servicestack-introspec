@@ -225,5 +225,33 @@ namespace ServiceStack.Documentation.Tests.Settings
 
             DocumenterSettings.DefaultTags.Should().BeEquivalentTo(tags);
         }
+
+        [Fact]
+        public void DefaultContentTypes_DefaultNull()
+        {
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.DefaultContentTypes.Should().BeNull();
+        }
+
+        [Fact]
+        public void With_DefaultContentTypes_SetsDefaultTags()
+        {
+            var contentTypes = new[] { "text/json", "image/png" };
+            var settings = DocumenterSettings.With(defaultContentTypes: contentTypes);
+            settings.DefaultContentTypes.Should().BeEquivalentTo(contentTypes);
+        }
+
+        [Fact]
+        public void BeginScope_SetsDefaultContentTypesForScope()
+        {
+            var contentTypes = new[] { "text/json", "image/png" };
+            DocumenterSettings.DefaultContentTypes = contentTypes;
+
+            var scopeTypes = new[] { "text/plain", "application/yaml" };
+            using (var settings = DocumenterSettings.With(defaultContentTypes: scopeTypes))
+                settings.DefaultContentTypes.Should().BeEquivalentTo(scopeTypes);
+
+            DocumenterSettings.DefaultContentTypes.Should().BeEquivalentTo(contentTypes);
+        }
     }
 }

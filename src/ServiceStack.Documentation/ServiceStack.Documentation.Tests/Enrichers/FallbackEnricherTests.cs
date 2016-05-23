@@ -61,11 +61,19 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
-        public void GetTags_ReturnsVerbs_FromSettings()
+        public void GetTags_ReturnTags_FromSettings()
         {
             var tags = new[] { "Tag1", "Tag2" };
             using (DocumenterSettings.With(defaultTags: tags))
                 fallback.GetTags(operation).Should().BeEquivalentTo(tags);
+        }
+
+        [Fact]
+        public void GetTags_ReturnsContentTypes_FromSettings()
+        {
+            var contentTypes = new[] { "test/jsv", "text/csv" };
+            using (DocumenterSettings.With(defaultContentTypes: contentTypes))
+                fallback.GetContentTypes(operation).Should().BeEquivalentTo(contentTypes);
         }
     }
 }

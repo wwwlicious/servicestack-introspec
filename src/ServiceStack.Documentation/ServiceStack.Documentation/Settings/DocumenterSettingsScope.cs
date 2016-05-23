@@ -67,6 +67,11 @@ namespace ServiceStack.Documentation.Settings
         /// </summary>
         public IEnumerable<string> DefaultTags { get; internal set; }
 
+        /// <summary>
+        /// The default contentTypes to be set for a request/response object.
+        /// </summary>
+        public IEnumerable<string> DefaultContentTypes { get; internal set; }
+
         private bool disposed;
         private readonly DocumenterSettingsScope parent;
 

@@ -83,6 +83,15 @@ namespace ServiceStack.Documentation.Settings
             set { DocumenterSettingsScope.Current.DefaultTags = value; }
         }
 
+        /// <summary>
+        /// The default content types to be set for a request/response object.
+        /// </summary>
+        public static IEnumerable<string> DefaultContentTypes
+        {
+            get { return DocumenterSettingsScope.Current.DefaultContentTypes; }
+            set { DocumenterSettingsScope.Current.DefaultContentTypes = value; }
+        }
+
         public static DocumenterSettingsScope BeginScope() => new DocumenterSettingsScope();
 
         public static DocumenterSettingsScope With(
@@ -93,7 +102,8 @@ namespace ServiceStack.Documentation.Settings
             IEnumerable<string> defaultVerbs = null,
             IEnumerable<StatusCode> defaultStatusCodes = null,
             string fallbackCategory = null,
-            IEnumerable<string> defaultTags = null)
+            IEnumerable<string> defaultTags = null,
+            IEnumerable<string> defaultContentTypes = null)
         {
             return new DocumenterSettingsScope
             {
@@ -104,7 +114,8 @@ namespace ServiceStack.Documentation.Settings
                 DefaultVerbs = defaultVerbs,
                 DefaultStatusCodes = defaultStatusCodes,
                 FallbackCategory = fallbackCategory,
-                DefaultTags = defaultTags
+                DefaultTags = defaultTags,
+                DefaultContentTypes = defaultContentTypes
             };
         }
     }

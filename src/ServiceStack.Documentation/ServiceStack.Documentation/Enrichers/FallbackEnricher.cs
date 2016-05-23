@@ -21,10 +21,7 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string[] GetVerbs(Operation operation) => DocumenterSettings.DefaultVerbs?.ToArray();
 
-        public string[] GetContentTypes(Operation operation)
-        {
-            throw new NotImplementedException();
-        }
+        public string[] GetContentTypes(Operation operation) => DocumenterSettings.DefaultContentTypes?.ToArray();
 
         public StatusCode[] GetStatusCodes(Operation operation) => DocumenterSettings.DefaultStatusCodes?.ToArray();
 
