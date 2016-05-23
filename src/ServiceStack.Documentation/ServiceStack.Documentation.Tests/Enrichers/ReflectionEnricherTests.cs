@@ -6,8 +6,8 @@ namespace ServiceStack.Documentation.Tests.Enrichers
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Reflection;
+    using DataAnnotations;
     using Documentation.Enrichers;
     using Documentation.Settings;
     using FluentAssertions;
@@ -68,7 +68,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
-        public void GetSatusCodes_ReturnsEmptyArray_IfNoApiResponseAttribute()
+        public void GetStatusCodes_ReturnsEmptyArray_IfNoApiResponseAttribute()
         {
             var operation = new Operation
             {
@@ -81,7 +81,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
-        public void GetSatusCodes_204_IfNoResponseType()
+        public void GetStatusCodes_204_IfNoResponseType()
         {
             var operation = new Operation
             {
@@ -95,7 +95,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
-        public void GetSatusCodes_204_IfContainsVoidReturn()
+        public void GetStatusCodes_204_IfContainsVoidReturn()
         {
             var operation = new Operation
             {
@@ -223,20 +223,62 @@ namespace ServiceStack.Documentation.Tests.Enrichers
 
         [Fact]
         public void GetTags_ReturnsNull() => enricher.GetTags(new Operation()).Should().BeNull();
+
+        [Fact]
+        public void GetContentTypes_ReturnsAllDefault()
+        {
+            var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
+            var contentTypes = enricher.GetContentTypes(operation);
+
+            contentTypes.Length.Should().Be(7);
+            contentTypes.Should().Contain(MimeTypes.Xml)
+                        .And.Contain(MimeTypes.Json)
+                        .And.Contain(MimeTypes.Jsv)
+                        .And.Contain(MimeTypes.Soap11)
+                        .And.Contain(MimeTypes.Soap12)
+                        .And.Contain(MimeTypes.Csv)
+                        .And.Contain(MimeTypes.Html);
+        }
+
+        [Fact]
+        public void GetContentTypes_ObeysRestrictAttribute()
+        {
+            var operation = new Operation { RequestType = typeof(OneAttribute) };
+            var contentTypes = enricher.GetContentTypes(operation);
+
+            contentTypes.Length.Should().Be(2);
+            contentTypes.Should().Contain(MimeTypes.Json)
+                        .And.Contain(MimeTypes.Jsv);
+        }
+
+        [Fact]
+        public void GetContentTypes_ObeysExcludeAttribute()
+        {
+            var operation = new Operation { RequestType = typeof(AllAttributes) };
+            var contentTypes = enricher.GetContentTypes(operation);
+
+            contentTypes.Length.Should().Be(5);
+            contentTypes.Should().Contain(MimeTypes.Xml)
+                        .And.Contain(MimeTypes.Json)
+                        .And.Contain(MimeTypes.Jsv)
+                        .And.Contain(MimeTypes.Csv)
+                        .And.Contain(MimeTypes.Html);
+        }
     }
 
     [Api("ApiDescription")]
-    [Description("ComponentModelDescription")]
+    [System.ComponentModel.Description("ComponentModelDescription")]
     [DataAnnotations.Description("ServiceStackDescription")]
     [Route("/here", Notes = "These are some notes")]
     [ApiResponse(201, "Thing created")]
     [ApiResponse(503, "Not available")]
+    [Exclude(Feature.Soap)]
     public class AllAttributes
     {
         
     }
 
-    [Description("ComponentModelDescription")]
+    [System.ComponentModel.Description("ComponentModelDescription")]
     [DataAnnotations.Description("ServiceStackDescription")]
     public class SomeAttributes
     {
@@ -247,6 +289,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
     }
 
     [DataAnnotations.Description("ServiceStackDescription")]
+    [Restrict(RequestAttributes.Json | RequestAttributes.Jsv)]
     public class OneAttribute
     {
         public void Holla(SomeAttributes requestDto) { }

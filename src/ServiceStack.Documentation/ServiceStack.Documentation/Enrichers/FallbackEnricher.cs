@@ -21,6 +21,11 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string[] GetVerbs(Operation operation) => DocumenterSettings.DefaultVerbs?.ToArray();
 
+        public string[] GetContentTypes(Operation operation)
+        {
+            throw new NotImplementedException();
+        }
+
         public StatusCode[] GetStatusCodes(Operation operation) => DocumenterSettings.DefaultStatusCodes?.ToArray();
 
         public string GetRelativePath(Operation operation) => null;

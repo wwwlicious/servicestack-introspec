@@ -13,6 +13,7 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     public interface IRequestEnricher : IEnrich
     {
         string[] GetVerbs(Operation operation);
+        string[] GetContentTypes(Operation operation);
         StatusCode[] GetStatusCodes(Operation operation);
         string GetRelativePath(Operation operation);
 

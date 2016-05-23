@@ -29,6 +29,11 @@ namespace ServiceStack.Documentation.Enrichers
         public string[] GetVerbs(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.Verbs.ToArray(), null);
 
+        public string[] GetContentTypes(Operation operation)
+        {
+            throw new NotImplementedException();
+        }
+
         public StatusCode[] GetStatusCodes(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.StatusCodes.ToArray(), null);
 

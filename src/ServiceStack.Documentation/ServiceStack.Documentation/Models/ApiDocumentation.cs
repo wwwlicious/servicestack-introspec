@@ -54,6 +54,7 @@ namespace ServiceStack.Documentation.Models
         // From IApiResponseStatus
         public string[] Verbs { get; set; }
         public StatusCode[] StatusCodes { get; set; }
+        public string[] ContentTypes { get; set; }
         public string RelativePath { get; set; } // Depends on [Route]. .ToRelativeUri(). Can only do PreDefinedRoutes if that feature is in
         public ApiResourceType ReturnType { get; set; } // ReturnType w/params
 
@@ -110,6 +111,7 @@ namespace ServiceStack.Documentation.Models
     {
         string[] Verbs { get; set; }
         StatusCode[] StatusCodes { get; set; }
+        string[] ContentTypes { get; set; } // NOTE Does this need split by Accepts: and Content-Type:
         string RelativePath { get; set; }
 
         ApiResourceType ReturnType { get; set; } // Could this be IApiResourceType

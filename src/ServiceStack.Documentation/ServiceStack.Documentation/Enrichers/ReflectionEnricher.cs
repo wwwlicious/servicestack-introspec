@@ -9,6 +9,7 @@ namespace ServiceStack.Documentation.Enrichers
     using System.Linq;
     using System.Net;
     using System.Reflection;
+    using Extensions;
     using Host;
     using Interfaces;
     using Logging;
@@ -39,6 +40,25 @@ namespace ServiceStack.Documentation.Enrichers
             return operation.Actions.Contains("ANY")
                 ? DocumenterSettings.ReplacementVerbs as string[] ?? DocumenterSettings.ReplacementVerbs.ToArray()
                 : operation.Actions.ToArray();
+        }
+
+        public string[] GetContentTypes(Operation operation)
+        {
+            var type = operation.RequestType;
+
+            var contentTypes = new List<string>(9);
+
+            if (type.HasXmlSupport()) contentTypes.Add(MimeTypes.Xml);
+            if (type.HasJsonSupport()) contentTypes.Add(MimeTypes.Json);
+            if (type.HasJsvSupport()) contentTypes.Add(MimeTypes.Jsv);
+            if (type.HasSoap11Support()) contentTypes.Add(MimeTypes.Soap11);
+            if (type.HasSoap12Support()) contentTypes.Add(MimeTypes.Soap12);
+            if (type.HasCsvSupport()) contentTypes.Add(MimeTypes.Csv);
+            if (type.HasHtmlSupport()) contentTypes.Add(MimeTypes.Html);
+            if (type.HasProtoBufSupport()) contentTypes.Add(MimeTypes.ProtoBuf);
+            if (type.HasMsgPackSupport()) contentTypes.Add(MimeTypes.MsgPack);
+
+            return contentTypes.ToArray();
         }
 
         public StatusCode[] GetStatusCodes(Operation operation)
