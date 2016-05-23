@@ -106,19 +106,13 @@ namespace ServiceStack.Documentation.Models
     }
 
     // NOTE Better name required
-    public interface IApiResponseStatus : ICategorised
+    public interface IApiResponseStatus : IApiMetadata
     {
         string[] Verbs { get; set; }
         StatusCode[] StatusCodes { get; set; }
         string RelativePath { get; set; }
 
         ApiResourceType ReturnType { get; set; } // Could this be IApiResourceType
-    }
-
-    public interface ICategorised
-    {
-        string Category { get; set; }
-        string[] Tags { get; set; }
     }
 
     public interface IApiSpec
