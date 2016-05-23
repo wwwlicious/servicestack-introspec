@@ -12,5 +12,11 @@ namespace ServiceStack.Documentation
         internal const string ReflectionEnricherKey = "reflection";
         internal const string ClassEnricherKey = "abstractclass";
         internal const string FallbackEnricherKey = "fallback";
+
+        internal static class Features
+        {
+            internal const string ProtoBufFeature = "ProtoBufFormat";
+            internal const string MsgPackFeature = "MsgPackFormat";
+        }
     }
 }

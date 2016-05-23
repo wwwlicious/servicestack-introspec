@@ -9,6 +9,7 @@ namespace ServiceStack.Documentation.Tests.Extensions
     using FluentAssertions;
     using Xunit;
 
+    [Collection("ApiSpecFeatureTests")]
     public class TypeExtensionsTests
     {
         [Fact]
@@ -72,27 +73,33 @@ namespace ServiceStack.Documentation.Tests.Extensions
         public void HasSoap12Support_True_IfExclude_NotSoap() => typeof(Soap11Restrict).HasSoap12Support().Should().BeFalse();
 
         [Fact]
+        public void HasMsgPackSupport_False_IfNoMsgPackFeature() => typeof(All).HasMsgPackSupport().Should().BeFalse();
+
+        [Fact(Skip = "Need appHost with MsgPack")]
         public void HasMsgPackSupport_True_IfMsgPack() => typeof(All).HasMsgPackSupport().Should().BeTrue();
 
-        [Fact]
+        [Fact(Skip = "Need appHost with MsgPack")]
         public void HasMsgPackSupport_False_IfExcludeMsgPack() => typeof(MsgPackExclude).HasMsgPackSupport().Should().BeFalse();
 
-        [Fact]
+        [Fact(Skip = "Need appHost with MsgPack")]
         public void HasMsgPackSupport_True_IfMsgPackRestrict() => typeof(MsgPackRestrict).HasMsgPackSupport().Should().BeTrue();
 
-        [Fact]
+        [Fact(Skip = "Need appHost with MsgPack")]
         public void HasMsgPackSupport_True_IfExclude_NotMsgPack() => typeof(Soap11Restrict).HasMsgPackSupport().Should().BeFalse();
 
         [Fact]
+        public void HasProtoBufSupport_False_IfNoProtoBufFeature() => typeof(All).HasProtoBufSupport().Should().BeFalse();
+
+        [Fact(Skip = "Need appHost with ProtoBuf")]
         public void HasProtoBufSupport_True_IfProtoBuf() => typeof(All).HasProtoBufSupport().Should().BeTrue();
 
-        [Fact]
+        [Fact(Skip = "Need appHost with ProtoBuf")]
         public void HasProtoBufSupport_False_IfExcludeProtoBuf() => typeof(ProtoBufExclude).HasProtoBufSupport().Should().BeFalse();
 
-        [Fact]
+        [Fact(Skip = "Need appHost with ProtoBuf")]
         public void HasProtoBufSupport_True_IfProtoBufRestrict() => typeof(ProtoBufRestrict).HasProtoBufSupport().Should().BeTrue();
 
-        [Fact]
+        [Fact(Skip = "Need appHost with ProtoBuf")]
         public void HasProtoBufSupport_True_IfExclude_NotProtoBuf() => typeof(Soap11Restrict).HasProtoBufSupport().Should().BeFalse();
     }
 

@@ -25,13 +25,23 @@ namespace ServiceStack.Documentation.Extensions
         public static bool HasSoap12Support(this Type type)
             => type.HasSupport(Feature.Soap, RequestAttributes.Soap12);
 
+        // TODO Is there a nicer way to handle this without taking dependency on MsgPack nuget package?
         public static bool HasMsgPackSupport(this Type type)
-            => type.HasSupport(Feature.MsgPack, RequestAttributes.MsgPack);
+            => type.HasSupportExternal(Feature.MsgPack, RequestAttributes.MsgPack, Constants.Features.MsgPackFeature);
 
+        // TODO Is there a nicer way to handle this without taking dependency on ProtoBuf nuget package?
         public static bool HasProtoBufSupport(this Type type)
-            => type.HasSupport(Feature.ProtoBuf, RequestAttributes.ProtoBuf);
+            => type.HasSupportExternal(Feature.ProtoBuf, RequestAttributes.ProtoBuf, Constants.Features.ProtoBufFeature);
         
-        public static bool HasSupport(this Type type, Feature feature, RequestAttributes request)
+        private static bool HasSupportExternal(this Type type, Feature feature, RequestAttributes request, string featureName)
+        {
+            var appHost = HostContext.AppHost;
+            if (appHost == null) return false;
+
+            return appHost.Plugins.Any(p => p.GetType().Name == featureName) && type.HasSupport(feature, request);
+        }
+
+        private static bool HasSupport(this Type type, Feature feature, RequestAttributes request)
             => !type.AllAttributes<ExcludeAttribute>().Any(t => t.Feature.HasFlag(feature)) &&
                type.AllAttributes<RestrictAttribute>().All(t => t.HasAccessTo(request));
     }
