@@ -78,8 +78,11 @@ namespace ServiceStack.Documentation.Enrichers
 
             // If no route then make one up
             return operation.IsOneWay ? ToOneWayUrlOnly(requestType) : ToReplyUrlOnly(requestType);
-        } 
-            
+        }
+
+        public string GetCategory(Operation operation) => null;
+        public string[] GetTags(Operation operation) => null;
+
         public string GetTitle(PropertyInfo pi) => GetApiMemberAttribute(pi)?.Name;
         public string GetDescription(PropertyInfo pi) => GetApiMemberAttribute(pi)?.Description;
         public string GetParamType(PropertyInfo pi) => GetApiMemberAttribute(pi)?.ParameterType;

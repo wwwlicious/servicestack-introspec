@@ -38,6 +38,13 @@ namespace ServiceStack.Documentation.Enrichers
             => GetPropertyValue(pi, property => property.Description);
 
         public string GetRelativePath(Operation operation) => null;
+
+        public string GetCategory(Operation operation)
+            => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.Category, null);
+
+        public string[] GetTags(Operation operation)
+            => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.Tags.ToArray(), null);
+
         public string GetNotes(PropertyInfo pi) => null;
         public bool? GetAllowMultiple(PropertyInfo pi) => null;
         public string[] GetExternalLinks(PropertyInfo pi) => null;

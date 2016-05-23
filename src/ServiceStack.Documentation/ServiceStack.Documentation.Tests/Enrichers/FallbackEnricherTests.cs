@@ -51,5 +51,21 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             using (DocumenterSettings.With(defaultStatusCodes: codes))
                 fallback.GetStatusCodes(operation).Should().BeEquivalentTo(codes);
         }
+
+        [Fact]
+        public void GetCategory_ReturnsFallbackNotes_FromSettings()
+        {
+            const string category = "danger";
+            using (DocumenterSettings.With(fallbackCategory: category))
+                fallback.GetCategory(operation).Should().Be(category);
+        }
+
+        [Fact]
+        public void GetTags_ReturnsVerbs_FromSettings()
+        {
+            var tags = new[] { "Tag1", "Tag2" };
+            using (DocumenterSettings.With(defaultTags: tags))
+                fallback.GetTags(operation).Should().BeEquivalentTo(tags);
+        }
     }
 }

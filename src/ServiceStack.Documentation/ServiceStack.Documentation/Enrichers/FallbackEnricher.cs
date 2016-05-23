@@ -24,5 +24,9 @@ namespace ServiceStack.Documentation.Enrichers
         public StatusCode[] GetStatusCodes(Operation operation) => DocumenterSettings.DefaultStatusCodes?.ToArray();
 
         public string GetRelativePath(Operation operation) => null;
+
+        public string GetCategory(Operation operation) => DocumenterSettings.FallbackCategory;
+
+        public string[] GetTags(Operation operation) => DocumenterSettings.DefaultTags?.ToArray();
     }
 }

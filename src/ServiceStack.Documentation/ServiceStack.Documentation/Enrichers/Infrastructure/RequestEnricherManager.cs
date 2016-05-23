@@ -47,6 +47,12 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
                 response.RelativePath =
                     response.RelativePath.GetIfNullOrEmpty(() => requestEnricher.GetRelativePath(operation));
+
+                response.Category = response.Category.GetIfNullOrEmpty(() => requestEnricher.GetCategory(operation));
+
+                response.Tags = unionCollections
+                    ? response.Tags.SafeUnion(() => requestEnricher.GetTags(operation))
+                    : response.Tags.GetIfNullOrEmpty(() => requestEnricher.GetTags(operation));
             }
 
             response.ReturnType = response.ReturnType.GetIfNull(() => new ApiResourceType());

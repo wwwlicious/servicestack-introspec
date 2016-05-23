@@ -53,15 +53,15 @@ namespace ServiceStack.Documentation.Models
         public string Notes { get; set; }
         public ApiPropertyDocumention[] Properties { get; set; }
 
-        // From IApiResponse
+        // From IApiResponseStatus
         public string[] Verbs { get; set; }
         public StatusCode[] StatusCodes { get; set; }
         public string RelativePath { get; set; } // Depends on [Route]. .ToRelativeUri(). Can only do PreDefinedRoutes if that feature is in
         public ApiResourceType ReturnType { get; set; } // ReturnType w/params
 
-        // These will be from something else?
-        /*public string Category { get; set; }
-        public string[] Tags { get; set; }*/
+        // From ICategorised
+        public string Category { get; set; }
+        public string[] Tags { get; set; }
 
         // IDictionary<string, string> of extra 'stuff' that doesn't fit in any specific place
     }
@@ -164,13 +164,19 @@ namespace ServiceStack.Documentation.Models
     }
 
     // NOTE Better name required
-    public interface IApiResponseStatus
+    public interface IApiResponseStatus : ICategorised
     {
         string[] Verbs { get; set; }
         StatusCode[] StatusCodes { get; set; }
         string RelativePath { get; set; }
 
         ApiResourceType ReturnType { get; set; } // Could this be IApiResourceType
+    }
+
+    public interface ICategorised
+    {
+        string Category { get; set; }
+        string[] Tags { get; set; }
     }
 
     public interface IApiSpec

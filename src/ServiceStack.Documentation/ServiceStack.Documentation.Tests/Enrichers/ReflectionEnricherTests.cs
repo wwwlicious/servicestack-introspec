@@ -217,6 +217,12 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
             enricher.GetRelativePath(operation).Should().Be("/json/oneway/EmptyRouteAttribute");
         }
+
+        [Fact]
+        public void GetCategory_ReturnsNull() => enricher.GetCategory(new Operation()).Should().BeNull();
+
+        [Fact]
+        public void GetTags_ReturnsNull() => enricher.GetTags(new Operation()).Should().BeNull();
     }
 
     [Api("ApiDescription")]

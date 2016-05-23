@@ -15,5 +15,8 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
         string[] GetVerbs(Operation operation);
         StatusCode[] GetStatusCodes(Operation operation);
         string GetRelativePath(Operation operation);
+
+        string GetCategory(Operation operation);
+        string[] GetTags(Operation operation);
     }
 }

@@ -78,6 +78,8 @@
                 ((StatusCode)HttpStatusCode.Forbidden).WithDescription("Set at a global level"),
                 ((StatusCode)200).WithDescription("Set at a global level")
             };
+            DocumenterSettings.FallbackCategory = "Default Category";
+            DocumenterSettings.DefaultTags = new[] { "Default1" };
 
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
             Plugins.Add(new ApiSpecFeature(apiSpecConfig));
@@ -112,7 +114,7 @@
         /// </summary>
         /// <remarks>More info on the optional property</remarks>
         [ApiMember(ExcludeInSchema = true)]
-        public int Optional { get; set; }
+        public int AnotherProperty { get; set; }
     }
 
     public class GlassesService : Service
