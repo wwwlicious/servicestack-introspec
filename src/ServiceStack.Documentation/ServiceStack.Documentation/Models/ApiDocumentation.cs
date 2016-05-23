@@ -107,7 +107,24 @@ namespace ServiceStack.Documentation.Models
         public string Description { get; set; }
         public string Name { get; set; }
 
-        // TODO Maybe get rid of these as it ties to how they're created??
+        public StatusCode WithDescription(string description)
+        {
+            Description = description;
+            return this;
+        }
+
+        public StatusCode WithCode(int code)
+        {
+            Code = code;
+            return this;
+        }
+
+        public StatusCode WithName(string name)
+        {
+            Name = name;
+            return this;
+        }
+
         public static explicit operator StatusCode(int statusCode)
         {
             var httpStatusCode = (HttpStatusCode) statusCode;

@@ -39,7 +39,6 @@ namespace ServiceStack.Documentation.Tests.Models
             statusCode.Description.Should().BeNull();
         }
 
-        //
         [Fact]
         public void ImplicitIntCast_SetsStatus()
         {
@@ -84,6 +83,30 @@ namespace ServiceStack.Documentation.Tests.Models
             var code2 = new StatusCode { Code = 201 };
 
             code.Equals(code2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void WithDescription_SetsDescription()
+        {
+            const string desc = "test description";
+            var code = new StatusCode().WithDescription(desc);
+            code.Description.Should().Be(desc);
+        }
+
+        [Fact]
+        public void WithName_SetsName()
+        {
+            const string name = "john";
+            var code = new StatusCode().WithName(name);
+            code.Name.Should().Be(name);
+        }
+
+        [Fact]
+        public void WithCode_SetsCode()
+        {
+            const int code = 200;
+            var statusCode = new StatusCode().WithCode(code);
+            statusCode.Code.Should().Be(code);
         }
     }
 }

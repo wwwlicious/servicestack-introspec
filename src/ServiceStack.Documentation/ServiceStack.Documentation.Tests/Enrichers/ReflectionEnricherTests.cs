@@ -51,7 +51,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         public void GetVerbs_ReturnsVerbsFromSettings_IfOperationActionsContainsAny()
         {
             var defaultVerbs = new[] { "GET", "PUT", "HEAD", "LESSERKNOWN" };
-            using (DocumenterSettings.With(verbs: defaultVerbs))
+            using (DocumenterSettings.With(replacementVerbs: defaultVerbs))
             {
                 var operation = new Operation { Actions = new List<string> { "GET", "PUT", "ANY" } };
                 var result = enricher.GetVerbs(operation);

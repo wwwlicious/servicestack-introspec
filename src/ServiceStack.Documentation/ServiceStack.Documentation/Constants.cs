@@ -11,5 +11,6 @@ namespace ServiceStack.Documentation
         internal const string XmlEnricherKey = "xml";
         internal const string ReflectionEnricherKey = "reflection";
         internal const string ClassEnricherKey = "abstractclass";
+        internal const string FallbackEnricherKey = "fallback";
     }
 }

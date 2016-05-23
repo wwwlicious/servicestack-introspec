@@ -23,7 +23,7 @@ namespace ServiceStack.Documentation.Tests.Settings
         public void With_Verbs_SetsVerbs()
         {
             var verbs = new[] { "GET", "PUT" };
-            var settings = DocumenterSettings.With(verbs: verbs);
+            var settings = DocumenterSettings.With(replacementVerbs: verbs);
             settings.ReplacementVerbs.Should().BeEquivalentTo(verbs);
         }
 

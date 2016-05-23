@@ -86,7 +86,7 @@ namespace ServiceStack.Documentation.Settings
         public static DocumenterSettingsScope BeginScope() => new DocumenterSettingsScope();
 
         public static DocumenterSettingsScope With(
-            IEnumerable<string> verbs = null,
+            IEnumerable<string> replacementVerbs = null,
             IEnumerable<Assembly> assemblies = null,
             EnrichmentStrategy collectionStrategy = EnrichmentStrategy.Union,
             string fallbackNotes = null,
@@ -97,7 +97,7 @@ namespace ServiceStack.Documentation.Settings
         {
             return new DocumenterSettingsScope
             {
-                ReplacementVerbs = verbs,
+                ReplacementVerbs = replacementVerbs,
                 CollectionStrategy = collectionStrategy,
                 Assemblies = assemblies,
                 FallbackNotes = fallbackNotes,

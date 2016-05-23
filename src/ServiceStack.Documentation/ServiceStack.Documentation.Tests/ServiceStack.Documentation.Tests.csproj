@@ -103,6 +103,7 @@
     <Compile Include="AbstractApiSpec\RequestDtoSpecTests.cs" />
     <Compile Include="ApiDocumentationGeneratorTests.cs" />
     <Compile Include="ApiSpecFeatureTests.cs" />
+    <Compile Include="Enrichers\FallbackEnricherTests.cs" />
     <Compile Include="Enrichers\Infrastructure\PropertyEnricherManagerTests.cs" />
     <Compile Include="Enrichers\Infrastructure\ResourceEnricherManagerTests.cs" />
     <Compile Include="Enrichers\Infrastructure\RequestEnricherManagerTests.cs" />

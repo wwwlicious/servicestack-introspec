@@ -61,10 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractApiSpec\DefaultDocumentationSettings.cs" />
     <Compile Include="AbstractApiSpec\TypeSpec.cs" />
     <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
-    <Compile Include="Enrichers\DefaultEnricher.cs" />
+    <Compile Include="Enrichers\FallbackEnricher.cs" />
     <Compile Include="Services\ApiSpecService.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Settings\ApiSpecConfig.cs" />

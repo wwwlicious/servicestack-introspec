@@ -110,7 +110,9 @@ namespace ServiceStack.Documentation
                 {
                     new EnricherCoordinator(container.ResolveNamed<IEnrich>(Constants.ReflectionEnricherKey)),
                     new EnricherCoordinator(container.ResolveNamed<IEnrich>(Constants.ClassEnricherKey)),
-                    new EnricherCoordinator(container.ResolveNamed<IEnrich>(Constants.XmlEnricherKey))
+                    new EnricherCoordinator(container.ResolveNamed<IEnrich>(Constants.XmlEnricherKey)),
+                    new EnricherCoordinator(container.ResolveNamed<IEnrich>(Constants.FallbackEnricherKey))
+
                 };
             }
 
@@ -136,6 +138,7 @@ namespace ServiceStack.Documentation
             container.Register<IEnrich>(Constants.ReflectionEnricherKey, c => new ReflectionEnricher());
             container.Register<IEnrich>(Constants.ClassEnricherKey, c => new AbstractClassEnricher());
             container.Register<IEnrich>(Constants.XmlEnricherKey, c => new XmlEnricher(c.Resolve<IXmlDocumentationLookup>()));
+            container.Register<IEnrich>(Constants.FallbackEnricherKey, c => new FallbackEnricher());
         }
     }
 }

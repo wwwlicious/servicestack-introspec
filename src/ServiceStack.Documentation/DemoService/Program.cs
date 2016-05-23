@@ -72,6 +72,14 @@
             //DocumenterSettings.With(verbs: new List<string> { "HEAD", "PATCH" });
             //DocumenterSettings.AnyVerbs = new List<string> { "HEAD", "PATCH" };
             //DocumenterSettings.CollectionStrategy = EnrichmentStrategy.SetIfEmpty;
+            DocumenterSettings.DefaultStatusCodes = new List<StatusCode>
+            {
+                new StatusCode { Code = 429, Description = "This is rate limited", Name = "Too Many Requests" },
+                ((StatusCode)HttpStatusCode.Forbidden).WithDescription("Set at a global level"),
+                ((StatusCode)200).WithDescription("Set at a global level")
+            };
+
+            DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
             Plugins.Add(new ApiSpecFeature(apiSpecConfig));
         }
     }
