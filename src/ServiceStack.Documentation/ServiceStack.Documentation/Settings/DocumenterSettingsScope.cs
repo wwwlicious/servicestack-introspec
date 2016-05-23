@@ -7,53 +7,24 @@ namespace ServiceStack.Documentation.Settings
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using Models;
 
     // Based on JsConfig and JsConfigScope from ServiceStack
-    public static class DocumenterSettings
-    {
-        public static IEnumerable<string> AnyVerbs
-        {
-            get { return DocumenterSettingsScope.Current.AnyVerbs; }
-            set { DocumenterSettingsScope.Current.AnyVerbs = value; }
-        }
-
-        public static IEnumerable<Assembly> Assemblies
-        {
-            get { return DocumenterSettingsScope.Current.Assemblies; }
-            set { DocumenterSettingsScope.Current.Assemblies = value; }
-        }
-
-        public static EnrichmentStrategy CollectionStrategy
-        {
-            get { return DocumenterSettingsScope.Current.CollectionStrategy; }
-            set { DocumenterSettingsScope.Current.CollectionStrategy = value; }
-        }
-
-        public static DocumenterSettingsScope BeginScope() => new DocumenterSettingsScope();
-
-        public static DocumenterSettingsScope With(
-            IEnumerable<string> verbs = null,
-            IEnumerable<Assembly> assemblies = null,
-            EnrichmentStrategy collectionStrategy = EnrichmentStrategy.Union)
-        {
-            return new DocumenterSettingsScope
-            {
-                AnyVerbs = verbs,
-                CollectionStrategy = collectionStrategy,
-                Assemblies = assemblies
-            };
-        }
-    }
-
     public class DocumenterSettingsScope : IDisposable
     {
-        private IEnumerable<string> anyVerbs;
-        public IEnumerable<string> AnyVerbs
+        /// <summary>
+        /// The verbs used in the event of 'Any' being found for DTO. Default: GET, POST
+        /// </summary>
+        private IEnumerable<string> standardVerbs;
+        public IEnumerable<string> ReplacementVerbs
         {
-            get { return anyVerbs ?? new[] { "GET", "POST" }; }
-            internal set { anyVerbs = value; }
+            get { return standardVerbs ?? new[] { "GET", "POST" }; }
+            internal set { standardVerbs = value; }
         }
 
+        /// <summary>
+        /// The assemblies to containing implementations of RequestSpec and TypeSpec. Default: EntryAssembly
+        /// </summary>
         private IEnumerable<Assembly> assemblies;
         public IEnumerable<Assembly> Assemblies
         {
@@ -61,6 +32,9 @@ namespace ServiceStack.Documentation.Settings
             internal set { assemblies = value; }
         }
 
+        /// <summary>
+        /// The EnrichmentStrategy to use when populating collections. Default: Union
+        /// </summary>
         private EnrichmentStrategy? collectionStrategy;
         public EnrichmentStrategy CollectionStrategy
         {
@@ -68,8 +42,33 @@ namespace ServiceStack.Documentation.Settings
             internal set { collectionStrategy = value; }
         }
 
+        /// <summary>
+        /// The default notes to be set for a request/response object.
+        /// </summary>
+        public string FallbackNotes { get; internal set; }
+
+        /// <summary>
+        /// The default verbs to be set for a request/response object.
+        /// </summary>
+        public IEnumerable<string> DefaultVerbs { get; internal set; }
+
+        /// <summary>
+        /// The default status codes to be set for a request/response object.
+        /// </summary>
+        public IEnumerable<StatusCode> DefaultStatusCodes { get; internal set; }
+
+        /// <summary>
+        /// The default category to be set for a request/response object.
+        /// </summary>
+        public string FallbackCategory { get; internal set; }
+
+        /// <summary>
+        /// The default tags to be set for a request/response object.
+        /// </summary>
+        public IEnumerable<string> DefaultTags { get; internal set; }
+
         private bool disposed;
-        private DocumenterSettingsScope parent;
+        private readonly DocumenterSettingsScope parent;
 
         [ThreadStatic] private static DocumenterSettingsScope head;
 

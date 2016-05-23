@@ -61,8 +61,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractApiSpec\DefaultDocumentationSettings.cs" />
     <Compile Include="AbstractApiSpec\TypeSpec.cs" />
     <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
+    <Compile Include="Enrichers\DefaultEnricher.cs" />
     <Compile Include="Services\ApiSpecService.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Settings\ApiSpecConfig.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="AbstractApiSpec\IProperty.cs" />
     <Compile Include="AbstractApiSpec\IPropertyMetadata.cs" />
     <Compile Include="AbstractApiSpec\PropertyMetadata.cs" />
+    <Compile Include="Settings\DocumenterSettings.cs" />
     <Compile Include="Settings\DocumenterSettingsScope.cs" />
     <Compile Include="Enrichers\AbstractClassEnricher.cs" />
     <Compile Include="Enrichers\Infrastructure\ResourceEnricherManager.cs" />

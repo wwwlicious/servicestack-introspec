@@ -4,6 +4,7 @@
 
 namespace ServiceStack.Documentation.Tests.Settings
 {
+    using Documentation.Models;
     using Documentation.Settings;
     using FluentAssertions;
     using Xunit;
@@ -11,11 +12,11 @@ namespace ServiceStack.Documentation.Tests.Settings
     public class DocumenterSettingsTests
     {
         [Fact]
-        public void AnyVerbs_HasDefault()
+        public void ReplacementVerbs_HasDefault()
         {
             var verbs = new[] { "GET", "POST" };
             using (var scope = DocumenterSettings.BeginScope())
-                scope.AnyVerbs.Should().BeEquivalentTo(verbs);
+                scope.ReplacementVerbs.Should().BeEquivalentTo(verbs);
         }
 
         [Fact]
@@ -23,20 +24,20 @@ namespace ServiceStack.Documentation.Tests.Settings
         {
             var verbs = new[] { "GET", "PUT" };
             var settings = DocumenterSettings.With(verbs: verbs);
-            settings.AnyVerbs.Should().BeEquivalentTo(verbs);
+            settings.ReplacementVerbs.Should().BeEquivalentTo(verbs);
         }
 
         [Fact]
         public void BeginScope_SetsVerbsForScope()
         {
             var verbs = new[] { "DELETE", "OPTIONS" };
-            DocumenterSettings.AnyVerbs = verbs;
+            DocumenterSettings.ReplacementVerbs = verbs;
 
             var scopeVerbs = new[] { "POST", "PATCH" };
             using (var settings = DocumenterSettings.With(scopeVerbs))
-                settings.AnyVerbs.Should().BeEquivalentTo(scopeVerbs);
+                settings.ReplacementVerbs.Should().BeEquivalentTo(scopeVerbs);
 
-            DocumenterSettings.AnyVerbs.Should().BeEquivalentTo(verbs);
+            DocumenterSettings.ReplacementVerbs.Should().BeEquivalentTo(verbs);
         }
 
         [Fact]
@@ -83,6 +84,146 @@ namespace ServiceStack.Documentation.Tests.Settings
                 settings.CollectionStrategy.Should().Be(EnrichmentStrategy.Union);
 
             DocumenterSettings.CollectionStrategy.Should().Be(EnrichmentStrategy.SetIfEmpty);
+        }
+
+        [Fact]
+        public void FallbackNotes_DefaultNull()
+        {
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.FallbackNotes.Should().BeNull();
+        }
+
+        [Fact]
+        public void With_FallbackNotes_SetsNotes()
+        {
+            const string notes = "watertight notes";
+            var settings = DocumenterSettings.With(fallbackNotes: notes);
+            settings.FallbackNotes.Should().Be(notes);
+        }
+
+        [Fact]
+        public void BeginScope_SetsFallbackNotesForScope()
+        {
+            const string notes = "watertight notes";
+            DocumenterSettings.FallbackNotes = notes;
+
+            const string scopeNotes = "snake eyes";
+            using (var settings = DocumenterSettings.With(fallbackNotes: scopeNotes))
+                settings.FallbackNotes.Should().Be(scopeNotes);
+
+            DocumenterSettings.FallbackNotes.Should().Be(notes);
+        }
+
+        [Fact]
+        public void FallbackCategory_DefaultNull()
+        {
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.FallbackCategory.Should().BeNull();
+        }
+
+        [Fact]
+        public void With_FallbackCategory_SetsCategory()
+        {
+            const string category = "products";
+            var settings = DocumenterSettings.With(fallbackCategory: category);
+            settings.FallbackCategory.Should().Be(category);
+        }
+
+        [Fact]
+        public void BeginScope_SetsFallbackCategoryForScope()
+        {
+            const string category = "products";
+            DocumenterSettings.FallbackCategory = category;
+
+            const string scopeCategory = "not products";
+            using (var settings = DocumenterSettings.With(fallbackCategory: scopeCategory))
+                settings.FallbackCategory.Should().Be(scopeCategory);
+
+            DocumenterSettings.FallbackCategory.Should().Be(category);
+        }
+
+        [Fact]
+        public void DefaultVerbs_DefaultNull()
+        {
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.DefaultVerbs.Should().BeNull();
+        }
+
+        [Fact]
+        public void With_DefaultVerbs_SetsDefaultVerbs()
+        {
+            var verbs = new[] { "PATCH", "POST" };
+            var settings = DocumenterSettings.With(defaultVerbs: verbs);
+            settings.DefaultVerbs.Should().BeEquivalentTo(verbs);
+        }
+
+        [Fact]
+        public void BeginScope_SetsDefaultVerbsForScope()
+        {
+            var verbs = new[] { "PATCH", "POST" };
+            DocumenterSettings.DefaultVerbs = verbs;
+
+            var scopeVerbs = new[] { "PUT", "DELETE", "OPTIONS" };
+            using (var settings = DocumenterSettings.With(defaultVerbs: scopeVerbs))
+                settings.DefaultVerbs.Should().BeEquivalentTo(scopeVerbs);
+
+            DocumenterSettings.DefaultVerbs.Should().BeEquivalentTo(verbs);
+        }
+
+        [Fact]
+        public void DefaultStatusCodes_DefaultNull()
+        {
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.DefaultStatusCodes.Should().BeNull();
+        }
+
+        [Fact]
+        public void With_DefaultStatusCodes_SetsDefaultStatusCodes()
+        {
+            var codes = new[] { (StatusCode) 200, (StatusCode) 409 };
+            var settings = DocumenterSettings.With(defaultStatusCodes: codes);
+            settings.DefaultStatusCodes.Should().BeEquivalentTo(codes);
+        }
+
+        [Fact]
+        public void BeginScope_SetsDefaultStatusCodesForScope()
+        {
+            var codes = new[] { (StatusCode)200, (StatusCode)409 };
+            DocumenterSettings.DefaultStatusCodes = codes;
+
+            var scopeCodes = new[] { (StatusCode)404, (StatusCode)503 };
+            using (var settings = DocumenterSettings.With(defaultStatusCodes: scopeCodes))
+                settings.DefaultStatusCodes.Should().BeEquivalentTo(scopeCodes);
+
+            DocumenterSettings.DefaultStatusCodes.Should().BeEquivalentTo(codes);
+        }
+
+        [Fact]
+        public void DefaultTags_DefaultNull()
+        {
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.DefaultTags.Should().BeNull();
+        }
+
+        [Fact]
+        public void With_DefaultTags_SetsDefaultTags()
+        {
+            var tags = new[] { "Tag1", "Tag2" };
+            var settings = DocumenterSettings.With(defaultTags: tags);
+            settings.DefaultTags.Should().BeEquivalentTo(tags);
+        }
+
+        [Fact]
+        public void BeginScope_SetsDefaultTagsForScope()
+        {
+            var tags = new[] { "Tag1", "Tag2" };
+            DocumenterSettings.DefaultTags = tags;
+
+            var defaultTags = new[] { "Tag4", "Tag5", "Tag6" };
+            using (var settings = DocumenterSettings.With(defaultTags: defaultTags))
+                settings.DefaultTags.Should().BeEquivalentTo(defaultTags);
+
+            DocumenterSettings.DefaultTags.Should().BeEquivalentTo(tags);
         }
     }
 }

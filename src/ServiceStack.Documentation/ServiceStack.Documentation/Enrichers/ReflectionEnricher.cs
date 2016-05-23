@@ -37,7 +37,7 @@ namespace ServiceStack.Documentation.Enrichers
         public string[] GetVerbs(Operation operation)
         {
             return operation.Actions.Contains("ANY")
-                ? DocumenterSettings.AnyVerbs as string[] ?? DocumenterSettings.AnyVerbs.ToArray()
+                ? DocumenterSettings.ReplacementVerbs as string[] ?? DocumenterSettings.ReplacementVerbs.ToArray()
                 : operation.Actions.ToArray();
         }
 
