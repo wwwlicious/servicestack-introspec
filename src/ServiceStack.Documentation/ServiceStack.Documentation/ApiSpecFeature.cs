@@ -32,8 +32,28 @@ namespace ServiceStack.Documentation
         public IApiDocumentationGenerator DocumentationGenerator { get; private set; }
         public Func<IEnumerable<IApiResourceEnricher>> Enrichers { get; private set; }
 
+        // TODO Tidy this up. From NativeTypesFeature. Use that??
+        public static List<string> IgnoreTypesInNamespaces = new List<string>
+        {
+            "ServiceStack",
+            "ServiceStack.Auth",
+            "ServiceStack.Caching",
+            "ServiceStack.Configuration",
+            "ServiceStack.Data",
+            "ServiceStack.IO",
+            "ServiceStack.Logging",
+            "ServiceStack.Messaging",
+            "ServiceStack.Model",
+            "ServiceStack.Redis",
+            "ServiceStack.Web",
+            "ServiceStack.Admin",
+            "ServiceStack.NativeTypes",
+            "ServiceStack.Api.Swagger",
+            "ServiceStack.Documentation"
+        };
+
         public Func<KeyValuePair<Type, Operation>, bool> OperationsMapFilter { get; private set; } = kvp =>
-            kvp.Value.RestrictTo == null &&
+            !IgnoreTypesInNamespaces.Contains(kvp.Key.Namespace) && 
             !kvp.Key.ExcludesFeature(Feature.Metadata) &&
             !kvp.Key.ExcludesFeature(Feature.ServiceDiscovery);
 

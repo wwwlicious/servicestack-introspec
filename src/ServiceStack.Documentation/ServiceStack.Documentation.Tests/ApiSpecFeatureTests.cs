@@ -14,6 +14,7 @@ namespace ServiceStack.Documentation.Tests
     using FakeItEasy;
     using FluentAssertions;
     using Host;
+    using NativeTypes;
     using Testing;
     using Xunit;
 
@@ -89,12 +90,12 @@ namespace ServiceStack.Documentation.Tests
         }
 
         [Fact]
-        public void OperationsMapFilter_ExcludesRestrictedTo()
+        public void OperationsMapFilter_ExcludesTypesInIgnoreNamespaces()
         {
             var operationsMap = new Dictionary<Type, Operation>
             {
                 { typeof (int), new Operation { RequestType = typeof (int) } },
-                { typeof (string), new Operation { RequestType = typeof (string), RestrictTo = new RestrictAttribute() } }
+                { typeof (TypesKotlin), new Operation { RequestType = typeof (TypesKotlin) } }
             };
 
             var filter = new ApiSpecFeature(apiSpecConfig).OperationsMapFilter;
