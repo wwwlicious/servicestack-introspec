@@ -73,6 +73,31 @@ namespace ServiceStack.Documentation.Tests.Extensions
         public void HasSoap12Support_True_IfExclude_NotSoap() => typeof(Soap11Restrict).HasSoap12Support().Should().BeFalse();
 
         [Fact]
+        public void HasCsvSupport_True_IfCsv() => typeof(All).HasCsvSupport().Should().BeTrue();
+
+        [Fact]
+        public void HasCsvSupport_False_IfExcludeCsv() => typeof(CsvExclude).HasCsvSupport().Should().BeFalse();
+
+        [Fact]
+        public void HasCsvSupport_True_IfCsvRestrict() => typeof(CsvRestrict).HasCsvSupport().Should().BeTrue();
+
+        [Fact]
+        public void HasCsvSupport_True_IfExclude_NotCsv() => typeof(Soap11Restrict).HasCsvSupport().Should().BeFalse();
+
+        [Fact]
+        public void HasHtmlSupport_True_IfHtml() => typeof(All).HasHtmlSupport().Should().BeTrue();
+
+        [Fact]
+        public void HasHtmlSupport_False_IfExcludeHtml() => typeof(HtmlExclude).HasHtmlSupport().Should().BeFalse();
+
+        [Fact]
+        public void HasHtmlSupport_True_IfHtmlRestrict() => typeof(HtmlRestrict).HasHtmlSupport().Should().BeTrue();
+
+        [Fact]
+        public void HasHtmlSupport_True_IfExclude_NotHtml() => typeof(Soap11Restrict).HasHtmlSupport().Should().BeFalse();
+        
+
+        [Fact]
         public void HasMsgPackSupport_False_IfNoMsgPackFeature() => typeof(All).HasMsgPackSupport().Should().BeFalse();
 
         [Fact(Skip = "Need appHost with MsgPack")]
@@ -117,6 +142,12 @@ namespace ServiceStack.Documentation.Tests.Extensions
     [Exclude(Feature.Soap)] public class SoapExclude { }
     [Restrict(RequestAttributes.Soap11)] public class Soap11Restrict { }
     [Restrict(RequestAttributes.Soap12)] public class Soap12Restrict { }
+
+    [Exclude(Feature.Csv)] public class CsvExclude { }
+    [Restrict(RequestAttributes.Csv)] public class CsvRestrict { }
+
+    [Exclude(Feature.Html)] public class HtmlExclude { }
+    [Restrict(RequestAttributes.Html)] public class HtmlRestrict { }
 
     [Exclude(Feature.MsgPack)] public class MsgPackExclude { }
     [Restrict(RequestAttributes.MsgPack)] public class MsgPackRestrict { }

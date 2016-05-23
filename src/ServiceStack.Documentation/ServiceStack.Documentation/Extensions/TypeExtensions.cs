@@ -25,6 +25,12 @@ namespace ServiceStack.Documentation.Extensions
         public static bool HasSoap12Support(this Type type)
             => type.HasSupport(Feature.Soap, RequestAttributes.Soap12);
 
+        public static bool HasCsvSupport(this Type type)
+            => type.HasSupport(Feature.Csv, RequestAttributes.Csv);
+
+        public static bool HasHtmlSupport(this Type type)
+            => type.HasSupport(Feature.Html, RequestAttributes.Html);
+
         // TODO Is there a nicer way to handle this without taking dependency on MsgPack nuget package?
         public static bool HasMsgPackSupport(this Type type)
             => type.HasSupportExternal(Feature.MsgPack, RequestAttributes.MsgPack, Constants.Features.MsgPackFeature);
