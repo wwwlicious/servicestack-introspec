@@ -53,6 +53,10 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
                 response.Tags = unionCollections
                     ? response.Tags.SafeUnion(() => requestEnricher.GetTags(operation))
                     : response.Tags.GetIfNullOrEmpty(() => requestEnricher.GetTags(operation));
+
+                response.ContentTypes = unionCollections
+                    ? response.ContentTypes.SafeUnion(() => requestEnricher.GetContentTypes(operation))
+                    : response.ContentTypes.GetIfNullOrEmpty(() => requestEnricher.GetContentTypes(operation));
             }
 
             response.ReturnType = response.ReturnType.GetIfNull(() => new ApiResourceType());

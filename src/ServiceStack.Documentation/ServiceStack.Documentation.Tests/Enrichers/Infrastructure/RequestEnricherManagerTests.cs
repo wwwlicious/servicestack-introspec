@@ -325,5 +325,69 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
 
             apiResourceDocumentation.RelativePath.Should().Be(returnPath);
         }
+
+
+        [Fact]
+        public void EnrichResponse_CallsGetContentTypes_IfResourceHasNullVerbs()
+        {
+            manager.EnrichRequest(new ApiResourceDocumentation(), operation);
+            A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void EnrichResponse_CallsGetContentTypes_IfResourceHasEmptyVerbs()
+        {
+            manager.EnrichRequest(new ApiResourceDocumentation { ContentTypes = new string[0] }, operation);
+            A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void EnrichResponse_SetsContentTypes_IfResourceHasEmptyVerbs()
+        {
+            var contentTypes = new[] { "text/jsv", "text/xml" };
+            A.CallTo(() => requestEnricher.GetContentTypes(operation)).Returns(contentTypes);
+            var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new string[0] };
+
+            manager.EnrichRequest(apiResourceDocumentation, operation);
+
+            apiResourceDocumentation.ContentTypes.Should().BeEquivalentTo(contentTypes);
+        }
+
+        [Fact]
+        public void EnrichResponse_CallsGetContentTypes_IfResourceHasContentTypes_AndUnionAsStrategy()
+        {
+            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
+            {
+                var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new[] { "text/jsv" } };
+                manager.EnrichRequest(apiResourceDocumentation, operation);
+                A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustHaveHappened();
+            }
+        }
+
+        [Fact]
+        public void EnrichResponse_ReturnsAllContentTypes_IfResourceHasContentTypes_AndUnionAsStrategy()
+        {
+            var contentTypes = new[] { "text/jsv", "text/csv" };
+            A.CallTo(() => requestEnricher.GetContentTypes(operation)).Returns(contentTypes);
+
+            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
+            {
+                var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new[] { "text/jsv", "application/json" } };
+                manager.EnrichRequest(apiResourceDocumentation, operation);
+                apiResourceDocumentation.ContentTypes.Length.Should().Be(3);
+                apiResourceDocumentation.ContentTypes.Should().Contain("text/jsv").And.Contain("text/csv").And.Contain("application/json");
+            }
+        }
+
+        [Fact]
+        public void EnrichResponse_DoesNotCallGetContentTypes_IfResourceHasContentTypes_AndSetIfEmptyAsStrategy()
+        {
+            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty))
+            {
+                var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new[] { "text/jsv" } };
+                manager.EnrichRequest(apiResourceDocumentation, operation);
+                A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustNotHaveHappened();
+            }
+        }
     }
 }
