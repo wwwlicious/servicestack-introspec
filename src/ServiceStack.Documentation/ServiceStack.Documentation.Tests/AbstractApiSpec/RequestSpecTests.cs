@@ -9,17 +9,26 @@ namespace ServiceStack.Documentation.Tests.AbstractApiSpec
     using FluentAssertions;
     using Xunit;
 
-    public class RequestDtoSpecTests
+    public class RequestSpecTests
     {
         private RequestDocumenter documenter = new RequestDocumenter();
+
+        [Fact]
+        public void Ctor_InitialisesLists()
+        {
+            var d = new RequestDocumenter();
+            d.Verbs.Should().NotBeNull();
+            d.StatusCodes.Should().NotBeNull();
+            d.Tags.Should().NotBeNull();
+            d.ContentTypes.Should().NotBeNull();
+        }
 
         [Fact]
         public void AddVerbs_PopulatesVerbsCollection()
         {
             documenter.SetVerbs("GET", "POST");
             documenter.Verbs.Count.Should().Be(2);
-            documenter.Verbs.Should().Contain("GET");
-            documenter.Verbs.Should().Contain("POST");
+            documenter.Verbs.Should().Contain("GET").And.Contain("POST");
         }
 
         [Fact]
@@ -27,8 +36,7 @@ namespace ServiceStack.Documentation.Tests.AbstractApiSpec
         {
             documenter.SetTags("Tag1", "Tag2");
             documenter.Tags.Count.Should().Be(2);
-            documenter.Tags.Should().Contain("Tag1");
-            documenter.Tags.Should().Contain("Tag2");
+            documenter.Tags.Should().Contain("Tag1").And.Contain("Tag2");
         }
 
         [Fact]
@@ -38,8 +46,15 @@ namespace ServiceStack.Documentation.Tests.AbstractApiSpec
             var code2 = new StatusCode { Code = 204 };
             documenter.SetStatusCodes(code, code2);
             documenter.StatusCodes.Count.Should().Be(2);
-            documenter.StatusCodes.Should().Contain(code);
-            documenter.StatusCodes.Should().Contain(code2);
+            documenter.StatusCodes.Should().Contain(code).And.Contain(code2);
+        }
+
+        [Fact]
+        public void AddContentTypes_PopulatesContentTypesCollection()
+        {
+            documenter.SetContentTypes("text/json", "text/xml");
+            documenter.ContentTypes.Count.Should().Be(2);
+            documenter.ContentTypes.Should().Contain("text/json").And.Contain("text/xml");
         }
     }
 
@@ -48,5 +63,6 @@ namespace ServiceStack.Documentation.Tests.AbstractApiSpec
         internal void SetVerbs(params string[] verbs) => AddVerbs(verbs);
         internal void SetTags(params string[] tags) => AddTags(tags);
         internal void SetStatusCodes(params StatusCode[] codes) => AddStatusCodes(codes);
+        internal void SetContentTypes(params string[] contentTypes) => AddContentTypes(contentTypes);
     }
 }

@@ -19,6 +19,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     {
         List<string> Verbs { get; }
         List<StatusCode> StatusCodes { get; }
+        List<string> ContentTypes { get; }
 
         string Category { get; }
         List<string> Tags { get; }

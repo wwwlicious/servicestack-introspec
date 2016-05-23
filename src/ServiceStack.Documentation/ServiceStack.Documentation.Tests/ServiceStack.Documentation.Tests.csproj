@@ -100,7 +100,7 @@
     <Compile Include="AbstractApiSpec\ApiDtoSpecTests.cs" />
     <Compile Include="AbstractApiSpec\DocumentationClassLocatorTests.cs" />
     <Compile Include="AbstractApiSpec\PropertyMetadataTests.cs" />
-    <Compile Include="AbstractApiSpec\RequestDtoSpecTests.cs" />
+    <Compile Include="AbstractApiSpec\RequestSpecTests.cs" />
     <Compile Include="ApiDocumentationGeneratorTests.cs" />
     <Compile Include="ApiSpecFeatureTests.cs" />
     <Compile Include="Enrichers\FallbackEnricherTests.cs" />

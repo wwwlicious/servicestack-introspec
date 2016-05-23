@@ -30,9 +30,7 @@ namespace ServiceStack.Documentation.Enrichers
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.Verbs.ToArray(), null);
 
         public string[] GetContentTypes(Operation operation)
-        {
-            throw new NotImplementedException();
-        }
+            => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.ContentTypes.ToArray(), null);
 
         public StatusCode[] GetStatusCodes(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.StatusCodes.ToArray(), null);
