@@ -19,7 +19,8 @@ namespace ServiceStack.Documentation.AbstractApiSpec
         {
             try
             {
-                var lookup = FindAllTypes()
+                var typesToScan = DocumenterSettings.Assemblies.SelectMany(a => a.GetTypes());
+                var lookup = FindAllTypeSpecs(typesToScan)
                     .ToDictionary(k => k.BaseType.GenericTypeArguments[0],
                         v => (IApiResource) Activator.CreateInstance(v));
 
@@ -32,11 +33,11 @@ namespace ServiceStack.Documentation.AbstractApiSpec
             }
         }
 
-        private static IEnumerable<Type> FindAllTypes()
+        private static IEnumerable<Type> FindAllTypeSpecs(IEnumerable<Type> types)
         {
             var target = typeof (TypeSpec<>);
 
-            var foundTypes = from t in DocumenterSettings.Assemblies.SelectMany(a => a.GetTypes())
+            var foundTypes = from t in types
                 let h = t.GetInheritanceHierarchy().Where(b => b.IsGenericType)
                 where
                     t.IsClass && !t.IsAbstract && t.IsVisible &&
