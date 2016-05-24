@@ -12,38 +12,38 @@ namespace ServiceStack.Documentation.Tests
     using Documentation.Services;
     using Documentation.Settings;
     using FakeItEasy;
+    using Fixtures;
     using FluentAssertions;
     using Host;
     using NativeTypes;
     using Testing;
     using Xunit;
 
-    [Collection("ApiSpecFeatureTests")]
-    public class ApiSpecFeatureTests : IDisposable
+    [Collection("AppHost")]
+    public class ApiSpecFeatureTests
     {
         private readonly ApiSpecFeature feature;
         private readonly ApiSpecConfig apiSpecConfig;
         private readonly IApiDocumentationGenerator generator;
         private readonly Func<KeyValuePair<Type, Operation>, bool> filter;
-        private ServiceStackHost appHost;
+        private readonly AppHostFixture fixture;
 
-        public ApiSpecFeatureTests()
+        public ApiSpecFeatureTests(AppHostFixture fixture)
         {
+            this.fixture = fixture;
+
             apiSpecConfig = new ApiSpecConfig
             {
                 Contact = new ApiContact { Email = "ronald.macdonald@macdonalds.hq", Name = "ronnie mcd" },
                 Description = "great api"
             };
             generator = A.Fake<IApiDocumentationGenerator>();
-            
+
             filter = A.Fake<Func<KeyValuePair<Type, Operation>, bool>>();
 
             feature = new ApiSpecFeature(apiSpecConfig)
                 .WithGenerator(generator)
                 .WithOperationsFilter(filter);
-
-            if (ServiceStackHost.Instance == null)
-                appHost = new BasicAppHost { TestMode = true }.Init();
         }
 
         [Fact]
@@ -65,15 +65,14 @@ namespace ServiceStack.Documentation.Tests
         {
             Action action = () => feature.Register(A.Fake<IAppHost>());
             action.ShouldThrow<ArgumentException>()
-                .WithMessage("The Metadata Feature must be enabled to use the ApiSpec Feature");
+                  .WithMessage("The Metadata Feature must be enabled to use the ApiSpec Feature");
         }
 
         [Fact]
         public void Register_RegistersService()
         {
-            appHost.Container.TryResolve<ApiSpecService>().Should().BeNull();
-            feature.Register(appHost);
-            appHost.Container.TryResolve<ApiSpecService>().Should().NotBeNull();
+            feature.Register(fixture.AppHost);
+            fixture.AppHost.Container.TryResolve<ApiSpecService>().Should().NotBeNull();
         }
 
         [Fact]
@@ -81,10 +80,10 @@ namespace ServiceStack.Documentation.Tests
         {
             const string href = "/spec";
 
-            var metadataFeature = appHost.GetPlugin<MetadataFeature>();
+            var metadataFeature = fixture.AppHost.GetPlugin<MetadataFeature>();
             metadataFeature.DebugLinks.Should().NotContainKey(href);
 
-            feature.Register(appHost);
+            feature.Register(fixture.AppHost);
 
             metadataFeature.DebugLinks.Should().ContainKey(href);
         }
@@ -94,8 +93,8 @@ namespace ServiceStack.Documentation.Tests
         {
             var operationsMap = new Dictionary<Type, Operation>
             {
-                { typeof (int), new Operation { RequestType = typeof (int) } },
-                { typeof (TypesKotlin), new Operation { RequestType = typeof (TypesKotlin) } }
+                { typeof(int), new Operation { RequestType = typeof(int) } },
+                { typeof(TypesKotlin), new Operation { RequestType = typeof(TypesKotlin) } }
             };
 
             var filter = new ApiSpecFeature(apiSpecConfig).OperationsMapFilter;
@@ -114,7 +113,7 @@ namespace ServiceStack.Documentation.Tests
         {
             var operationsMap = new Dictionary<Type, Operation>
             {
-                { typeof (int), new Operation { RequestType = typeof (int) } },
+                { typeof(int), new Operation { RequestType = typeof(int) } },
                 { requestType, new Operation { RequestType = requestType } }
             };
 
@@ -128,7 +127,7 @@ namespace ServiceStack.Documentation.Tests
         [Fact(Skip = "This is proving harder than expected. Will pick up again")]
         public void Register_CallsOperationsMapFilter()
         {
-            var basicAppHost = new BasicAppHost();// A.Fake<IAppHost>();
+            var basicAppHost = new BasicAppHost(); // A.Fake<IAppHost>();
             basicAppHost.Plugins.Add(new MetadataFeature());
 
             /*A.CallTo(() => generator.GenerateDocumentation(A<IEnumerable<Operation>>.Ignored, basicAppHost))
@@ -138,8 +137,6 @@ namespace ServiceStack.Documentation.Tests
 
             A.CallTo(() => filter.Invoke(A<KeyValuePair<Type, Operation>>.Ignored)).MustHaveHappened();
         }
-
-        public void Dispose() => appHost?.Dispose();
     }
 
     [Exclude(Feature.Metadata)] public class ExcludeMetaData { }
