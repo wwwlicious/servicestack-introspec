@@ -9,12 +9,15 @@ namespace ServiceStack.Documentation.Enrichers
     using System.Linq;
     using System.Net;
     using System.Reflection;
+    using DataAnnotations;
+    using Documentation.Infrastructure;
     using Extensions;
     using Host;
     using Interfaces;
     using Logging;
     using Models;
     using Settings;
+    using Utilities;
 
     public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher
     {
@@ -44,33 +47,35 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string[] GetContentTypes(Operation operation)
         {
-            // [Restrict] could come from the RequestDTO OR the Service. If we just look at RequestType then 
-            // will miss any that are set at the service level
-            var restrictedTo = operation.RestrictTo;
+            // Get a list of all available formats
+            var availableFormats = HostContext.MetadataPagesConfig.AvailableFormatConfigs.Select(a => a.Format);
 
-            var type = operation.RequestType;
-            var contentTypes = new List<string>(10);
+            // NOTE Restriction can come from either DTO or Service
+            RestrictAttribute restrictedTo = operation.RestrictTo;
+            var requestType = operation.RequestType;
 
-            if (type.HasXmlSupport(restrictedTo)) contentTypes.Add(MimeTypes.Xml);
-            if (type.HasJsonSupport(restrictedTo)) contentTypes.Add(MimeTypes.Json);
-            if (type.HasJsvSupport(restrictedTo)) contentTypes.Add(MimeTypes.Jsv);
-            if (type.HasSoap11Support(restrictedTo)) contentTypes.Add(MimeTypes.Soap11);
-            if (type.HasSoap12Support(restrictedTo)) contentTypes.Add(MimeTypes.Soap12);
-            if (type.HasCsvSupport(restrictedTo)) contentTypes.Add(MimeTypes.Csv);
-            if (type.HasHtmlSupport(restrictedTo)) contentTypes.Add(MimeTypes.Html);
-            if (type.HasProtoBufSupport(restrictedTo)) contentTypes.Add(MimeTypes.ProtoBuf);
-            if (type.HasMsgPackSupport(restrictedTo)) contentTypes.Add(MimeTypes.MsgPack);
-
-            var addHeader = type.FirstAttribute<AddHeaderAttribute>();
-            if (addHeader != null)
+            var mimeTypes = new List<string>();
+            foreach (var format in availableFormats.Select(s => s.TrimStart("x-")))
             {
-                var contentType = addHeader.ContentType ?? addHeader.DefaultContentType;
-                if (!string.IsNullOrEmpty(contentType))
-                    contentTypes.Add(contentType);
+                // Verify RestrictAttribute not preventing access
+                var requestAttrResult = EnumUtilities.SafeParse<RequestAttributes>(format);
+                if (!restrictedTo.CanAccess(requestAttrResult)) continue;
 
+                // Verify ExcludeAttribute not preventing access
+                var featureResult = EnumUtilities.SafeParse<Feature>(format);
+                if (requestType.HasAccessToFeature(featureResult))
+                    mimeTypes.Add(MimeTypeUtilities.GetMimeType(format));
             }
 
-            return contentTypes.ToArray();
+            var addHeader = requestType.FirstAttribute<AddHeaderAttribute>();
+            if (addHeader == null) return mimeTypes.ToArray();
+
+            // If [AddHeader] then add that content-type
+            var contentType = addHeader.ContentType ?? addHeader.DefaultContentType;
+            if (!string.IsNullOrEmpty(contentType))
+                mimeTypes.Add(contentType);
+
+            return mimeTypes.Distinct().ToArray();
         }
 
         public StatusCode[] GetStatusCodes(Operation operation)
@@ -169,9 +174,23 @@ namespace ServiceStack.Documentation.Enrichers
             return attr;
         }
 
-        private string GetPropertyInfoName(PropertyInfo pi)
-        {
-            return $"{pi.DeclaringType?.FullName}.{pi.Name}";
-        }
+        private string GetPropertyInfoName(PropertyInfo pi) => $"{pi.DeclaringType?.FullName}.{pi.Name}";
+
+        /*private static bool IsNotRestrictedTo(RestrictAttribute restrictAttribute, Result<RequestAttributes> request)
+            => restrictAttribute == null || (request.IsSuccess && restrictAttribute.HasAccessTo(request.Value));
+
+        private static bool IsNotExcluded(Type requestType, Result<Feature> feature)
+            => feature.IsSuccess &&
+                !requestType.AllAttributes<ExcludeAttribute>().Any(t => t.Feature.HasFlag(feature.Value));*/
+    }
+
+    internal static class AccessExceptions
+    {
+        internal static bool CanAccess(this RestrictAttribute restrictAttribute, Result<RequestAttributes> request)
+            => restrictAttribute == null || (request.IsSuccess && restrictAttribute.HasAccessTo(request.Value));
+
+        internal static bool HasAccessToFeature(this Type requestType, Result<Feature> feature)
+            => feature.IsSuccess &&
+                !requestType.AllAttributes<ExcludeAttribute>().Any(t => t.Feature.HasFlag(feature.Value));
     }
 }

@@ -64,7 +64,8 @@
     <Compile Include="AbstractApiSpec\TypeSpec.cs" />
     <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Utilities\EnumUtilities.cs" />
+    <Compile Include="Infrastructure\Result.cs" />
     <Compile Include="Models\PropertyConstraint.cs" />
     <Compile Include="Models\StatusCode.cs" />
     <Compile Include="Services\ApiSpecService.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Enrichers\ReflectionEnricher.cs" />
     <Compile Include="Enrichers\Interfaces\IApiResourceEnricher.cs" />
     <Compile Include="IApiDocumentationGenerator.cs" />
+    <Compile Include="Utilities\MimeTypeUtilities.cs" />
     <Compile Include="Validators\ApiContactValidator.cs" />
     <Compile Include="Validators\ApiSpecConfigValidator.cs" />
     <Compile Include="XmlDocumentation\IXmlDocumentationLookup.cs" />

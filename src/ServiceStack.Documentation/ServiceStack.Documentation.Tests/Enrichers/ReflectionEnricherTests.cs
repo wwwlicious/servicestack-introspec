@@ -11,16 +11,24 @@ namespace ServiceStack.Documentation.Tests.Enrichers
     using Documentation.Enrichers;
     using Documentation.Models;
     using Documentation.Settings;
+    using Fixtures;
     using FluentAssertions;
     using Host;
     using Xunit;
 
+    [Collection("AppHost")]
     public class ReflectionEnricherTests
     {
         private ReflectionEnricher enricher = new ReflectionEnricher();
+        private readonly AppHostFixture fixture;
 
         private static PropertyInfo noPropertyInfo => typeof(SomeAttributes).GetProperty("NoAttr");
         private static PropertyInfo propertyInfo => typeof (SomeAttributes).GetProperty("Thing");
+
+        public ReflectionEnricherTests(AppHostFixture fixture)
+        {
+            this.fixture = fixture;
+        }
 
         [Fact]
         public void GetTitle_ReturnsTypeName() => enricher.GetTitle(typeof(AllAttributes)).Should().Be("AllAttributes");
@@ -39,14 +47,6 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         [Fact]
         public void GetNotes_ReturnsNotes_IfRouteAttribute()
             => enricher.GetNotes(typeof(AllAttributes)).Should().Be("These are some notes");
-
-        [Fact]
-        public void GetVerbs_ReturnsAllVerbs_IfOperationActionsIsAny()
-        {
-            var operation = new Operation { Actions = new List<string> { "ANY" } };
-            var result = enricher.GetVerbs(operation);
-            result.Should().BeEquivalentTo("GET", "POST");
-        }
 
         [Fact]
         public void GetVerbs_ReturnsVerbsFromSettings_IfOperationActionsContainsAny()
@@ -231,20 +231,24 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(SomeAttributes) };
             var contentTypes = enricher.GetContentTypes(operation);
 
-            contentTypes.Length.Should().Be(7);
+            contentTypes.Length.Should().Be(6);
             contentTypes.Should().Contain(MimeTypes.Xml)
                         .And.Contain(MimeTypes.Json)
                         .And.Contain(MimeTypes.Jsv)
                         .And.Contain(MimeTypes.Soap11)
                         .And.Contain(MimeTypes.Soap12)
-                        .And.Contain(MimeTypes.Csv)
-                        .And.Contain(MimeTypes.Html);
+                        .And.Contain(MimeTypes.Csv);
         }
 
         [Fact]
         public void GetContentTypes_ObeysRestrictAttribute()
         {
-            var operation = new Operation { RequestType = typeof(OneAttribute) };
+            var requestType = typeof(OneAttribute);
+            var operation = new Operation
+            {
+                RequestType = requestType,
+                RestrictTo = requestType.FirstAttribute<RestrictAttribute>()
+            };
             var contentTypes = enricher.GetContentTypes(operation);
 
             contentTypes.Length.Should().Be(2);
@@ -258,12 +262,11 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(AllAttributes) };
             var contentTypes = enricher.GetContentTypes(operation);
 
-            contentTypes.Length.Should().Be(5);
+            contentTypes.Length.Should().Be(4);
             contentTypes.Should().Contain(MimeTypes.Xml)
                         .And.Contain(MimeTypes.Json)
                         .And.Contain(MimeTypes.Jsv)
-                        .And.Contain(MimeTypes.Csv)
-                        .And.Contain(MimeTypes.Html);
+                        .And.Contain(MimeTypes.Csv);
         }
 
         [Fact]
