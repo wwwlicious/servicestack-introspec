@@ -13,6 +13,7 @@
     using ServiceStack.Documentation.Models;
     using ServiceStack.Documentation.Settings;
     using ServiceStack.Logging;
+    using ServiceStack.MsgPack;
     using ServiceStack.Text;
 
     public class Program
@@ -59,6 +60,7 @@
 
         private void SetupPlugins()
         {
+            Plugins.Add(new MsgPackFormat());
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new SwaggerFeature());
 
