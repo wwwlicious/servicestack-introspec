@@ -9,8 +9,6 @@ namespace ServiceStack.Documentation.Enrichers
     using System.Linq;
     using System.Net;
     using System.Reflection;
-    using DataAnnotations;
-    using Documentation.Infrastructure;
     using Extensions;
     using Host;
     using Interfaces;
@@ -67,13 +65,7 @@ namespace ServiceStack.Documentation.Enrichers
                     mimeTypes.Add(MimeTypeUtilities.GetMimeType(format));
             }
 
-            var addHeader = requestType.FirstAttribute<AddHeaderAttribute>();
-            if (addHeader == null) return mimeTypes.ToArray();
-
-            // If [AddHeader] then add that content-type
-            var contentType = addHeader.ContentType ?? addHeader.DefaultContentType;
-            if (!string.IsNullOrEmpty(contentType))
-                mimeTypes.Add(contentType);
+            ProcessAddHeaderAttribute(requestType, mimeTypes);
 
             return mimeTypes.Distinct().ToArray();
         }
@@ -176,21 +168,16 @@ namespace ServiceStack.Documentation.Enrichers
 
         private string GetPropertyInfoName(PropertyInfo pi) => $"{pi.DeclaringType?.FullName}.{pi.Name}";
 
-        /*private static bool IsNotRestrictedTo(RestrictAttribute restrictAttribute, Result<RequestAttributes> request)
-            => restrictAttribute == null || (request.IsSuccess && restrictAttribute.HasAccessTo(request.Value));
+        private static void ProcessAddHeaderAttribute(Type requestType, List<string> mimeTypes)
+        {
+            var addHeader = requestType.FirstAttribute<AddHeaderAttribute>();
+            if (addHeader == null)
+                return;
 
-        private static bool IsNotExcluded(Type requestType, Result<Feature> feature)
-            => feature.IsSuccess &&
-                !requestType.AllAttributes<ExcludeAttribute>().Any(t => t.Feature.HasFlag(feature.Value));*/
-    }
-
-    internal static class AccessExceptions
-    {
-        internal static bool CanAccess(this RestrictAttribute restrictAttribute, Result<RequestAttributes> request)
-            => restrictAttribute == null || (request.IsSuccess && restrictAttribute.HasAccessTo(request.Value));
-
-        internal static bool HasAccessToFeature(this Type requestType, Result<Feature> feature)
-            => feature.IsSuccess &&
-                !requestType.AllAttributes<ExcludeAttribute>().Any(t => t.Feature.HasFlag(feature.Value));
+            // If [AddHeader] present then add that content-type
+            var contentType = addHeader.ContentType ?? addHeader.DefaultContentType;
+            if (!string.IsNullOrEmpty(contentType))
+                mimeTypes.Add(contentType);
+        }
     }
 }
