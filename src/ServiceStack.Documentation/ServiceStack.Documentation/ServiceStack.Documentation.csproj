@@ -65,6 +65,7 @@
     <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Models\PropertyConstraint.cs" />
     <Compile Include="Models\StatusCode.cs" />
     <Compile Include="Services\ApiSpecService.cs" />
     <Compile Include="Constants.cs" />

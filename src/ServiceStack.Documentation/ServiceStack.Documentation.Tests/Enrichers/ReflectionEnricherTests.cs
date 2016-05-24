@@ -9,6 +9,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
     using System.Reflection;
     using DataAnnotations;
     using Documentation.Enrichers;
+    using Documentation.Models;
     using Documentation.Settings;
     using FluentAssertions;
     using Host;
@@ -273,6 +274,37 @@ namespace ServiceStack.Documentation.Tests.Enrichers
 
             contentTypes.Should().Contain(MimeTypes.Bson);
         }
+
+        [Fact]
+        public void GetConstraints_Null_IfNoApiAllowableValuesAttribute()
+            => enricher.GetConstraints(noPropertyInfo).Should().BeNull();
+
+        [Fact]
+        public void GetConstraints_ReturnsListConstraint()
+        {
+            var pi = typeof(SomeAttributes).GetProperty("List");
+            var constraint = enricher.GetConstraints(pi);
+
+            constraint.Name.Should().Be("List");
+            constraint.Type.Should().Be(ConstraintType.List);
+            constraint.Values.Should().Contain("Range").And.Contain("List");
+            constraint.Values.Length.Should().Be(2);
+            constraint.Min.Should().NotHaveValue();
+            constraint.Max.Should().NotHaveValue();
+        }
+
+        [Fact]
+        public void GetConstraints_ReturnsRangeConstraint()
+        {
+            var pi = typeof(SomeAttributes).GetProperty("Range");
+            var constraint = enricher.GetConstraints(pi);
+
+            constraint.Name.Should().Be("Range");
+            constraint.Type.Should().Be(ConstraintType.Range);
+            constraint.Values.Should().BeNull();
+            constraint.Min.Should().Be(1);
+            constraint.Max.Should().Be(10);
+        }
     }
 
     [Api("ApiDescription")]
@@ -292,6 +324,12 @@ namespace ServiceStack.Documentation.Tests.Enrichers
     public class SomeAttributes
     {
         public int NoAttr { get; set; }
+
+        [ApiAllowableValues("Range", 1, 10)]
+        public int Range { get; set; }
+
+        [ApiAllowableValues("List", typeof(ConstraintType))]
+        public int List { get; set; }
 
         [ApiMember(AllowMultiple = true, ParameterType = "body", Description = "we're no here", IsRequired = true, Name = "batcat")]
         public string Thing { get; set; }

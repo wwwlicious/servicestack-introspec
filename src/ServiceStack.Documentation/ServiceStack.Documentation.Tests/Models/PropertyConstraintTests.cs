@@ -11,17 +11,19 @@ namespace ServiceStack.Documentation.Tests.Models
 
     public class PropertyConstraintTests
     {
+        private const string name = "TheName";
+
         [Fact]
         public void CreateRangeConstraint_Throws_IfMinAndMaxNull()
         {
-            Action action = () => PropertyConstraint.CreateRangeConstraint(null, null);
+            Action action = () => PropertyConstraint.CreateRangeConstraint(name, null, null);
             action.ShouldThrow<InvalidOperationException>().WithMessage("You must supply either a Min or Max value");
         }
 
         [Fact]
         public void CreateRangeConstraint_Throws_IfMinGreaterThanMax()
         {
-            Action action = () => PropertyConstraint.CreateRangeConstraint(10, 9);
+            Action action = () => PropertyConstraint.CreateRangeConstraint(name, 10, 9);
             action.ShouldThrow<ArgumentOutOfRangeException>();
         }
 
@@ -32,7 +34,8 @@ namespace ServiceStack.Documentation.Tests.Models
         [InlineData(10, 10)]
         public void CreateRangeConstraint_CreatesConstraint_WithCorrectValues(int? min, int? max)
         {
-            var constraint = PropertyConstraint.CreateRangeConstraint(min, max);
+            var constraint = PropertyConstraint.CreateRangeConstraint(name, min, max);
+            constraint.Name.Should().Be(name);
             constraint.Min.Should().Be(min);
             constraint.Max.Should().Be(max);
             constraint.Type.Should().Be(ConstraintType.Range);
@@ -43,7 +46,7 @@ namespace ServiceStack.Documentation.Tests.Models
         [MemberData("InvalidValuesArray")]
         public void CreateListConstraint_Throws_IfValuesNullOrEmpty(string[] values)
         {
-            Action action = () => PropertyConstraint.CreateListConstraint(values);
+            Action action = () => PropertyConstraint.CreateListConstraint(name, values);
             action.ShouldThrow<ArgumentException>();
         }
 
@@ -51,7 +54,8 @@ namespace ServiceStack.Documentation.Tests.Models
         public void CreateListConstraint_CreatesConstraint_WithCorrectValues()
         {
             var values = new[] { "one", "six" };
-            var constraint = PropertyConstraint.CreateListConstraint(values);
+            var constraint = PropertyConstraint.CreateListConstraint(name, values);
+            constraint.Name.Should().Be(name);
             constraint.Min.Should().NotHaveValue();
             constraint.Max.Should().NotHaveValue();
             constraint.Type.Should().Be(ConstraintType.List);

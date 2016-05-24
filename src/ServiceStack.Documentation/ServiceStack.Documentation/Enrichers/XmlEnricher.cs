@@ -7,6 +7,7 @@ namespace ServiceStack.Documentation.Enrichers
     using System;
     using System.Reflection;
     using Interfaces;
+    using Models;
     using XmlDocumentation;
 
     public class XmlEnricher : IResourceEnricher, IPropertyEnricher
@@ -28,7 +29,7 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetTitle(PropertyInfo pi) => GetXmlMember(pi)?.Name;
         public bool? GetAllowMultiple(PropertyInfo pi) => null;
         public string[] GetExternalLinks(PropertyInfo pi) => null;
-        public string GetContraints(PropertyInfo pi) => null;
+        public PropertyConstraint GetConstraints(PropertyInfo pi) => null;
         public bool? GetIsRequired(PropertyInfo pi) => null;
         public string GetParamType(PropertyInfo pi) => null;
 

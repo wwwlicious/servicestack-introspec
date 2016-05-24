@@ -125,7 +125,21 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string GetNotes(PropertyInfo pi) => null;
         public string[] GetExternalLinks(PropertyInfo pi) => null;
-        public string GetContraints(PropertyInfo pi) => null;
+
+        public PropertyConstraint GetConstraints(PropertyInfo pi)
+        {
+            var allowableValues = pi.FirstAttribute<ApiAllowableValuesAttribute>();
+            if (allowableValues == null)
+                return null;
+
+            var constraint = allowableValues.Type == "LIST"
+                                 ? PropertyConstraint.CreateListConstraint(allowableValues.Name, allowableValues.Values)
+                                 : PropertyConstraint.CreateRangeConstraint(allowableValues.Name, allowableValues.Min,
+                                     allowableValues.Max);
+
+            log.Debug($"Created {allowableValues.Type} constraint for property {pi.Name}");
+            return constraint;
+        }
 
         private static bool HasOneWayMethod(Operation operation)
         {

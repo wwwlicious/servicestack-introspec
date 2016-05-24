@@ -90,13 +90,12 @@ namespace ServiceStack.Documentation.Models
     
         public string ParamType { get; set; } // used to denote if the param is request querystring or body restricted
         public bool? IsRequired { get; set; }
-        public string Contraints { get; set; } // used to specify accepted values (min/max) or iterate enum types. Could have separate for enum etc
         public string[] ExternalLinks { get; set; }
         public bool? AllowMultiple { get; set; }
 
         public IApiResourceType EmbeddedResource { get; set; }
 
-        public PropertyConstraint Constraint { get; set; }
+        public PropertyConstraint Contraints { get; set; }
 
         // IDictionary<string,string> for extra stuff?
         // ExcludeInSchema??

@@ -81,7 +81,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
             property.Description = property.Description.GetIfNullOrEmpty(() => propertyEnricher.GetDescription(pi));
             property.Notes = property.Notes.GetIfNullOrEmpty(() => propertyEnricher.GetNotes(pi));
             property.ParamType = property.ParamType.GetIfNullOrEmpty(() => propertyEnricher.GetParamType(pi));
-            property.Contraints = property.Contraints.GetIfNullOrEmpty(() => propertyEnricher.GetContraints(pi));
+            property.Contraints = property.Contraints.GetIfNull(() => propertyEnricher.GetConstraints(pi));
 
             property.IsRequired = property.IsRequired.GetIfNoValue(() => propertyEnricher.GetIsRequired(pi));
             property.AllowMultiple = property.AllowMultiple.GetIfNoValue(() => propertyEnricher.GetAllowMultiple(pi));

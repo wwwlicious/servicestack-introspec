@@ -202,24 +202,22 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
             A.CallTo(() => propertyEnricher.GetParamType(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void EnrichParameters_CallsGetContraints_IfContraintsNullOrEmpty(string contraints)
+        [Fact]
+        public void EnrichParameters_CallsGetContraints_IfContraintsNull()
         {
             var param = GetApiParameterDocumention();
-            param.Contraints = contraints;
+            param.Contraints = null;
             manager.EnrichParameters(new[] { param }, typeof(SingleProp));
-            A.CallTo(() => propertyEnricher.GetContraints(A<PropertyInfo>.Ignored)).MustHaveHappened();
+            A.CallTo(() => propertyEnricher.GetConstraints(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
         [Fact]
         public void EnrichParameters_DoesNotCallGetContraints_IfHasContraints()
         {
             var param = GetApiParameterDocumention();
-            param.Contraints = "put in the work";
+            param.Contraints = new PropertyConstraint();
             manager.EnrichParameters(new[] { param }, typeof(SingleProp));
-            A.CallTo(() => propertyEnricher.GetContraints(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => propertyEnricher.GetConstraints(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
         
         [Fact]

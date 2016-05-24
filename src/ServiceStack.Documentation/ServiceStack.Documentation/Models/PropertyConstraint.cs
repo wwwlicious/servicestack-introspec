@@ -8,12 +8,13 @@ namespace ServiceStack.Documentation.Models
 
     public class PropertyConstraint
     {
+        public string Name { get; set; }
         public int? Min { get; set; }
         public int? Max { get; set; }
         public string[] Values { get; set; }
         public ConstraintType Type { get; set; }
 
-        public static PropertyConstraint CreateRangeConstraint(int? min, int? max)
+        public static PropertyConstraint CreateRangeConstraint(string name, int? min, int? max)
         {
             if (!min.HasValue && !max.HasValue)
                 throw new InvalidOperationException("You must supply either a Min or Max value");
@@ -21,15 +22,15 @@ namespace ServiceStack.Documentation.Models
             if ((min ?? int.MinValue) > (max ?? int.MaxValue))
                 throw new ArgumentOutOfRangeException(nameof(max), "Min cannot be creater than Max");
 
-            return new PropertyConstraint { Min = min, Max = max, Type = ConstraintType.Range };
+            return new PropertyConstraint { Name = name, Min = min, Max = max, Type = ConstraintType.Range };
         }
 
-        public static PropertyConstraint CreateListConstraint(string[] values)
+        public static PropertyConstraint CreateListConstraint(string name, string[] values)
         {
             if ((values == null) || (values.Length == 0))
                 throw new ArgumentException("You must supply a list of values", nameof(values));
 
-            return new PropertyConstraint { Values = values, Type = ConstraintType.List };
+            return new PropertyConstraint { Name = name, Values = values, Type = ConstraintType.List };
         }
     }
 

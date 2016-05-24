@@ -5,6 +5,7 @@
 namespace ServiceStack.Documentation.Enrichers.Interfaces
 {
     using System.Reflection;
+    using Models;
 
     /// <summary>
     /// Methods for populating a documentatino resource parameter
@@ -16,7 +17,7 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
         string GetNotes(PropertyInfo pi);
         bool? GetAllowMultiple(PropertyInfo pi);
         string[] GetExternalLinks(PropertyInfo pi);
-        string GetContraints(PropertyInfo pi);
+        PropertyConstraint GetConstraints(PropertyInfo pi);
         bool? GetIsRequired(PropertyInfo pi);
         string GetParamType(PropertyInfo pi);
     }
