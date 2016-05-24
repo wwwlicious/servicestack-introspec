@@ -102,12 +102,33 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
-        public void GetDescription_PI_ReturnsDescription_IfMemberFound()
+        public void GetDescription_PI_ReturnsDescription_IfSummaryFound()
         {
             const string description = "travel is dangerious";
             var summary = new XmlBase { Text = description };
             A.CallTo(() => lookup.GetXmlMember(GetProperty())).Returns(new XmlMember { Summary = summary });
             enricher.GetDescription(GetProperty()).Should().Be(description);
+        }
+
+        [Fact]
+        public void GetDescription_PI_ReturnsDescription_IfValueFound()
+        {
+            const string description = "travel is dangerious";
+            A.CallTo(() => lookup.GetXmlMember(GetProperty())).Returns(new XmlMember { Value = description });
+            enricher.GetDescription(GetProperty()).Should().Be(description);
+        }
+
+        [Fact]
+        public void GetDescription_PI_ReturnsDescription_IfSummaryAndValueFound()
+        {
+            const string value = "travel is dangerious";
+            const string summary = "a brief history of seven killings";
+            A.CallTo(() => lookup.GetXmlMember(GetProperty())).Returns(new XmlMember
+            {
+                Value = value,
+                Summary = new XmlBase { Text = summary }
+            });
+            enricher.GetDescription(GetProperty()).Should().Be($"{summary} {value}");
         }
 
         [Fact]

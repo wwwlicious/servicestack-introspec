@@ -23,7 +23,16 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetDescription(Type type) => GetDescriptionInternal(type);
         public string GetNotes(Type type) => GetNotesInternal(type);
 
-        public string GetDescription(PropertyInfo pi) => GetDescriptionInternal(pi);
+        public string GetDescription(PropertyInfo pi)
+        {
+            var desc = GetDescriptionInternal(pi);
+            var value = GetXmlMember(pi)?.Value;
+
+            return string.IsNullOrEmpty(value)
+                       ? desc
+                       : string.IsNullOrEmpty(desc) ? value : $"{desc} {value}";
+        }
+
         public string GetNotes(PropertyInfo pi) => GetNotesInternal(pi);
 
         public string GetTitle(PropertyInfo pi) => GetXmlMember(pi)?.Name;
