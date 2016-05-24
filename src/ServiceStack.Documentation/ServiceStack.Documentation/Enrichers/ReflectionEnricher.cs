@@ -133,8 +133,8 @@ namespace ServiceStack.Documentation.Enrichers
                 return null;
 
             var constraint = allowableValues.Type == "LIST"
-                                 ? PropertyConstraint.CreateListConstraint(allowableValues.Name, allowableValues.Values)
-                                 : PropertyConstraint.CreateRangeConstraint(allowableValues.Name, allowableValues.Min,
+                                 ? PropertyConstraint.ListConstraint(allowableValues.Name, allowableValues.Values)
+                                 : PropertyConstraint.RangeConstraint(allowableValues.Name, allowableValues.Min,
                                      allowableValues.Max);
 
             log.Debug($"Created {allowableValues.Type} constraint for property {pi.Name}");

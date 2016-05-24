@@ -4,10 +4,13 @@
 
 namespace ServiceStack.Documentation.AbstractApiSpec
 {
+    using Models;
+
     public interface IProperty
     {
         string Title { get; set; }
         string Description { get; set; }
         bool? IsRequired { get; set; }
+        PropertyConstraint Constraint { get; set; }
     }
 }

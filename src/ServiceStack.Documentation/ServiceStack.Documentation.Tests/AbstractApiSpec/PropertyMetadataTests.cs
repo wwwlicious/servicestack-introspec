@@ -5,6 +5,7 @@
 namespace ServiceStack.Documentation.Tests.AbstractApiSpec
 {
     using Documentation.AbstractApiSpec;
+    using Documentation.Models;
     using FluentAssertions;
     using Xunit;
 
@@ -49,6 +50,16 @@ namespace ServiceStack.Documentation.Tests.AbstractApiSpec
             metadata.With(x => x.IsRequired, true);
 
             metadata.IsRequired.Should().BeTrue();
+        }
+
+        [Fact]
+        public void With_SetsConstraint()
+        {
+            var metadata = GetPropertyMetadata();
+            var propertyConstraint = PropertyConstraint.RangeConstraint("Test constraint", 1, 2);
+            metadata.With(x => x.Constraint, propertyConstraint);
+
+            metadata.Constraint.Should().Be(propertyConstraint);
         }
     }
 

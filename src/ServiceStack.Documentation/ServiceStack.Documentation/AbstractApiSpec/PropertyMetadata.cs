@@ -8,6 +8,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     using System.Linq.Expressions;
     using System.Reflection;
     using FluentValidation.Internal;
+    using Models;
 
     /// <summary>
     /// Represents data about a property of a type exposed via API 
@@ -17,6 +18,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
         public string Title { get; set; }
         public string Description { get; set; }
         public bool? IsRequired { get; set; }
+        public PropertyConstraint Constraint { get; set; }
 
         internal MemberInfo MemberInfo { get; private set; }
 
