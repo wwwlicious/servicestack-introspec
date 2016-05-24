@@ -51,7 +51,9 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetNotes(PropertyInfo pi) => null;
         public bool? GetAllowMultiple(PropertyInfo pi) => null;
         public string[] GetExternalLinks(PropertyInfo pi) => null;
-        public string GetContraints(PropertyInfo pi) => null;
+
+        public PropertyConstraint GetConstraints(PropertyInfo pi)
+            => GetPropertyValue(pi, property => property?.Constraint);
 
         public bool? GetIsRequired(PropertyInfo pi)
             => GetPropertyValue(pi, property => property.IsRequired);

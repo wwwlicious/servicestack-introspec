@@ -40,7 +40,8 @@ namespace DemoService.Documenters
 
             For(t => t.Age)
                 .With(p => p.Title, "This is an optional thing. AC")
-                .With(p => p.IsRequired, false);
+                .With(p => p.IsRequired, false)
+                .With(p => p.Constraint, PropertyConstraint.RangeConstraint("Age Range", 0, 120));
 
             For(t => t.MyName)
                 .With(p => p.Description, "This is a complex return type");
