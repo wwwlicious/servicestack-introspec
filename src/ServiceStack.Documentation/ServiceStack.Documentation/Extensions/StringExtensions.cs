@@ -8,12 +8,12 @@ namespace ServiceStack.Documentation.Extensions
 
     public static class StringExtensions
     {
-        const char space = ' ';
+        private const char Space = ' ';
 
         /// <summary>
         /// Takes a camel/pascal-case string and adds space before any Capital letter (except first)
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">String to operate on</param>
         /// <returns>String split on capitals</returns>
         /// <remarks>Based on accepted answer for http://stackoverflow.com/questions/272633/add-spaces-before-capital-letters</remarks>
         public static string ToSpaced(this string text)
@@ -27,10 +27,24 @@ namespace ServiceStack.Documentation.Extensions
             for (var x = 1; x < text.Length; x++)
             {
                 if (char.IsUpper(text[x]) && (IsNewUpper(text, x) || IsEndOfAcronym(text, x)))
-                    newText.Append(space);
+                    newText.Append(Space);
                 newText.Append(text[x]);
             }
             return newText.ToString();
+        }
+
+        /// <summary>
+        /// Removes occurrence of toTrim from start of string
+        /// </summary>
+        /// <param name="text">Text to trim</param>
+        /// <param name="toTrim">String value to trim</param>
+        /// <returns>Trimmed string</returns>
+        public static string TrimStart(this string text, string toTrim)
+        {
+            if (string.IsNullOrEmpty(text) || !text.StartsWith(toTrim))
+                return text;
+
+            return text.Substring(toTrim.Length);
         }
 
         private static bool IsEndOfAcronym(string text, int index)
@@ -43,7 +57,7 @@ namespace ServiceStack.Documentation.Extensions
         {
             // Preceding char is not a space OR uppercase
             var preceding = text[index - 1];
-            return !(preceding == space || char.IsUpper(preceding));
+            return !(preceding == Space || char.IsUpper(preceding));
         }
     }
 }

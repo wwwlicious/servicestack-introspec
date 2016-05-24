@@ -25,5 +25,26 @@ namespace ServiceStack.Documentation.Tests.Extensions
         [InlineData("TestOKString", "Test OK String")]
         [InlineData("TestOK", "Test OK")]
         public void ToSpaced_CorrectResult(string text, string expected) => text.ToSpaced().Should().Be(expected);
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void TrimStart_ReturnsString_IfNullOrEmpty(string text) => text.TrimStart("aa").Should().Be(text);
+
+        [Fact]
+        public void TrimStart_ReturnsString_IfNotStartWith()
+        {
+            const string toRemove = "ab";
+            const string str = "banana";
+            str.TrimStart(toRemove).Should().Be(str);
+        }
+
+        [Theory]
+        [InlineData("banana", "b", "anana")]
+        [InlineData("banana", "ban", "ana")]
+        [InlineData("banana", "banana", "")]
+        public void TrimStart_TrimsIfStringStartsWith(string text, string toTrim, string expected)
+            => text.TrimStart(toTrim).Should().Be(expected);
+
     }
 }
