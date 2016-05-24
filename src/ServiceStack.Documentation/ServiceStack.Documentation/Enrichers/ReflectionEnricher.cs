@@ -108,8 +108,10 @@ namespace ServiceStack.Documentation.Enrichers
             if (!string.IsNullOrWhiteSpace(routeFromAttribute))
                 return routeFromAttribute;
 
+            var emptyType = requestType.CreateInstance();
+
             // If no route then make one up
-            return operation.IsOneWay ? ToOneWayUrlOnly(requestType) : ToReplyUrlOnly(requestType);
+            return operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly();
         }
 
         public string GetCategory(Operation operation) => null;
@@ -139,7 +141,7 @@ namespace ServiceStack.Documentation.Enrichers
         private ApiMemberAttribute GetApiMemberAttribute(PropertyInfo pi)
         {
             ApiMemberAttribute attr;
-            var piName = GetPiName(pi);
+            var piName = GetPropertyInfoName(pi);
 
             if (!apiMemberLookup.TryGetValue(piName, out attr))
             {
@@ -153,19 +155,9 @@ namespace ServiceStack.Documentation.Enrichers
             return attr;
         }
 
-        // Move this
-        private string GetPiName(PropertyInfo pi)
+        private string GetPropertyInfoName(PropertyInfo pi)
         {
-            return $"{pi.DeclaringType.FullName}.{pi.Name}";
+            return $"{pi.DeclaringType?.FullName}.{pi.Name}";
         }
-
-        // TODO Find a better way of getting routes. Fallback routes. Changed predefined etc
-        // Based on method of same name from ServiceStack UrlExtensions
-        private string ToOneWayUrlOnly(Type dtoType, string format = "json")
-            => $"/{format}/oneway/{UrlExtensions.GetOperationName(dtoType)}";
-
-        // Based on method of same name from ServiceStack UrlExtensions
-        private string ToReplyUrlOnly(Type dtoType, string format = "json")
-            => $"/{format}/reply/{UrlExtensions.GetOperationName(dtoType)}";
     }
 }

@@ -194,6 +194,7 @@
     /// This is a description of PlainText from XML
     /// </summary>
     /// <remarks>Notes from PlainRequest</remarks>
+    [FallbackRoute("/fallback")]
     public class PlainRequest : IReturn<ComplexResponse>
     {
         public string Name { get; set; }

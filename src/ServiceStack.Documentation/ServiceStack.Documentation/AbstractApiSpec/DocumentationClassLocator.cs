@@ -22,7 +22,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
                 var typesToScan = DocumenterSettings.Assemblies.SelectMany(a => a.GetTypes());
                 var lookup = FindAllTypeSpecs(typesToScan)
                     .ToDictionary(k => k.BaseType.GenericTypeArguments[0],
-                        v => (IApiResource) Activator.CreateInstance(v));
+                        v => (IApiResource)v.CreateInstance());
 
                 return lookup;
             }

@@ -12,7 +12,8 @@ namespace ServiceStack.Documentation.Services
         public object Get(SpecRequest request)
         {
             // Get the documentation from the plugin
-            var documentation = HostContext.GetPlugin<ApiSpecFeature>().Documentation;
+            var apiSpecFeature = HostContext.GetPlugin<ApiSpecFeature>();
+            var documentation = apiSpecFeature.Documentation;
 
             // TODO Filter out by auth permissions
             return new SpecResponse { ApiDocumentation = documentation };
