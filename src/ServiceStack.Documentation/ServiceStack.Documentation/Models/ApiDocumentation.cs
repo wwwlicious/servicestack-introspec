@@ -55,7 +55,7 @@ namespace ServiceStack.Documentation.Models
         public string[] Verbs { get; set; }
         public StatusCode[] StatusCodes { get; set; }
         public string[] ContentTypes { get; set; }
-        public string RelativePath { get; set; } // Depends on [Route]. .ToRelativeUri(). Can only do PreDefinedRoutes if that feature is in
+        public string RelativePath { get; set; } // Depends on [Route]. .ToRelativeUri().
         public ApiResourceType ReturnType { get; set; } // ReturnType w/params
 
         // From ICategorised
@@ -95,6 +95,8 @@ namespace ServiceStack.Documentation.Models
         public bool? AllowMultiple { get; set; }
 
         public IApiResourceType EmbeddedResource { get; set; }
+
+        public PropertyConstraint Constraint { get; set; }
 
         // IDictionary<string,string> for extra stuff?
         // ExcludeInSchema??
