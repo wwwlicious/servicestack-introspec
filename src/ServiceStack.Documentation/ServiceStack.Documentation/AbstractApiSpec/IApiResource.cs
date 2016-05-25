@@ -27,6 +27,6 @@ namespace ServiceStack.Documentation.AbstractApiSpec
 
     public interface IApiPropertyResource
     {
-        IProperty GetPropertySpec(PropertyInfo pi);
+        IProperty GetPropertySpec(MemberInfo pi);
     }
 }

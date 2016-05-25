@@ -12,13 +12,13 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     /// </summary>
     public interface IPropertyEnricher : IEnrich
     {
-        string GetTitle(PropertyInfo pi);
-        string GetDescription(PropertyInfo pi);
-        string GetNotes(PropertyInfo pi);
-        bool? GetAllowMultiple(PropertyInfo pi);
-        string[] GetExternalLinks(PropertyInfo pi);
-        PropertyConstraint GetConstraints(PropertyInfo pi);
-        bool? GetIsRequired(PropertyInfo pi);
-        string GetParamType(PropertyInfo pi);
+        string GetTitle(MemberInfo mi);
+        string GetDescription(MemberInfo mi);
+        string GetNotes(MemberInfo mi);
+        bool? GetAllowMultiple(MemberInfo mi);
+        string[] GetExternalLinks(MemberInfo mi);
+        PropertyConstraint GetConstraints(MemberInfo mi);
+        bool? GetIsRequired(MemberInfo mi);
+        string GetParamType(MemberInfo mi);
     }
 }

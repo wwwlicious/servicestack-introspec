@@ -114,18 +114,18 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetCategory(Operation operation) => null;
         public string[] GetTags(Operation operation) => null;
 
-        public string GetTitle(PropertyInfo pi) => GetApiMemberAttribute(pi)?.Name;
-        public string GetDescription(PropertyInfo pi) => GetApiMemberAttribute(pi)?.Description;
-        public string GetParamType(PropertyInfo pi) => GetApiMemberAttribute(pi)?.ParameterType;
-        public bool? GetAllowMultiple(PropertyInfo pi) => GetApiMemberAttribute(pi)?.AllowMultiple;
-        public bool? GetIsRequired(PropertyInfo pi) => GetApiMemberAttribute(pi)?.IsRequired;
+        public string GetTitle(MemberInfo mi) => GetApiMemberAttribute(mi)?.Name;
+        public string GetDescription(MemberInfo mi) => GetApiMemberAttribute(mi)?.Description;
+        public string GetParamType(MemberInfo mi) => GetApiMemberAttribute(mi)?.ParameterType;
+        public bool? GetAllowMultiple(MemberInfo mi) => GetApiMemberAttribute(mi)?.AllowMultiple;
+        public bool? GetIsRequired(MemberInfo mi) => GetApiMemberAttribute(mi)?.IsRequired;
 
-        public string GetNotes(PropertyInfo pi) => null;
-        public string[] GetExternalLinks(PropertyInfo pi) => null;
+        public string GetNotes(MemberInfo mi) => null;
+        public string[] GetExternalLinks(MemberInfo mi) => null;
 
-        public PropertyConstraint GetConstraints(PropertyInfo pi)
+        public PropertyConstraint GetConstraints(MemberInfo mi)
         {
-            var allowableValues = pi.FirstAttribute<ApiAllowableValuesAttribute>();
+            var allowableValues = mi.FirstAttribute<ApiAllowableValuesAttribute>();
             if (allowableValues == null)
                 return null;
 
@@ -134,7 +134,7 @@ namespace ServiceStack.Documentation.Enrichers
                                  : PropertyConstraint.RangeConstraint(allowableValues.Name, allowableValues.Min,
                                      allowableValues.Max);
 
-            log.Debug($"Created {allowableValues.Type} constraint for property {pi.Name}");
+            log.Debug($"Created {allowableValues.Type} constraint for property {mi.Name}");
             return constraint;
         }
 
@@ -149,7 +149,7 @@ namespace ServiceStack.Documentation.Enrichers
                     && m.GetParameters().Any(p => p.ParameterType == operation.RequestType));
         }
 
-        private ApiMemberAttribute GetApiMemberAttribute(PropertyInfo pi)
+        private ApiMemberAttribute GetApiMemberAttribute(MemberInfo pi)
         {
             ApiMemberAttribute attr;
             var piName = GetPropertyInfoName(pi);
@@ -166,7 +166,7 @@ namespace ServiceStack.Documentation.Enrichers
             return attr;
         }
 
-        private string GetPropertyInfoName(PropertyInfo pi) => $"{pi.DeclaringType?.FullName}.{pi.Name}";
+        private string GetPropertyInfoName(MemberInfo pi) => $"{pi.DeclaringType?.FullName}.{pi.Name}";
 
         private static void ProcessAddHeaderAttribute(Type requestType, List<string> mimeTypes)
         {

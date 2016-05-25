@@ -28,12 +28,17 @@ namespace ServiceStack.Documentation.AbstractApiSpec
             parameterLookup = new Dictionary<MemberInfo, IProperty>();
         }
 
-        public IProperty GetPropertySpec(PropertyInfo pi) => parameterLookup.SafeGet(pi, (IProperty)null);
+        public IProperty GetPropertySpec(MemberInfo pi) => parameterLookup.SafeGet(pi, (IProperty)null);
 
         protected IPropertyMetadata For<TProperty>(Expression<Func<T, TProperty>> expression)
         {
             var parameter = PropertyMetadata.Create(expression);
-            parameterLookup.Add(parameter.MemberInfo, parameter);
+            var memberInfo = parameter.MemberInfo;
+
+            if (!(memberInfo is PropertyInfo) && !(memberInfo is FieldInfo))
+                throw new ArgumentException("For() only supports PropertyInfo or FieldInfo", nameof(expression));
+
+            parameterLookup.Add(memberInfo, parameter);
             return parameter;
         }
     }

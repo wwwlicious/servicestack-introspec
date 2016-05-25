@@ -33,6 +33,9 @@ namespace DemoService.Documenters
 
             AddContentTypes("application/hal+json");
 
+            For(t => t.MyField)
+                .With(p => p.Title, "Just some field");
+
             For(t => t.Name)
                 .With(p => p.Title, "Name parameter abstract class definition")
                 .With(p => p.IsRequired, true)

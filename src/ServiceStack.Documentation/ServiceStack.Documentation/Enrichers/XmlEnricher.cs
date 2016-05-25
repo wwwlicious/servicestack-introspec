@@ -23,24 +23,24 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetDescription(Type type) => GetDescriptionInternal(type);
         public string GetNotes(Type type) => GetNotesInternal(type);
 
-        public string GetDescription(PropertyInfo pi)
+        public string GetDescription(MemberInfo mi)
         {
-            var desc = GetDescriptionInternal(pi);
-            var value = GetXmlMember(pi)?.Value;
+            var desc = GetDescriptionInternal(mi);
+            var value = GetXmlMember(mi)?.Value;
 
             return string.IsNullOrEmpty(value)
                        ? desc
                        : string.IsNullOrEmpty(desc) ? value : $"{desc} {value}";
         }
 
-        public string GetNotes(PropertyInfo pi) => GetNotesInternal(pi);
+        public string GetNotes(MemberInfo mi) => GetNotesInternal(mi);
 
-        public string GetTitle(PropertyInfo pi) => GetXmlMember(pi)?.Name;
-        public bool? GetAllowMultiple(PropertyInfo pi) => null;
-        public string[] GetExternalLinks(PropertyInfo pi) => null;
-        public PropertyConstraint GetConstraints(PropertyInfo pi) => null;
-        public bool? GetIsRequired(PropertyInfo pi) => null;
-        public string GetParamType(PropertyInfo pi) => null;
+        public string GetTitle(MemberInfo mi) => GetXmlMember(mi)?.Name;
+        public bool? GetAllowMultiple(MemberInfo mi) => null;
+        public string[] GetExternalLinks(MemberInfo mi) => null;
+        public PropertyConstraint GetConstraints(MemberInfo mi) => null;
+        public bool? GetIsRequired(MemberInfo mi) => null;
+        public string GetParamType(MemberInfo mi) => null;
 
         private string GetNotesInternal(MemberInfo mi) => GetXmlMember(mi)?.Remarks?.Text;
         private string GetDescriptionInternal(MemberInfo mi) => GetXmlMember(mi)?.Summary?.Text;

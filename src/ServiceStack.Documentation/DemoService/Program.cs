@@ -74,6 +74,8 @@
             //DocumenterSettings.With(verbs: new List<string> { "HEAD", "PATCH" });
             //DocumenterSettings.AnyVerbs = new List<string> { "HEAD", "PATCH" };
             //DocumenterSettings.CollectionStrategy = EnrichmentStrategy.SetIfEmpty;
+
+            JsConfig.IncludePublicFields = true;
             DocumenterSettings.DefaultStatusCodes = new List<StatusCode>
             {
                 new StatusCode { Code = 429, Description = "This is rate limited", Name = "Too Many Requests" },
@@ -204,6 +206,12 @@
         public int Age { get; set; }
 
         public Name MyName { get; set; }
+
+        [DataMember]
+        public string MyField = "Hi";
+
+        [DataMember]
+        public const string NotMyField = "Hi";
     }
 
     public class PlainService : Service

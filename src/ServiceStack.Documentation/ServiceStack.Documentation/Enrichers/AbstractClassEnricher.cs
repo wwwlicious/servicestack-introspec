@@ -35,10 +35,10 @@ namespace ServiceStack.Documentation.Enrichers
         public StatusCode[] GetStatusCodes(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.StatusCodes.ToArray(), null);
 
-        public string GetTitle(PropertyInfo pi) => GetPropertyValue(pi, property => property.Title);
+        public string GetTitle(MemberInfo mi) => GetPropertyValue(mi, property => property.Title);
 
-        public string GetDescription(PropertyInfo pi)
-            => GetPropertyValue(pi, property => property.Description);
+        public string GetDescription(MemberInfo mi)
+            => GetPropertyValue(mi, property => property.Description);
 
         public string GetRelativePath(Operation operation) => null;
 
@@ -48,19 +48,19 @@ namespace ServiceStack.Documentation.Enrichers
         public string[] GetTags(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.Tags.ToArray(), null);
 
-        public string GetNotes(PropertyInfo pi) => null;
-        public bool? GetAllowMultiple(PropertyInfo pi) => null;
-        public string[] GetExternalLinks(PropertyInfo pi) => null;
+        public string GetNotes(MemberInfo mi) => null;
+        public bool? GetAllowMultiple(MemberInfo mi) => null;
+        public string[] GetExternalLinks(MemberInfo mi) => null;
 
-        public PropertyConstraint GetConstraints(PropertyInfo pi)
-            => GetPropertyValue(pi, property => property?.Constraint);
+        public PropertyConstraint GetConstraints(MemberInfo mi)
+            => GetPropertyValue(mi, property => property?.Constraint);
 
-        public bool? GetIsRequired(PropertyInfo pi)
-            => GetPropertyValue(pi, property => property.IsRequired);
+        public bool? GetIsRequired(MemberInfo mi)
+            => GetPropertyValue(mi, property => property.IsRequired);
 
-        public string GetParamType(PropertyInfo pi) => null;
+        public string GetParamType(MemberInfo mi) => null;
 
-        private T GetPropertyValue<T>(PropertyInfo pi, Func<IProperty, T> getter)
+        private T GetPropertyValue<T>(MemberInfo pi, Func<IProperty, T> getter)
         {
             IApiResource spec;
             if (lookup.TryGetValue(pi.DeclaringType, out spec))
