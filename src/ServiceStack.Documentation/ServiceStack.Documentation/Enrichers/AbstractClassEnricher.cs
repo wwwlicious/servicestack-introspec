@@ -35,10 +35,10 @@ namespace ServiceStack.Documentation.Enrichers
         public StatusCode[] GetStatusCodes(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.StatusCodes.ToArray(), null);
 
-        public string GetTitle(MemberInfo mi) => GetPropertyValue(mi, property => property.Title);
+        public string GetTitle(MemberInfo mi) => GetPropertyValue(mi, property => property?.Title);
 
         public string GetDescription(MemberInfo mi)
-            => GetPropertyValue(mi, property => property.Description);
+            => GetPropertyValue(mi, property => property?.Description);
 
         public string GetRelativePath(Operation operation) => null;
 
@@ -56,7 +56,7 @@ namespace ServiceStack.Documentation.Enrichers
             => GetPropertyValue(mi, property => property?.Constraint);
 
         public bool? GetIsRequired(MemberInfo mi)
-            => GetPropertyValue(mi, property => property.IsRequired);
+            => GetPropertyValue(mi, property => property?.IsRequired);
 
         public string GetParamType(MemberInfo mi) => null;
 

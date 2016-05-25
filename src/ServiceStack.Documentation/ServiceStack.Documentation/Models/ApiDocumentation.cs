@@ -53,8 +53,17 @@ namespace ServiceStack.Documentation.Models
     //[DebuggerDisplay("{Title}")]
     public class ApiResourceDocumentation : IApiResourceType, IApiResponseStatus
     {
+        // Set when instantiating
+        public string TypeName { get; set; }
+
         // From IApiResourceType
-        public string Title { get; set; }
+        private string title;
+        public string Title
+        {
+            get { return title ?? TypeName; }
+            set { title = value; }
+        }
+
         public string Description { get; set; }
         public string Notes { get; set; }
         public ApiPropertyDocumention[] Properties { get; set; }
@@ -92,7 +101,12 @@ namespace ServiceStack.Documentation.Models
         public Type ClrType { get; set; }
 
         // From IApiSpec
-        public string Title { get; set; }
+        private string title;
+        public string Title
+        {
+            get { return title ?? Id; }
+            set { title = value; }
+        }
         public string Description { get; set; }
         public string Notes { get; set; }
     

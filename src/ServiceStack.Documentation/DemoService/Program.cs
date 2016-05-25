@@ -138,6 +138,8 @@
         /// XML Comment on a property
         /// </summary>
         public bool SunShining { get; set; }
+
+        public Name GlassesName { get; set; }
     }
 
     public class DemoResponse

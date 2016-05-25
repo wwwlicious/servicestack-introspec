@@ -5,15 +5,32 @@
 namespace ServiceStack.Documentation.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using DataAnnotations;
+    using Extensions;
     using Models;
     using Models.Postman;
     using Text;
 
     public class ApiSpecPostmanService : IService
     {
+        // Set as property in feature?
+        public Dictionary<string, string> FriendlyTypeNames = new Dictionary<string, string>
+        {
+            {"Int32", "int"},
+            {"Int64", "long"},
+            {"Boolean", "bool"},
+            {"String", "string"},
+            {"Double", "double"},
+            {"Single", "float"},
+        };
+
+        // Need to be able to set which Headers to add???
+        // TODO Auth
+
         // TODO Have this use the same filtering logic as ApiSpecService to get a subset of data
+        // TODO Take filter of Verb??
         public object Get(PostmanRequest request)
         {
             // Get the documentation object
@@ -32,42 +49,70 @@ namespace ServiceStack.Documentation.Services
             collection.Description = documentation.Description;
             collection.Timestamp = DateTime.UtcNow.ToUnixTimeMs();
 
-            collection.Requests =
-                documentation.Resources.Select(r => GetRequests(r, documentation, collectionId)).ToArray();
+            collection.Requests = GetRequests(documentation, collectionId).ToArray();
 
-            return new PostmanResponse { Collection = collection };
+            return collection;
         }
 
-        private PostmanSpecRequest[] GetRequests(ApiDocumentation documentation, string collectionId)
+        private IEnumerable<PostmanSpecRequest> GetRequests(ApiDocumentation documentation, string collectionId)
         {
-            throw new NotImplementedException();
-        }
+            // Iterate over all resources
+            foreach (var resource in documentation.Resources)
+            {
+                // TODO Tighten up the logic used here
+                var contentType = resource.ContentTypes.Contains(MimeTypes.Json)
+                                      ? MimeTypes.Json
+                                      : resource.ContentTypes.First();
 
-        private PostmanSpecRequest GetRequests(ApiResourceDocumentation resource, ApiDocumentation documentation, string collectionId)
-        {
-            // Pick Header
+                var data = resource.Properties.Select(r =>
+                        new PostmanSpecData
+                        {
+                            Enabled = true,
+                            Key = r.Title,
+                            Type = FriendlyTypeNames.SafeGet(r.ClrType.Name, r.ClrType.Name),
+                            Value = $"{r.Title}_value"
+                        }).ToList();
 
-            var request = new PostmanSpecRequest();
-            request.Id = Guid.NewGuid().ToString();
-            //request.Headers = 
-            request.Url = documentation.ApiBaseUrl.CombineWith(request.Url);
-            //request.PathVariables =
-            //request.Method =
-            //request.Data =
-            //request.DataMode =
+                // Iterate through every verb of every resource. Generate a collection request per verb
+                foreach (var verb in resource.Verbs)
+                {
+                    var request = new PostmanSpecRequest
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Url = documentation.ApiBaseUrl.CombineWith(resource.RelativePath),
+                        Method = verb,
+                        Time = DateTime.UtcNow.ToUnixTimeMs(),
+                        Name = resource.Title,
+                        Description = resource.Description,
+                        CollectionId = collectionId,
+                        Headers = $"Accept: {contentType}"
+                    };
 
-            request.Time = DateTime.UtcNow.ToUnixTimeMs();
-            request.Name = resource.Title;
-            request.Description = resource.Description;
-            request.CollectionId = collectionId;
+                    // Build the list of PostmanSpecData here as this will be then split into PathVariables or used straight
 
-            return request;
+                    if (verb.HasRequestBody())
+                    {
+                        request.Data = data;
+                        request.PathVariables = null;
+                    }
+                    else
+                    {
+                        request.Data = null;
+
+                        // TODO Only set PathVariables if within 2 slashes.
+                        // TODO Handle query string parameters
+                        request.PathVariables = data.ToDictionary(k => k.Key, v => v.Value);
+                    }
+
+                    yield return request;
+                }
+            }
         }
     }
 
     [Route(Constants.PostmanSpecUri)]
     [Exclude(Feature.Metadata | Feature.ServiceDiscovery)]
-    public class PostmanRequest : IReturn<PostmanResponse> { }
+    public class PostmanRequest : IReturn<PostmanSpecCollection> { }
 
     public class PostmanResponse
     {

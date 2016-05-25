@@ -57,7 +57,7 @@ namespace ServiceStack.Documentation
             {
                 log.Debug($"Found type: {operation.RequestType}");
 
-                var resourceDoc = new ApiResourceDocumentation();
+                var resourceDoc = new ApiResourceDocumentation { TypeName = operation.RequestType.Name };
 
                 foreach (var apiSpecPopulater in enrichers)
                 {

@@ -66,7 +66,7 @@ namespace ServiceStack.Documentation.Models.Postman
         public List<PostmanSpecData> Data { get; set; }
 
         [DataMember(Name = "dataMode")]
-        public string DataMode { get; set; }
+        public string DataMode { get; set; } = "params"; // raw?
 
         [DataMember(Name = "version")]
         public int Version { get; set; } = 2;
@@ -83,13 +83,19 @@ namespace ServiceStack.Documentation.Models.Postman
         [DataMember(Name = "description")]
         public string Description { get; set; }
 
-        [DataMember(Name = "collectionid")]
+        // descriptionFormat
+
+        [DataMember(Name = "collectionId")]
         public string CollectionId { get; set; }
 
         [DataMember(Name = "responses")]
         public string[] Responses { get; set; } = new string[0];
 
-        //rawModeData
+        // tests
+
+        // rawModeData
+
+        // helperAttributes
     }
 
     [DataContract]
@@ -98,10 +104,13 @@ namespace ServiceStack.Documentation.Models.Postman
         [DataMember(Name = "key")]
         public string Key { get; set; }
 
-        [DataMember(Name = "name")]
+        [DataMember(Name = "value")]
         public string Value { get; set; }
 
         [DataMember(Name = "type")]
         public string Type { get; set; }
+
+        [DataMember(Name = "enabled")]
+        public bool Enabled { get; set; }
     }
 }

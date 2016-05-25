@@ -19,7 +19,7 @@ namespace ServiceStack.Documentation.Enrichers
             this.lookup = lookup;
         }
 
-        public string GetTitle(Type type) => GetXmlMember(type)?.Name;
+        public string GetTitle(Type type) => null; //GetXmlMember(type)?.Name;
         public string GetDescription(Type type) => GetDescriptionInternal(type);
         public string GetNotes(Type type) => GetNotesInternal(type);
 
@@ -35,7 +35,7 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string GetNotes(MemberInfo mi) => GetNotesInternal(mi);
 
-        public string GetTitle(MemberInfo mi) => GetXmlMember(mi)?.Name;
+        public string GetTitle(MemberInfo mi) => null; //GetXmlMember(mi)?.Name;
         public bool? GetAllowMultiple(MemberInfo mi) => null;
         public string[] GetExternalLinks(MemberInfo mi) => null;
         public PropertyConstraint GetConstraints(MemberInfo mi) => null;
