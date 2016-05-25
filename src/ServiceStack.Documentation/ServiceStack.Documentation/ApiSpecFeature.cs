@@ -142,11 +142,14 @@ namespace ServiceStack.Documentation
 
         private void RegisterServices(IAppHost appHost)
         {
-            appHost.RegisterService<ApiSpecService>();
-
             var metadataFeature = appHost.GetPlugin<MetadataFeature>();
-            metadataFeature
-                .AddDebugLink(Constants.SpecUri, "Raw API Documentation");
+
+            appHost.RegisterService<ApiSpecService>();
+            appHost.RegisterService<ApiSpecPostmanService>();
+
+            metadataFeature.AddDebugLink(Constants.SpecUri, "Raw API Spec");
+            metadataFeature.AddPluginLink(Constants.PostmanSpecUri, "Postman API Metadata");
+
         }
 
         private void RegisterDependencies(Container container)

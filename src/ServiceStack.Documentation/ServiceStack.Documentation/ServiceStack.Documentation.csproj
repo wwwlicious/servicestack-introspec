@@ -66,6 +66,8 @@
     <Compile Include="Extensions\AccessExtensions.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
     <Compile Include="Linq\PredicateBuilder.cs" />
+    <Compile Include="Models\Postman\Postman.cs" />
+    <Compile Include="Services\ApiSpecPostmanService.cs" />
     <Compile Include="Utilities\EnumUtilities.cs" />
     <Compile Include="Infrastructure\Result.cs" />
     <Compile Include="Models\PropertyConstraint.cs" />
