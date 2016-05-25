@@ -146,7 +146,7 @@ namespace ServiceStack.Documentation.Tests.Extensions
         }
 
         [Fact]
-        public void SafeGetFromValue_ReturnsResultOfFund_IfKeyFound()
+        public void SafeGetFromValue_ReturnsResultOfFunc_IfKeyFound()
         {
             const int fallback = 421;
             var dictionary = new Dictionary<string, int>
@@ -157,6 +157,59 @@ namespace ServiceStack.Documentation.Tests.Extensions
             var result = dictionary.SafeGetFromValue("Test1", s => s + 10, fallback);
 
             result.Should().Be(11);
+        }
+        
+        [Fact]
+        public void SafeGetOrInsert_ReturnsFallback_IfDictionaryNull()
+        {
+            const string fallback = "fallback";
+            Dictionary<string, string> dictionary = null;
+            var result = dictionary.SafeGetOrInsert("test", () => fallback);
+
+            result.Should().Be(fallback);
+        }
+
+        [Fact]
+        public void SafeGetOrInsert_ReturnsFallback_IfKeyNotFound()
+        {
+            const int fallback = 421;
+            var dictionary = new Dictionary<string, int>
+            {
+                { "Test1", 1 },
+                { "Test2", 2 }
+            };
+            var result = dictionary.SafeGetOrInsert("test", () => fallback);
+
+            result.Should().Be(fallback);
+        }
+
+        [Fact]
+        public void SafeGetOrInsert_AddsFallbackToDictionary_IfKeyNotFound()
+        {
+            const int fallback = 421;
+            const string key = "test";
+
+            var dictionary = new Dictionary<string, int>
+            {
+                { "Test1", 1 },
+                { "Test2", 2 }
+            };
+            dictionary.SafeGetOrInsert(key, () => fallback);
+            dictionary[key].Should().Be(fallback);
+        }
+
+        [Fact]
+        public void SafeGetOrInsert_ReturnsKey_IfFound()
+        {
+            const int fallback = 421;
+            var dictionary = new Dictionary<string, int>
+            {
+                { "Test1", 1 },
+                { "Test2", 2 }
+            };
+            var result = dictionary.SafeGetOrInsert("Test1", () => fallback);
+
+            result.Should().Be(1);
         }
     }
 }

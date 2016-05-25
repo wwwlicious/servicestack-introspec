@@ -83,5 +83,29 @@ namespace ServiceStack.Documentation.Extensions
             TValue value;
             return dictionary.TryGetValue(key, out value) ? getResult(value) : fallback;
         }
+
+        /// <summary>
+        /// Attempt to get provided key from dictionary. Returns item from dictionary if found. If not found calls delegate to get value, adds to dictionary and returns.
+        /// </summary>
+        /// <typeparam name="TKey">Type of dictionary key</typeparam>
+        /// <typeparam name="TValue">Type of dictionary value</typeparam>
+        /// <param name="dictionary">Dictionary to get value from</param>
+        /// <param name="key">Key of value to find</param>
+        /// <param name="fallbackProvider">Delegate used to create fallback value if key not present</param>
+        /// <returns>Value at key from dictionary, or item provided by fallback delegate if not found</returns>
+        public static TValue SafeGetOrInsert<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key,
+            Func<TValue> fallbackProvider)
+        {
+            if (dictionary == null)
+                return fallbackProvider();
+
+            TValue value;
+            if (dictionary.TryGetValue(key, out value))
+                return value;
+
+            value = fallbackProvider();
+            dictionary.Add(key, value);
+            return value;
+        }
     }
 }
