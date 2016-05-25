@@ -6,6 +6,7 @@ namespace ServiceStack.Documentation.Extensions
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
 
     public static class ReflectionExtensions
     {
@@ -19,5 +20,20 @@ namespace ServiceStack.Documentation.Extensions
             for (var current = type; current != null; current = current.BaseType)
                 yield return current;
         }
+
+        /// <summary>
+        /// Gets the FieldInfo.FieldType or PropertyInfo.PropertyType from this MemberInfo object.
+        /// </summary>
+        /// <param name="memberInfo">MemberInfo object to get type for</param>
+        /// <returns>Type of underlying Property/Field</returns>
+        /// <remarks>This only works for MemberInfo/FieldInfo</remarks>
+        public static Type GetFieldPropertyType(this MemberInfo memberInfo)
+        {
+            if (!(memberInfo is PropertyInfo) && !(memberInfo is FieldInfo))
+                throw new ArgumentException("Method only supports PropertyInfo or FieldInfo", nameof(memberInfo));
+
+            return (memberInfo as PropertyInfo)?.PropertyType ?? (memberInfo as FieldInfo).FieldType;
+        }
+            
     }
 }

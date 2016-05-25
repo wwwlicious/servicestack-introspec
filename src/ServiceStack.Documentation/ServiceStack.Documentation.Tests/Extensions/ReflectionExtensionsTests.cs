@@ -39,7 +39,33 @@ namespace ServiceStack.Documentation.Tests.Extensions
             result[3].Should().Be<object>();
         }
 
-        public class FirstClass { }
+        [Fact]
+        public void GetFieldPropertyType_Throws_IfNotPropertyInfoOrFieldInfo()
+        {
+            Action action = () => typeof(FirstClass).GetMethod("MyMethod").GetFieldPropertyType();
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        [Fact]
+        public void GetFieldPropertyType_ReturnsPropertyInfoType()
+        {
+            var propertyInfo = typeof(FirstClass).GetProperty("Property");
+            propertyInfo.GetFieldPropertyType().Should().Be<string>();
+        }
+
+        [Fact]
+        public void GetFieldPropertyType_ReturnsFieldInfoType()
+        {
+            var fieldInfo = typeof(FirstClass).GetField("Field");
+            fieldInfo.GetFieldPropertyType().Should().Be<DateTime>();
+        }
+
+        public class FirstClass
+        {
+            public string Property { get; set; }
+            public DateTime Field;
+            public void MyMethod() { }
+        }
 
         public class SecondClass : FirstClass { }
 
