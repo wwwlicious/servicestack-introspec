@@ -89,8 +89,6 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
                 });
         }
 
-        //private static bool ShouldIgnoreParameter(PropertyInfo mi) => mi.HasAttribute<IgnoreDataMemberAttribute>();
-
         private void EnrichParameter(ApiPropertyDocumention property, MemberInfo mi)
         {
             property.Title = property.Title.GetIfNullOrEmpty(() => propertyEnricher.GetTitle(mi));
