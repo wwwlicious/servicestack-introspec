@@ -63,7 +63,9 @@
   <ItemGroup>
     <Compile Include="AbstractApiSpec\TypeSpec.cs" />
     <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
+    <Compile Include="Enrichers\AccessExtensions.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
+    <Compile Include="Linq\PredicateBuilder.cs" />
     <Compile Include="Utilities\EnumUtilities.cs" />
     <Compile Include="Infrastructure\Result.cs" />
     <Compile Include="Models\PropertyConstraint.cs" />

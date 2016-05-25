@@ -5,6 +5,7 @@
 namespace ServiceStack.Documentation.Models
 {
     using System;
+    using System.Linq;
 
     // TODO Rename this api spec?
     /// <summary>
@@ -27,6 +28,13 @@ namespace ServiceStack.Documentation.Models
         public ApiResourceDocumentation[] Resources { get; set; }
 
         // Security
+
+        public ApiDocumentation CreateCopy(Func<ApiResourceDocumentation, bool> resourcesFilter)
+        {
+            var apiDocumentation = MemberwiseClone() as ApiDocumentation;
+            apiDocumentation.Resources = Resources.Where(resourcesFilter).ToArray();
+            return apiDocumentation;
+        }
     }
 
     /// <summary>

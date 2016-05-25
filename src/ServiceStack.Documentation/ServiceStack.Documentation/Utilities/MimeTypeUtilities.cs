@@ -12,7 +12,7 @@ namespace ServiceStack.Documentation.Utilities
 
     public static class MimeTypeUtilities
     {
-        private static Dictionary<string, string> mimeDictionary;
+        private static readonly Dictionary<string, string> mimeDictionary;
         static MimeTypeUtilities()
         {
             // There's no nice way to get mime type (application/json) from type (json).
