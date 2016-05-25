@@ -15,7 +15,7 @@ namespace ServiceStack.Documentation.Models.Postman
     }
 
     [DataContract]
-    public class PostmanCollection
+    public class PostmanSpecCollection
     {
         [DataMember(Name = "id")]
         public string Id { get; set; }
@@ -39,11 +39,11 @@ namespace ServiceStack.Documentation.Models.Postman
         public bool Public { get; set; }
 
         [DataMember(Name = "requests")]
-        public PostmanRequest[] Requests { get; set; } = new PostmanRequest[0];
+        public PostmanSpecRequest[] Requests { get; set; } = new PostmanSpecRequest[0];
     }
 
     [DataContract]
-    public class PostmanRequest
+    public class PostmanSpecRequest
     {
         [DataMember(Name = "id")]
         public string Id { get; set; }
@@ -63,7 +63,7 @@ namespace ServiceStack.Documentation.Models.Postman
         public string Method { get; set; }
 
         [DataMember(Name = "data")]
-        public List<PostmanData> Data { get; set; }
+        public List<PostmanSpecData> Data { get; set; }
 
         [DataMember(Name = "dataMode")]
         public string DataMode { get; set; }
@@ -93,7 +93,7 @@ namespace ServiceStack.Documentation.Models.Postman
     }
 
     [DataContract]
-    public class PostmanData
+    public class PostmanSpecData
     {
         [DataMember(Name = "key")]
         public string Key { get; set; }
