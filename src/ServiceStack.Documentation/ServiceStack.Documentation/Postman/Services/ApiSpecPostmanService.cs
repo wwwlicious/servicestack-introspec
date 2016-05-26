@@ -30,7 +30,6 @@ namespace ServiceStack.Documentation.Postman.Services
         // TODO Need to be able to set which Headers to add
         // TODO Auth
         // TODO Take filter of Verb(s) to use/ignore?
-        // TODO Have a parameter that can be set of whether to set the query string on all verbs or just GET
         [AddHeader(ContentType = MimeTypes.Json)]
         public object Get(PostmanRequest request)
         {
@@ -64,21 +63,20 @@ namespace ServiceStack.Documentation.Postman.Services
                 var data = GetPostmanSpecData(resource);
 
                 // Get any pathVariables that are present (variable place holders in route)
-                var pathVariables = resource.RelativePath.HasPathParams();
-                string relativePath = resource.RelativePath;
-                foreach (var match in pathVariables)
-                {
-                    // Replace any matched routes with :name and remove the {} from around them
-                    relativePath = relativePath.Replace($"{{{match}}}", $":{match}");
-                }               
-                
-                // Iterate through every verb of every resource. Generate a collection request per verb
+                var pathVariableNames = resource.RelativePath.HasPathParams();
+                string relativePath = pathVariableNames.Aggregate(resource.RelativePath,
+                    (current, match) => current.Replace($"{{{match}}}", $":{match}"));
+
+                // Add path vars regardless of verb
+                Dictionary<string, string> pathVars = GetPathVariabless(data, pathVariableNames);
+
+                // Generate a collection request per verb/resource combo
                 foreach (var verb in resource.Verbs)
                 {
                     var hasRequestBody = verb.HasRequestBody();
                     string verbPath = relativePath;
                     if (!hasRequestBody)
-                        verbPath = ProcessQueryStringParams(data, pathVariables, relativePath);
+                        verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
 
                     var request = new PostmanSpecRequest
                     {
@@ -94,16 +92,21 @@ namespace ServiceStack.Documentation.Postman.Services
 
                     request.Data = hasRequestBody
                                        ? data.Where(t => 
-                                            !pathVariables.Contains(t.Key, StringComparer.OrdinalIgnoreCase)).ToList()
+                                            !pathVariableNames.Contains(t.Key, StringComparer.OrdinalIgnoreCase)).ToList()
                                        : null;
 
-                    request.PathVariables =
-                            data.Where(t => pathVariables.Contains(t.Key, StringComparer.OrdinalIgnoreCase))
-                                .ToDictionary(k => k.Key, v => v.Value);
+                    request.PathVariables = pathVars;
 
                     yield return request;
                 }
             }
+        }
+
+        private static Dictionary<string, string> GetPathVariabless(List<PostmanSpecData> data, List<string> pathVariables)
+        {
+            var pathVars = data.Where(t => pathVariables.Contains(t.Key, StringComparer.OrdinalIgnoreCase))
+                               .ToDictionary(k => k.Key, v => v.Value);
+            return pathVars;
         }
 
         private static string GetContentTypes(ApiResourceDocumentation resource)
@@ -117,23 +120,24 @@ namespace ServiceStack.Documentation.Postman.Services
 
         private static string ProcessQueryStringParams(List<PostmanSpecData> data, List<string> pathVariables, string relativePath)
         {
-            // TODO Make nicer attempts at querystring values. String if string, number if int etc
-
             var queryParams = data.Where(d => !pathVariables.Contains(d.Key, StringComparer.OrdinalIgnoreCase));
-            return queryParams.Aggregate(relativePath, (current, queryParam) => current.AddQueryParam(queryParam.Key, queryParam.Value));
+            return queryParams.Aggregate(relativePath,
+                (current, queryParam) => current.AddQueryParam(queryParam.Key, queryParam.Value));
         }
 
         private List<PostmanSpecData> GetPostmanSpecData(ApiResourceDocumentation resource)
         {
-            int count = 0;
             var data = resource.Properties.Select(r =>
-                                                  new PostmanSpecData
-                                                  {
-                                                      Enabled = true,
-                                                      Key = r.Title,
-                                                      Type = FriendlyTypeNames.SafeGet(r.ClrType.Name, r.ClrType.Name),
-                                                      Value = $"val-{++count}"
-                                                  }).ToList();
+            {
+                var type = FriendlyTypeNames.SafeGet(r.ClrType.Name, r.ClrType.Name);
+                return new PostmanSpecData
+                {
+                    Enabled = true,
+                    Key = r.Title,
+                    Type = type,
+                    Value = $"val-{type}"
+                };
+            }).ToList();
             return data;
         }
     }
