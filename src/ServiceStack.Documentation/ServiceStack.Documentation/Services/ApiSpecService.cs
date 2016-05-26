@@ -10,8 +10,10 @@ namespace ServiceStack.Documentation.Services
     {
         public object Get(SpecRequest request)
         {
+            var apiSpecFeature = HostContext.GetPlugin<ApiSpecFeature>();
+
             // Get the filtered documentation to return
-            var documentation = ApiDocumentationFilter.GetApiDocumentation(request);
+            var documentation = ApiDocumentationFilter.GetApiDocumentation(request, apiSpecFeature.Documentation);
 
             // TODO Filter out by auth permissions
             return new SpecResponse { ApiDocumentation = documentation };

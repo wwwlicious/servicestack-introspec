@@ -29,8 +29,10 @@ namespace ServiceStack.Documentation.Postman.Services
         [AddHeader(ContentType = MimeTypes.Json)]
         public object Get(PostmanRequest request)
         {
+            var apiSpecFeature = HostContext.GetPlugin<ApiSpecFeature>();
+
             // Get the documentation object
-            var documentation = ApiDocumentationFilter.GetApiDocumentation(request);
+            var documentation = ApiDocumentationFilter.GetApiDocumentation(request, apiSpecFeature.Documentation);
 
             // TODO Look at the cookies that are in the current postman plugin
 

@@ -112,6 +112,7 @@
     <Compile Include="Enrichers\XmlEnricherTests.cs" />
     <Compile Include="Extensions\CollectionExtensionsTests.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
+    <Compile Include="Services\ApiDocumentationFilterTests.cs" />
     <Compile Include="Utilities\EnumUtilitiesTests.cs" />
     <Compile Include="Extensions\GetValueExtensionsTests.cs" />
     <Compile Include="Extensions\ReflectionExtensionsTests.cs" />
@@ -138,9 +139,7 @@
       <Name>ServiceStack.Documentation</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

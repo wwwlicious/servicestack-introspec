@@ -14,10 +14,10 @@ namespace ServiceStack.Documentation.Services
 
     public class ApiDocumentationFilter
     {
-        public static ApiDocumentation GetApiDocumentation(IFilterableSpecRequest request)
+        public static ApiDocumentation GetApiDocumentation(IFilterableSpecRequest request, ApiDocumentation documentation)
         {
-            var apiSpecFeature = HostContext.GetPlugin<ApiSpecFeature>();
-            var documentation = apiSpecFeature.Documentation;
+            request.ThrowIfNull(nameof(request));
+            documentation.ThrowIfNull(nameof(documentation));
 
             var filter = GetFilter(request);
             if (filter != null)
