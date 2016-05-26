@@ -93,6 +93,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
         {
             if (property.Title == property.Id || string.IsNullOrEmpty(property.Title))
                 property.Title = propertyEnricher.GetTitle(mi);
+
             property.Description = property.Description.GetIfNullOrEmpty(() => propertyEnricher.GetDescription(mi));
             property.Notes = property.Notes.GetIfNullOrEmpty(() => propertyEnricher.GetNotes(mi));
             property.ParamType = property.ParamType.GetIfNullOrEmpty(() => propertyEnricher.GetParamType(mi));
@@ -103,8 +104,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
             property.ExternalLinks = property.ExternalLinks.GetIfNullOrEmpty(() => propertyEnricher.GetExternalLinks(mi));
 
-            // TODO Is this the best way to identify these?
-            if (!mi.GetFieldPropertyType().IsSystemType()) // TODO Make this an extension method
+            if (!mi.GetFieldPropertyType().IsSystemType()) 
                 EnrichEmbeddedResource(property, mi);
         }
 
@@ -113,7 +113,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
             // Call enrichResource on this type
             if (property.EmbeddedResource == null)
                 property.EmbeddedResource = new ApiResourceType();
-            enrichResource(property.EmbeddedResource, mi.GetFieldPropertyType()); // TODO Make this an extension method
+            enrichResource(property.EmbeddedResource, mi.GetFieldPropertyType());
         }
     }
 }

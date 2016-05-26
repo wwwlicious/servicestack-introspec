@@ -33,7 +33,7 @@ namespace ServiceStack.Documentation
         public IApiDocumentationGenerator DocumentationGenerator { get; private set; }
         public Func<IEnumerable<IApiResourceEnricher>> Enrichers { get; private set; }
 
-        // TODO Tidy this up. From NativeTypesFeature. Use that??
+        // NOTE Similar to what's in NativeTypesFeature - use that if present?
         public static List<string> IgnoreTypesInNamespaces = new List<string>
         {
             "ServiceStack",

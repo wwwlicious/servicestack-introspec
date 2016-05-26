@@ -31,7 +31,6 @@ namespace ServiceStack.Documentation.Postman.Services
         {
             log.Debug($"Generating PostmanCollection for service {documentation.Title}");
 
-            // TODO Use SS AutoMapping for this?
             // Convert apiDocumentation to postman spec
             var collection = new PostmanSpecCollection();
 

@@ -76,7 +76,6 @@ namespace ServiceStack.Documentation.Enrichers
             var apiResponseAttributes = operation.RequestType.GetCustomAttributes<ApiResponseAttribute>();
             var responseAttributes = apiResponseAttributes as ApiResponseAttribute[] ?? apiResponseAttributes.ToArray();
 
-            // TODO Only instantiate if needed?
             var list = new List<StatusCode>(responseAttributes.Length + 1);
             if (HasOneWayMethod(operation))
                 // add a 204
@@ -100,7 +99,6 @@ namespace ServiceStack.Documentation.Enrichers
             // TODO Handle multiple routes for same DTO. Anything accessing [Route] will be affected
             var requestType = operation.RequestType;
 
-            // NOTE Routes aren't populated until service call. Get directly from [Route]
             var routeFromAttribute = requestType.FirstAttribute<RouteAttribute>()?.Path;
             if (!string.IsNullOrWhiteSpace(routeFromAttribute))
                 return routeFromAttribute;

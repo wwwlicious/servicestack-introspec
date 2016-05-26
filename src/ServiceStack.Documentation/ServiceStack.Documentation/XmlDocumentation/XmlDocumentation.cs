@@ -4,7 +4,7 @@
 
 namespace ServiceStack.Documentation.XmlDocumentation
 {
-    // TODO : Beef up the comments for all of this.
+    // TODO Beef up the comments for all of this.
     using System.Xml.Serialization;
 
     [XmlRoot("doc")]
