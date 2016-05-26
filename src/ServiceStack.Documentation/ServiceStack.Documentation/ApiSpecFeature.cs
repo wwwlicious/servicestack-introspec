@@ -16,6 +16,7 @@ namespace ServiceStack.Documentation
     using Host;
     using Logging;
     using Models;
+    using Postman.Services;
     using Services;
     using Settings;
     using Validators;

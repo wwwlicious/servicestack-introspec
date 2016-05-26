@@ -2,16 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this 
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-namespace ServiceStack.Documentation.Services
+namespace ServiceStack.Documentation.Postman.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text.RegularExpressions;
-    using DataAnnotations;
+    using Documentation.Models;
+    using Documentation.Services;
+    using DTO;
     using Extensions;
     using Models;
-    using Models.Postman;
     using Text;
 
     public class ApiSpecPostmanService : IService
@@ -29,7 +29,6 @@ namespace ServiceStack.Documentation.Services
 
         // TODO Need to be able to set which Headers to add
         // TODO Auth
-        // TODO Have this use the same filtering logic as ApiSpecService to get a subset of data
         // TODO Take filter of Verb(s) to use/ignore?
         // TODO Have a parameter that can be set of whether to set the query string on all verbs or just GET
         [AddHeader(ContentType = MimeTypes.Json)]
@@ -93,18 +92,14 @@ namespace ServiceStack.Documentation.Services
                         Headers = $"Accept: {contentType}"
                     };
 
-                    if (hasRequestBody)
-                    {
-                        request.Data = data;
-                        request.PathVariables = null;
-                    }
-                    else
-                    {
-                        request.Data = null;
-                        request.PathVariables =
+                    request.Data = hasRequestBody
+                                       ? data.Where(t => 
+                                            !pathVariables.Contains(t.Key, StringComparer.OrdinalIgnoreCase)).ToList()
+                                       : null;
+
+                    request.PathVariables =
                             data.Where(t => pathVariables.Contains(t.Key, StringComparer.OrdinalIgnoreCase))
                                 .ToDictionary(k => k.Key, v => v.Value);
-                    }
 
                     yield return request;
                 }
@@ -141,42 +136,5 @@ namespace ServiceStack.Documentation.Services
                                                   }).ToList();
             return data;
         }
-    }
-
-    public static class PostmanSpecExtensions
-    {
-        // Regex to get any 
-        private static readonly Regex pathVariableRegex = new Regex("\\{([A-Za-z0-9-_]+)\\}");
-        
-        // TODO Handle wildcards
-        public static List<string> HasPathParams(this string path)
-        {
-            var matches = pathVariableRegex.Matches(path);
-
-            var output = new List<string>();
-            foreach (Match match in matches)
-            {
-                if (!match.Success)
-                    continue;
-                
-                output.Add(match.Groups[1].Value);
-            }
-
-            return output.Count > 0 ? output : Enumerable.Empty<string>().ToList();
-        }
-    }
-
-    [Route(Constants.PostmanSpecUri)]
-    [Exclude(Feature.Metadata | Feature.ServiceDiscovery)]
-    public class PostmanRequest : IReturn<PostmanSpecCollection>, IFilterableSpecRequest
-    {
-        public string[] DtoName { get; set; }
-        public string Category { get; set; }
-        public string[] Tags { get; set; }
-    }
-
-    public class PostmanResponse
-    {
-        public PostmanSpecCollection Collection { get; set; }
     }
 }
