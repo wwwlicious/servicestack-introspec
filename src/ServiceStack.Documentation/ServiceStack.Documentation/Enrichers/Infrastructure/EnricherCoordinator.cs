@@ -9,7 +9,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     using Models;
 
     /// <summary>
-    /// Class is responsible for coordinating calls to the various enrichers in the 
+    /// Class is responsible for coordinating calls between the various enrichers
     /// </summary>
     public class EnricherCoordinator : IApiResourceEnricher
     {
@@ -23,7 +23,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
         }
 
         /// <summary>
-        /// Enrich supplied resourceSpecification object with details from Operation object
+        /// Enrich supplied ApiResourceDocumentation object with details from Operation object
         /// </summary>
         /// <param name="resourceSpecification">The object to be enriched</param>
         /// <param name="operation">Details of operation to use for enrichment</param>

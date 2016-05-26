@@ -13,7 +13,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     /// <summary>
     /// Documentation class for default object exposed in API (nested type, return object etc)
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">Object type that is being decorated</typeparam>
     public abstract class TypeSpec<T> : IApiResource, IApiPropertyResource
         where T : class, new()
     {

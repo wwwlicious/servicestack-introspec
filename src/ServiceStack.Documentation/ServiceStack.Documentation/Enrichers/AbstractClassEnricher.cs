@@ -13,6 +13,9 @@ namespace ServiceStack.Documentation.Enrichers
     using Interfaces;
     using Models;
 
+    /// <summary>
+    /// Enricher that will use implementations of RequestSpec and TypeSpec to enrich object
+    /// </summary>
     public class AbstractClassEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher
     {
         private readonly Dictionary<Type, IApiResource> lookup;

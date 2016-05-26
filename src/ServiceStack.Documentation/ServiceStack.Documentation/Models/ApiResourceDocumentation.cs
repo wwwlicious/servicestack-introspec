@@ -4,10 +4,12 @@
 
 namespace ServiceStack.Documentation.Models
 {
+    using System.Diagnostics;
+
     /// <summary>
     /// A single API resource (DTO)
     /// </summary>
-    //[DebuggerDisplay("{Title}")]
+    [DebuggerDisplay("{Title}")]
     public class ApiResourceDocumentation : IApiResourceType, IApiResponseStatus
     {
         // Set when instantiating

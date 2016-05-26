@@ -67,7 +67,7 @@ namespace ServiceStack.Documentation.Postman.Services
                 var data = GetPostmanSpecData(resource);
 
                 // Get any pathVariables that are present (variable place holders in route)
-                var pathVariableNames = resource.RelativePath.HasPathParams();
+                var pathVariableNames = resource.RelativePath.GetPathParams();
                 string relativePath = pathVariableNames.Aggregate(resource.RelativePath,
                     (current, match) => current.Replace($"{{{match}}}", $":{match}"));
 

@@ -104,6 +104,7 @@
     <Compile Include="Enrichers\XmlEnricherTests.cs" />
     <Compile Include="Extensions\CollectionExtensionsTests.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
+    <Compile Include="Extensions\UrlExtensionsTests.cs" />
     <Compile Include="Postman\PostmanCollectionGeneratorTests.cs" />
     <Compile Include="Services\ApiDocumentationFilterTests.cs" />
     <Compile Include="Utilities\EnumUtilitiesTests.cs" />

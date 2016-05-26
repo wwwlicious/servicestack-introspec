@@ -7,7 +7,7 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     using System;
 
     /// <summary>
-    /// Methods for populating a documentation resource
+    /// Methods for populating a resource object
     /// </summary>
     public interface IResourceEnricher : IEnrich
     {

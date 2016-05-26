@@ -10,7 +10,7 @@ namespace ServiceStack.Documentation.AbstractApiSpec
     /// <summary>
     /// Documentation class for a request DTO, including Verbs, status codes etc
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">DTO Type that is being decorated</typeparam>
     public abstract class RequestSpec<T> : TypeSpec<T>, IApiRequest
         where T : class, new()
     {

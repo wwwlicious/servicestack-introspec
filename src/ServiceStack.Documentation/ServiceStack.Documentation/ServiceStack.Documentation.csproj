@@ -68,6 +68,7 @@
     <Compile Include="DTO\SpecResponse.cs" />
     <Compile Include="Extensions\AccessExtensions.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
+    <Compile Include="Extensions\UrlExtensions.cs" />
     <Compile Include="Linq\PredicateBuilder.cs" />
     <Compile Include="Models\ApiContact.cs" />
     <Compile Include="Models\ApiPropertyDocumention.cs" />
@@ -80,8 +81,11 @@
     <Compile Include="Postman\Models\Postman.cs" />
     <Compile Include="Postman\DTO\PostmanRequest.cs" />
     <Compile Include="Postman\DTO\PostmanResponse.cs" />
+    <Compile Include="Postman\Models\PostmanFolder.cs" />
+    <Compile Include="Postman\Models\PostmanSpecCollection.cs" />
+    <Compile Include="Postman\Models\PostmanSpecData.cs" />
+    <Compile Include="Postman\Models\PostmanSpecRequest.cs" />
     <Compile Include="Postman\Services\PostmanCollectionGenerator.cs" />
-    <Compile Include="Postman\Services\PostmanSpecExtensions.cs" />
     <Compile Include="Extensions\ApiDocumentationExtensions.cs" />
     <Compile Include="Postman\Services\ApiSpecPostmanService.cs" />
     <Compile Include="Services\ApiDocumentationProvider.cs" />

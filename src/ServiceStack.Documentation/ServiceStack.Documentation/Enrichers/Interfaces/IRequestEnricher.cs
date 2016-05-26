@@ -8,7 +8,7 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     using Models;
 
     /// <summary>
-    /// Methods for populating a documentation response
+    /// Methods for populating a request DTO class
     /// </summary>
     public interface IRequestEnricher : IEnrich
     {

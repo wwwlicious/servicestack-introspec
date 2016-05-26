@@ -86,7 +86,7 @@ namespace ServiceStack.Documentation
         }
 
         /// <summary>
-        /// Omplementation of IApiDocumentationGenerator used for creating documentation POCOs
+        /// Implementation of IApiDocumentationGenerator used for creating documentation POCOs
         /// Defaults to ApiDocumentationGenerator
         /// </summary>
         /// <param name="generator">Predicate to use to filter operations map</param>

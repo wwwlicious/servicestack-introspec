@@ -17,6 +17,10 @@ namespace ServiceStack.Documentation.Enrichers
     using Settings;
     using Utilities;
 
+    /// <summary>
+    /// Enricher that will use Reflection to enrich object. 
+    /// </summary>
+    /// <remarks>This primarily looks at Attributes as well as types etc</remarks>
     public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher
     {
         private readonly ILog log = LogManager.GetLogger(typeof(ReflectionEnricher));
@@ -77,17 +81,15 @@ namespace ServiceStack.Documentation.Enrichers
 
             var list = new List<StatusCode>(responseAttributes.Length + 1);
             if (HasOneWayMethod(operation))
-                // add a 204
                 list.Add((StatusCode) HttpStatusCode.NoContent);
 
-            if (responseAttributes.Length > 0)
+            if (responseAttributes.Length == 0) return list.ToArray();
+
+            foreach (var apiResponseAttribute in responseAttributes)
             {
-                foreach (var apiResponseAttribute in responseAttributes)
-                {
-                    var statusCode = (StatusCode) apiResponseAttribute.StatusCode;
-                    statusCode.Description = apiResponseAttribute.Description;
-                    list.Add(statusCode);
-                }
+                var statusCode = (StatusCode) apiResponseAttribute.StatusCode;
+                statusCode.Description = apiResponseAttribute.Description;
+                list.Add(statusCode);
             }
 
             return list.ToArray();

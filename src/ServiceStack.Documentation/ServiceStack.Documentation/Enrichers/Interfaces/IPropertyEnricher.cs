@@ -8,7 +8,7 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     using Models;
 
     /// <summary>
-    /// Methods for populating a documentatino resource parameter
+    /// Methods for populating a resource property
     /// </summary>
     public interface IPropertyEnricher : IEnrich
     {

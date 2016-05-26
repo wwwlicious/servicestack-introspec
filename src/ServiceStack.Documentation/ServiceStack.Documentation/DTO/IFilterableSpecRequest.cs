@@ -4,6 +4,9 @@
 
 namespace ServiceStack.Documentation.DTO
 {
+    /// <summary>
+    /// Custom interface used by DTOs that offer filtering
+    /// </summary>
     public interface IFilterableSpecRequest
     {
         string[] DtoName { get; set; }

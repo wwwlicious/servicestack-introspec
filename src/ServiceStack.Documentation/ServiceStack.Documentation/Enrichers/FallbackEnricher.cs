@@ -11,6 +11,9 @@ namespace ServiceStack.Documentation.Enrichers
     using Models;
     using Settings;
 
+    /// <summary>
+    /// Enricher that will use global settings properties to enrich object
+    /// </summary>
     public class FallbackEnricher : IResourceEnricher, IRequestEnricher
     {
         public string GetTitle(Type type) => null;

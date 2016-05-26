@@ -12,7 +12,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     using Settings;
 
     /// <summary>
-    /// Manages default logic for enriching response objects
+    /// Manages default logic for enriching request DTO objects
     /// </summary>
     public class RequestEnricherManager
     {
@@ -36,7 +36,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
             if (requestEnricher != null)
             {
-                // The object that has ResponseStatus is built up from request object
+                // The object that has ResponseStatus is built up from request DTO
                 response.Verbs = unionCollections
                     ? response.Verbs.SafeUnion(() => requestEnricher.GetVerbs(operation))
                     : response.Verbs.GetIfNullOrEmpty(() => requestEnricher.GetVerbs(operation));
