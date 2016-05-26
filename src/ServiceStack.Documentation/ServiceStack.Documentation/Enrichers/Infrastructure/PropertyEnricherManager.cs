@@ -50,22 +50,13 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
             foreach (var mi in allMembers)
             {
-                // 1. Check if the property already exists. 
-                // If so get it, If not create it 
-                ApiPropertyDocumention property;
+                // Check if the property already exists. if so get it, If not create it 
+                var property = indexedParams.SafeGet(mi.Name,
+                    () => new ApiPropertyDocumention { Id = mi.Name, ClrType = mi.GetFieldPropertyType() });
 
-                // As we look for object by mi.Id, set it if instantiated
-                if (!indexedParams.TryGetValue(mi.Name, out property))
-                    property = new ApiPropertyDocumention
-                    {
-                        Id = mi.Name,
-                        ClrType = mi.GetFieldPropertyType()
-                    };
-
-                // Pass it to method to be populated. Would this be a recursive call?
+                // Pass it to method to be populated.
                 EnrichParameter(property, mi);
 
-                // Smelly?
                 if (newList)
                     parameterDocuments.Add(property);
             }
@@ -76,6 +67,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
         private MemberInfo[] GetMemberInfo(Type dtoType)
         {
+            // The same properties will be required multiple times (per enricher type) so build lookup
             return PropertyDictionary.SafeGetOrInsert(dtoType, () =>
                 {
                     var allProperties = dtoType.GetSerializableProperties();
@@ -104,16 +96,18 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
             property.ExternalLinks = property.ExternalLinks.GetIfNullOrEmpty(() => propertyEnricher.GetExternalLinks(mi));
 
-            if (!mi.GetFieldPropertyType().IsSystemType()) 
-                EnrichEmbeddedResource(property, mi);
+            EnrichEmbeddedResource(property, mi);
         }
 
         private void EnrichEmbeddedResource(ApiPropertyDocumention property, MemberInfo mi)
         {
-            // Call enrichResource on this type
+            var fieldPropertyType = mi.GetFieldPropertyType();
+            if (fieldPropertyType.IsSystemType())
+                return;
+
             if (property.EmbeddedResource == null)
                 property.EmbeddedResource = new ApiResourceType();
-            enrichResource(property.EmbeddedResource, mi.GetFieldPropertyType());
+            enrichResource(property.EmbeddedResource, fieldPropertyType);
         }
     }
 }

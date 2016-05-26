@@ -274,6 +274,30 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
             A.CallTo(() => propertyEnricher.GetExternalLinks(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
+        [Fact]
+        public void EnrichParameters_CallsEnrichResource_IfTypeIsNotSystemType()
+        {
+            var param = GetApiParameterDocumention();
+
+            bool called = false;
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type) => { called = true; });
+
+            enricherManager.EnrichParameters(new[] { param }, typeof(ComplexProp));
+            called.Should().BeTrue();
+        }
+
+        [Fact]
+        public void EnrichParameters_DoesNotCallEnrichResource_IfIsSystemType()
+        {
+            var param = GetApiParameterDocumention();
+            
+            bool called = false;
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type) => { called = true; });
+
+            enricherManager.EnrichParameters(new[] { param }, typeof(SingleProp));
+            called.Should().BeFalse();
+        }
+
         private static ApiPropertyDocumention GetApiParameterDocumention() => new ApiPropertyDocumention { Id = "X" };
         private void ResourceEnricher(IApiResourceType resource, Type type) { }
     }
@@ -292,5 +316,10 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         public string S { get; set; }
 
         public int X { get; set; }
+    }
+
+    public class ComplexProp
+    {
+        public IgnoredProps Props { get; set; }
     }
 }

@@ -21,7 +21,6 @@ namespace ServiceStack.Documentation.Enrichers
     {
         private readonly ILog log = LogManager.GetLogger(typeof(ReflectionEnricher));
 
-        // ConcurrentDictionary?
         private readonly Dictionary<string, ApiMemberAttribute> apiMemberLookup;
 
         public ReflectionEnricher()
