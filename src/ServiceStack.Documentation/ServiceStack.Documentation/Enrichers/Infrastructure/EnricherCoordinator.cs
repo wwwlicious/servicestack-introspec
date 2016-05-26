@@ -19,7 +19,8 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
         public EnricherCoordinator(IEnrich enricher)
         {
             resourceEnricherManager = new ResourceEnricherManager(enricher as IResourceEnricher, enricher as IPropertyEnricher);
-            requestEnricherManager = new RequestEnricherManager(enricher as IRequestEnricher, resourceEnricherManager.EnrichResource);
+            requestEnricherManager = new RequestEnricherManager(enricher as IRequestEnricher,
+                enricher as ISecurityEnricher, resourceEnricherManager.EnrichResource);
         }
 
         /// <summary>

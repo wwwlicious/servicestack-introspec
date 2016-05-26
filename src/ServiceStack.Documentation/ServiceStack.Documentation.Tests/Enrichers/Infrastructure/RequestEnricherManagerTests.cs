@@ -5,6 +5,7 @@
 namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
 {
     using System;
+    using System.Collections.Generic;
     using Documentation.Enrichers.Infrastructure;
     using Documentation.Enrichers.Interfaces;
     using Documentation.Models;
@@ -20,33 +21,42 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         private readonly RequestEnricherManager nullParameterManager;
         private readonly RequestEnricherManager manager;
         private readonly IRequestEnricher requestEnricher;
+        private readonly ISecurityEnricher securityEnricher;
 
         private RequestEnricherManager GetEnricherManager(Action<IApiResourceType, Operation> action)
-            => new RequestEnricherManager(requestEnricher, action);
+            => new RequestEnricherManager(requestEnricher, null, action);
 
         private void ResourceEnricher(IApiResourceType type, Operation operation) {}
 
         public RequestEnricherManagerTests()
         {
-            nullParameterManager = new RequestEnricherManager(null, ResourceEnricher);
+            nullParameterManager = new RequestEnricherManager(null, null, ResourceEnricher);
             operation = new Operation { RequestType = typeof(int), ResponseType = typeof(string) };
 
             requestEnricher = A.Fake<IRequestEnricher>();
-            manager = new RequestEnricherManager(requestEnricher, ResourceEnricher);
+            securityEnricher = A.Fake<ISecurityEnricher>();
+            manager = new RequestEnricherManager(requestEnricher, securityEnricher, ResourceEnricher);
         }
 
         [Fact]
         public void Ctor_AllowsNullResourceEnricher()
         {
-            Action action = () => new RequestEnricherManager(null, ResourceEnricher);
+            Action action = () => new RequestEnricherManager(null, securityEnricher, ResourceEnricher);
             action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [Fact]
-        public void EnrichResponse_HandlesNullResourceEnricher()
+        public void Ctor_AllowsNullSecurityEnricher()
         {
-            nullParameterManager.EnrichRequest(new ApiResourceDocumentation(), new Operation());
-            // no assert but no error
+            Action action = () => new RequestEnricherManager(requestEnricher, null, ResourceEnricher);
+            action.ShouldNotThrow<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void EnrichResponse_HandlesNullResourceAndSecurityEnricher()
+        {
+            Action action = () => nullParameterManager.EnrichRequest(new ApiResourceDocumentation(), new Operation());
+            action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [Fact]
@@ -326,7 +336,6 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
             apiResourceDocumentation.RelativePath.Should().Be(returnPath);
         }
 
-
         [Fact]
         public void EnrichResponse_CallsGetContentTypes_IfResourceHasNullVerbs()
         {
@@ -388,6 +397,28 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
                 manager.EnrichRequest(apiResourceDocumentation, operation);
                 A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustNotHaveHappened();
             }
+        }
+
+        [Fact]
+        public void EnrichResponse_CallsGetSecurity()
+        {
+            manager.EnrichRequest(new ApiResourceDocumentation(), operation);
+            A.CallTo(() => securityEnricher.GetSecurity(operation)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void EnrichResponse_ReturnsSecurity()
+        {
+            var apiResourceDocumentation = new ApiResourceDocumentation();
+            var apiSecurity = new ApiSecurity
+            {
+                IsProtected = true,
+                Permissions = new Permissions { AllOf = new List<string> { "me" } }
+            };
+            A.CallTo(() => securityEnricher.GetSecurity(operation)).Returns(apiSecurity);
+
+            manager.EnrichRequest(apiResourceDocumentation, operation);
+            apiResourceDocumentation.Security.Should().Be(apiSecurity);
         }
     }
 }

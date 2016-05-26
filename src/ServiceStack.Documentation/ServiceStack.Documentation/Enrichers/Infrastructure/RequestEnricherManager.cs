@@ -17,11 +17,13 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     public class RequestEnricherManager
     {
         private readonly IRequestEnricher requestEnricher;
+        private readonly ISecurityEnricher securityEnricher;
         private readonly Action<IApiResourceType, Operation> enrichResource;
 
-        public RequestEnricherManager(IRequestEnricher requestEnricher, Action<IApiResourceType, Operation> enrichResource)
+        public RequestEnricherManager(IRequestEnricher requestEnricher, ISecurityEnricher securityEnricher, Action<IApiResourceType, Operation> enrichResource)
         {
             this.requestEnricher = requestEnricher;
+            this.securityEnricher = securityEnricher;
             this.enrichResource = enrichResource;
         }
 
@@ -62,6 +64,9 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
             response.ReturnType = response.ReturnType.GetIfNull(() => new ApiResourceType());
 
             enrichResource(response.ReturnType, operation);
+
+            if (securityEnricher != null)
+                response.Security = securityEnricher.GetSecurity(operation);
         }
     }
 }

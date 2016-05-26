@@ -21,7 +21,7 @@ namespace ServiceStack.Documentation.Enrichers
     /// Enricher that will use Reflection to enrich object. 
     /// </summary>
     /// <remarks>This primarily looks at Attributes as well as types etc</remarks>
-    public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher
+    public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher, ISecurityEnricher
     {
         private readonly ILog log = LogManager.GetLogger(typeof(ReflectionEnricher));
 
@@ -135,6 +135,21 @@ namespace ServiceStack.Documentation.Enrichers
 
             log.Debug($"Created {allowableValues.Type} constraint for property {mi.Name}");
             return constraint;
+        }
+
+        public ApiSecurity GetSecurity(Operation operation)
+        {
+            if (!operation.RequiresAuthentication)
+                return null;
+
+            var apiSecurity = new ApiSecurity
+            {
+                IsProtected = true,
+                Roles = Permissions.Create(operation.RequiredRoles, operation.RequiresAnyRole),
+                Permissions = Permissions.Create(operation.RequiredPermissions, operation.RequiresAnyPermission)
+            };
+
+            return apiSecurity;
         }
 
         private static bool HasOneWayMethod(Operation operation)

@@ -185,9 +185,27 @@
 
     public class OneWayService : IService
     {
+        [RequiresAnyRole("Butcher", "Baker", "Candlestick Maker")]
         public void Get(OneWayRequest requiest) { }
     }
 
     [Api("One Way Request. Should have a 204 response")]
     public class OneWayRequest { }
+
+    public class SecureResponse { }
+
+    [Authenticate(ApplyTo.Get | ApplyTo.Put | ApplyTo.Post | ApplyTo.Delete)]
+    [RequiredRole("Admin")]
+    [RequiredPermission("CanAccess")]
+    [RequiredPermission(ApplyTo.Put | ApplyTo.Post, "CanAdd")]
+    [RequiresAnyPermission("CanDelete", "AdminRights", ApplyTo = ApplyTo.Delete)]
+    public class SecureRequest : IReturn<SecureResponse> { }
+
+    public class SecureService : IService
+    {
+        public object Any(SecureRequest request)
+        {
+            return new SecureResponse();
+        }
+    }
 }   

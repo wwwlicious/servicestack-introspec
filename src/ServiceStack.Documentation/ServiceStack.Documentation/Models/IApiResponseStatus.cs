@@ -4,7 +4,7 @@
 
 namespace ServiceStack.Documentation.Models
 {
-    public interface IApiResponseStatus : IApiMetadata
+    public interface IApiResponseStatus : IApiMetadata, ISecured
     {
         string[] Verbs { get; set; }
         StatusCode[] StatusCodes { get; set; }

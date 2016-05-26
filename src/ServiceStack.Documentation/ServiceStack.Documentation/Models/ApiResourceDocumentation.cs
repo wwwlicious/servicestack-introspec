@@ -38,8 +38,11 @@ namespace ServiceStack.Documentation.Models
         public string RelativePath { get; set; }
         public ApiResourceType ReturnType { get; set; } // ReturnType w/params
 
-        // From ICategorised
+        // From IApiMetadata by way of IApiResponseStatus
         public string Category { get; set; }
         public string[] Tags { get; set; }
+
+        // From ISecured by way of IApiResponseStatus
+        public ApiSecurity Security { get; set; }
     }
 }
