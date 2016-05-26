@@ -72,7 +72,7 @@
     <Compile Include="Postman\Models\Postman.cs" />
     <Compile Include="Postman\DTO\PostmanRequest.cs" />
     <Compile Include="Postman\DTO\PostmanResponse.cs" />
-    <Compile Include="Postman\Services\PostmanModelGenerator.cs" />
+    <Compile Include="Postman\Services\PostmanCollectionGenerator.cs" />
     <Compile Include="Postman\Services\PostmanSpecExtensions.cs" />
     <Compile Include="Extensions\ApiDocumentationExtensions.cs" />
     <Compile Include="Postman\Services\ApiSpecPostmanService.cs" />

@@ -11,7 +11,6 @@ namespace ServiceStack.Documentation.Tests
     using FakeItEasy;
     using FluentAssertions;
     using Host;
-    using Ploeh.AutoFixture.Xunit2;
     using Testing;
     using Xunit;
 
@@ -49,10 +48,10 @@ namespace ServiceStack.Documentation.Tests
             action.ShouldThrow<ArgumentException>();
         }
 
-        [Theory]
-        [InlineAutoData]
-        public void GenerateDocumentation_SetsTitle_AsServiceName(string serviceName)
+        [Fact]
+        public void GenerateDocumentation_SetsTitle_AsServiceName()
         {
+            const string serviceName = "das service";
             var host = new BasicAppHost { ServiceName = serviceName, Config = new HostConfig { WebHostUrl = "a" } };
             var doc = generator.GenerateDocumentation(null, host, apiSpecConfig);
             doc.Title.Should().Be(serviceName);
@@ -112,7 +111,7 @@ namespace ServiceStack.Documentation.Tests
         [Fact]
         public void GenerateDocumentation_CallsEnrichersInOrder()
         {
-            var operation = new Operation();
+            var operation = new Operation { RequestType = typeof(string) };
             generator.GenerateDocumentation(new[] { operation }, appHost, apiSpecConfig);
 
             A.CallTo(() => enricher1.Enrich(A<ApiResourceDocumentation>.Ignored, operation)).MustHaveHappened()
@@ -123,8 +122,8 @@ namespace ServiceStack.Documentation.Tests
         [Fact]
         public void GenerateDocumentation_CallsEnrichersInOrder_WithAllOperations()
         {
-            var operation = new Operation();
-            var operation2 = new Operation();
+            var operation = new Operation { RequestType = typeof(string) };
+            var operation2 = new Operation { RequestType = typeof(string) };
 
             generator.GenerateDocumentation(new[] { operation, operation2 }, appHost, apiSpecConfig);
 

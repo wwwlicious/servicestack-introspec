@@ -247,4 +247,13 @@
     public class DiscoveryExcludeRequest : IReturn<DemoResponse> //default if none
     {
     }
+
+    public class EmptyDtoService : Service
+    {
+        public object Any(EmptyDtoRequest request) => new DemoResponse { Message = "I have no params" };
+    }
+
+    public class EmptyDtoRequest : IReturn<DemoResponse> //default if none
+    {
+    }
 }

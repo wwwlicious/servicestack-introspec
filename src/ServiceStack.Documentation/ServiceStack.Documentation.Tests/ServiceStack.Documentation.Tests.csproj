@@ -45,14 +45,6 @@
       <HintPath>..\packages\FluentAssertions.4.5.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture, Version=3.45.1.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.3.45.1\lib\net40\Ploeh.AutoFixture.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ploeh.AutoFixture.Xunit2, Version=3.45.1.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoFixture.Xunit2.3.45.1\lib\net45\Ploeh.AutoFixture.Xunit2.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ServiceStack, Version=4.0.56.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.4.0.56\lib\net40\ServiceStack.dll</HintPath>
       <Private>True</Private>
@@ -112,6 +104,7 @@
     <Compile Include="Enrichers\XmlEnricherTests.cs" />
     <Compile Include="Extensions\CollectionExtensionsTests.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
+    <Compile Include="Postman\PostmanCollectionGeneratorTests.cs" />
     <Compile Include="Services\ApiDocumentationFilterTests.cs" />
     <Compile Include="Utilities\EnumUtilitiesTests.cs" />
     <Compile Include="Extensions\GetValueExtensionsTests.cs" />

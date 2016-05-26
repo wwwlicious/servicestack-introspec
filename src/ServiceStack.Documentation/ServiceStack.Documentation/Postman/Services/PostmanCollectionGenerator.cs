@@ -9,11 +9,14 @@ namespace ServiceStack.Documentation.Postman.Services
     using System.Linq;
     using Documentation.Models;
     using Extensions;
+    using Logging;
     using Models;
     using Text;
 
     public class PostmanCollectionGenerator
     {
+        private readonly ILog log = LogManager.GetLogger(typeof(PostmanCollectionGenerator));
+
         public Dictionary<string, string> FriendlyTypeNames = new Dictionary<string, string>
         {
             {"Int32", "int"},
@@ -26,6 +29,8 @@ namespace ServiceStack.Documentation.Postman.Services
 
         public PostmanSpecCollection Generate(ApiDocumentation documentation)
         {
+            log.Debug($"Generating PostmanCollection for service {documentation.Title}");
+
             // TODO Use SS AutoMapping for this?
             // Convert apiDocumentation to postman spec
             var collection = new PostmanSpecCollection();
@@ -38,15 +43,24 @@ namespace ServiceStack.Documentation.Postman.Services
 
             PopulateRequests(documentation, collection);
 
+            log.Debug($"Generated PostmanRequest for resource {documentation.Title}");
             return collection;
         }
 
         private void PopulateRequests(ApiDocumentation documentation, PostmanSpecCollection collection)
         {
+            if (documentation.Resources.IsNullOrEmpty())
+            {
+                log.Debug($"ApiDocumentatino for service {documentation.Title} has no resources");
+                return;
+            }
+
             var requests = new List<PostmanSpecRequest>();
 
             foreach (var resource in documentation.Resources)
             {
+                log.Debug($"Generating PostmanRequest for resource {resource.Title}");
+
                 var folder = CreateFolder(resource);
 
                 var contentType = GetContentTypes(resource);
@@ -64,6 +78,8 @@ namespace ServiceStack.Documentation.Postman.Services
                 // Generate a collection request per verb/resource combo
                 foreach (var verb in resource.Verbs)
                 {
+                    log.Debug($"Generating PostmanRequest for resource {resource.Title}, {verb}");
+
                     var hasRequestBody = verb.HasRequestBody();
                     string verbPath = relativePath;
                     if (!hasRequestBody)
@@ -137,6 +153,9 @@ namespace ServiceStack.Documentation.Postman.Services
 
         private List<PostmanSpecData> GetPostmanSpecData(ApiResourceDocumentation resource)
         {
+            if (resource.Properties.IsNullOrEmpty())
+                return Enumerable.Empty<PostmanSpecData>().ToList();
+
             var data = resource.Properties.Select(r =>
             {
                 var type = FriendlyTypeNames.SafeGet(r.ClrType.Name, r.ClrType.Name);
