@@ -31,11 +31,11 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             => enricher.GetTitle(Type).Should().BeNull();
 
         [Fact]
-        public void GetTitle_ReturnsTitle_IfMemberFound()
+        public void GetTitle_ReturnsNull()
         {
             const string name = "the sun smells too loud";
             A.CallTo(() => lookup.GetXmlMember(Type)).Returns(new XmlMember { Name = name });
-            enricher.GetTitle(Type).Should().Be(name);
+            enricher.GetTitle(Type).Should().BeNull();
         }
 
         [Fact]
@@ -171,11 +171,11 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
-        public void GetTitle_PI_ReturnsDescription_IfMemberFound()
+        public void GetTitle_PI_ReturnsNull()
         {
             const string name = "mr November";
             A.CallTo(() => lookup.GetXmlMember(GetProperty())).Returns(new XmlMember { Name = name });
-            enricher.GetTitle(GetProperty()).Should().Be(name);
+            enricher.GetTitle(GetProperty()).Should().BeNull();
         }
     }
 
