@@ -16,7 +16,6 @@ namespace ServiceStack.Documentation.Postman.Services
 
     public class ApiSpecPostmanService : IService
     {
-        // TODO Set as property in feature?
         public Dictionary<string, string> FriendlyTypeNames = new Dictionary<string, string>
         {
             {"Int32", "int"},
@@ -27,9 +26,6 @@ namespace ServiceStack.Documentation.Postman.Services
             {"Single", "float"},
         };
 
-        // TODO Need to be able to set which Headers to add
-        // TODO Auth
-        // TODO Take filter of Verb(s) to use/ignore?
         [AddHeader(ContentType = MimeTypes.Json)]
         public object Get(PostmanRequest request)
         {
