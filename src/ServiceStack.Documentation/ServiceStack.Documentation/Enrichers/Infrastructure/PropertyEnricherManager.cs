@@ -39,7 +39,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
             MemberInfo[] allMembers = GetMemberInfo(dtoType);
 
-            if ((properties == null) || (properties.Length == 0))
+            if (properties.IsNullOrEmpty())
             {
                 indexedParams = new Dictionary<string, ApiPropertyDocumention>();
                 newList = true;

@@ -61,7 +61,11 @@ namespace ServiceStack.Documentation.Models
         public string Title
         {
             get { return title ?? TypeName; }
-            set { title = value; }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    title = value;
+            }
         }
 
         public string Description { get; set; }
@@ -85,9 +89,19 @@ namespace ServiceStack.Documentation.Models
     public class ApiResourceType : IApiResourceType
     {
         // These will need key'd by something (Type?) for finding + enriching
-        public string Title { get; set; }
+        private string title;
+        public string Title
+        {
+            get { return title ?? TypeName; }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    title = value;
+            }
+        }
         public string Description { get; set; }
         public string Notes { get; set; }
+        public string TypeName { get; set; }
         public ApiPropertyDocumention[] Properties { get; set; }
     }
 
@@ -101,12 +115,7 @@ namespace ServiceStack.Documentation.Models
         public Type ClrType { get; set; }
 
         // From IApiSpec
-        private string title;
-        public string Title
-        {
-            get { return title ?? Id; }
-            set { title = value; }
-        }
+        public string Title { get; set; }
         public string Description { get; set; }
         public string Notes { get; set; }
     
@@ -126,6 +135,7 @@ namespace ServiceStack.Documentation.Models
     // Should this be split further down? IHasTitle, IHasDescription etc?
     public interface IApiResourceType : IApiSpec
     {
+        string TypeName { get; set; }
         ApiPropertyDocumention[] Properties { get; set; }
     }
 

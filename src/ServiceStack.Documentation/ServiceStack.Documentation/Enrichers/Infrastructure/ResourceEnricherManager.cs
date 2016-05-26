@@ -44,7 +44,9 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
             // The object that has ResponseStatus is built up from request object
             if (resourceEnricher != null)
             {
-                resource.Title = resource.Title.GetIfNullOrEmpty(() => resourceEnricher.GetTitle(type));
+                if (resource.Title == resource.TypeName)
+                    resource.Title = resourceEnricher.GetTitle(type);
+
                 resource.Description = resource.Description.GetIfNullOrEmpty(() => resourceEnricher.GetDescription(type));
                 resource.Notes = resource.Notes.GetIfNullOrEmpty(() => resourceEnricher.GetNotes(type));
             }
