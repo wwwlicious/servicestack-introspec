@@ -7,7 +7,6 @@ namespace ServiceStack.Documentation.Models
     using System;
     using System.Linq;
 
-    // TODO Rename this api spec?
     /// <summary>
     /// General top level model with API (Service) wide vars
     /// </summary>
@@ -18,8 +17,6 @@ namespace ServiceStack.Documentation.Models
         public string ApiBaseUrl { get; set; }
 
         public string Description { get; set; }
-        /*public string Category { get; set; }
-        public string[] Tags { get; set; }*/
         public string TermsOfService { get; set; }
         public string Licence { get; set; }
         public string LicenceUrl { get; set; }
@@ -76,14 +73,12 @@ namespace ServiceStack.Documentation.Models
         public string[] Verbs { get; set; }
         public StatusCode[] StatusCodes { get; set; }
         public string[] ContentTypes { get; set; }
-        public string RelativePath { get; set; } // Depends on [Route]. .ToRelativeUri().
+        public string RelativePath { get; set; }
         public ApiResourceType ReturnType { get; set; } // ReturnType w/params
 
         // From ICategorised
         public string Category { get; set; }
         public string[] Tags { get; set; }
-
-        // IDictionary<string, string> of extra 'stuff' that doesn't fit in any specific place
     }
 
     public class ApiResourceType : IApiResourceType
@@ -136,24 +131,19 @@ namespace ServiceStack.Documentation.Models
         public IApiResourceType EmbeddedResource { get; set; }
 
         public PropertyConstraint Contraints { get; set; }
-
-        // IDictionary<string,string> for extra stuff?
-        // ExcludeInSchema??
     }
 
-    // Should this be split further down? IHasTitle, IHasDescription etc?
     public interface IApiResourceType : IApiSpec
     {
         string TypeName { get; set; }
         ApiPropertyDocumention[] Properties { get; set; }
     }
 
-    // NOTE Better name required
     public interface IApiResponseStatus : IApiMetadata
     {
         string[] Verbs { get; set; }
         StatusCode[] StatusCodes { get; set; }
-        string[] ContentTypes { get; set; } // NOTE Does this need split by Accepts: and Content-Type:
+        string[] ContentTypes { get; set; }
         string RelativePath { get; set; }
 
         ApiResourceType ReturnType { get; set; } // Could this be IApiResourceType
