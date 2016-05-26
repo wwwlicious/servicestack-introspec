@@ -45,6 +45,26 @@ namespace ServiceStack.Documentation.Tests.Extensions
         [InlineData("banana", "banana", "")]
         public void TrimStart_TrimsIfStringStartsWith(string text, string toTrim, string expected)
             => text.TrimStart(toTrim).Should().Be(expected);
+        
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void EnsureEndsWith_ReturnsString_IfNullOrEmpty(string text) => text.EnsureEndsWith("aa").Should().Be(text);
 
+        [Fact]
+        public void EnsureEndsWith_ReturnsString_IfNotEndsWith()
+        {
+            const string toEndWith = "na";
+            const string str = "banana";
+            str.EnsureEndsWith(toEndWith).Should().Be(str);
+        }
+
+        [Fact]
+        public void EnsureEndsWith_AppendsString_IfDoesntEndWith()
+        {
+            const string toEndWith = "app";
+            const string str = "banana";
+            str.EnsureEndsWith(toEndWith).Should().Be("bananaapp");
+        }
     }
 }

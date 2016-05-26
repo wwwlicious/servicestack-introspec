@@ -67,7 +67,7 @@ namespace ServiceStack.Documentation.Tests.Postman
             var request = collection.Requests.First();
 
             request.CollectionId.Should().Be(collection.Id);
-            request.Url.Should().Be($"{documentation.ApiBaseUrl}/dto");
+            request.Url.Should().Be($"{documentation.ApiBaseUrl}/dto/");
             request.Description.Should().Be(description);
             request.Name.Should().Be("dto");
             request.Method.Should().Be("GET");
@@ -138,6 +138,39 @@ namespace ServiceStack.Documentation.Tests.Postman
                 request.Url.Should().Be(expectedUrl);
                 request.PathVariables.Should().ContainKey("Name");
             }
+        }
+
+        [Fact]
+        public void Generate_HandlesPathVariables_NoTrailingSlash()
+        {
+            var resources = new ApiResourceDocumentation[]
+            {
+                new ApiResourceDocumentation
+                {
+                    Title = "dto",
+                    Verbs = new[] { "GET" },
+                    RelativePath = "/dto/{Name}",
+                    ContentTypes = new[] { "application/json" },
+                    Properties = new []
+                        { new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) } }
+                }
+            };
+
+            var documentation = new ApiDocumentation
+            {
+                Title = "title",
+                Description = "description",
+                Resources = resources,
+                ApiBaseUrl = "http://acme.com/api"
+            };
+
+            string expectedUrl = "http://acme.com/api/dto/:Name/";
+            var collection = generator.Generate(documentation);
+            collection.Requests.Length.Should().Be(1);
+            var request = collection.Requests[0];
+
+            request.Url.Should().Be(expectedUrl);
+            request.PathVariables.Should().ContainKey("Name");
         }
 
         [Fact]

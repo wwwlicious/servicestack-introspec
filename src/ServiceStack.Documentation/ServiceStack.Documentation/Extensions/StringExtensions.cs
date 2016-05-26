@@ -47,6 +47,20 @@ namespace ServiceStack.Documentation.Extensions
             return text.Substring(toTrim.Length);
         }
 
+        /// <summary>
+        /// Ensures that the provided string ends with endWith string. Will be added if does not currently end with.
+        /// </summary>
+        /// <param name="text">Text to end with</param>
+        /// <param name="endWith">String to add at end of string</param>
+        /// <returns>String ended in required string</returns>
+        public static string EnsureEndsWith(this string text, string endWith)
+        {
+            if (string.IsNullOrEmpty(text) || text.EndsWith(endWith))
+                return text;
+
+            return $"{text}{endWith}";
+        }
+
         private static bool IsEndOfAcronym(string text, int index)
         {
             // Preceding char is upper AND next character isn't beyond bounds AND next char isn't upper

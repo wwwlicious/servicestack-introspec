@@ -69,7 +69,7 @@ namespace ServiceStack.Documentation.Postman.Services
                 // Get any pathVariables that are present (variable place holders in route)
                 var pathVariableNames = resource.RelativePath.GetPathParams();
                 string relativePath = pathVariableNames.Aggregate(resource.RelativePath,
-                    (current, match) => current.Replace($"{{{match}}}", $":{match}"));
+                    (current, match) => current.Replace($"{{{match}}}", $":{match}")).EnsureEndsWith("/");
 
                 // Add path vars regardless of verb
                 Dictionary<string, string> pathVars = GetPathVariabless(data, pathVariableNames);
