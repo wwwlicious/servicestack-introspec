@@ -5,15 +5,22 @@
 namespace ServiceStack.Documentation.Services
 {
     using DTO;
+    using Extensions;
 
     public class ApiSpecService : Service
     {
+        private readonly IApiDocumentationProvider documentationProvider;
+
+        public ApiSpecService(IApiDocumentationProvider documentationProvider)
+        {
+            documentationProvider.ThrowIfNull(nameof(documentationProvider));
+            this.documentationProvider = documentationProvider;
+        }
+
         public object Get(SpecRequest request)
         {
-            var apiSpecFeature = HostContext.GetPlugin<ApiSpecFeature>();
-
             // Get the filtered documentation to return
-            var documentation = ApiDocumentationFilter.GetApiDocumentation(request, apiSpecFeature.Documentation);
+            var documentation = documentationProvider.GetApiDocumentation().Filter(request);
 
             // TODO Filter out by auth permissions
             return new SpecResponse { ApiDocumentation = documentation };

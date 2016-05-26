@@ -73,8 +73,10 @@
     <Compile Include="Postman\DTO\PostmanRequest.cs" />
     <Compile Include="Postman\DTO\PostmanResponse.cs" />
     <Compile Include="Postman\Services\PostmanSpecExtensions.cs" />
-    <Compile Include="Services\ApiDocumentationFilter.cs" />
+    <Compile Include="Extensions\ApiDocumentationExtensions.cs" />
     <Compile Include="Postman\Services\ApiSpecPostmanService.cs" />
+    <Compile Include="Services\ApiDocumentationProvider.cs" />
+    <Compile Include="Services\IApiDocumentationProvider.cs" />
     <Compile Include="Utilities\EnumUtilities.cs" />
     <Compile Include="Infrastructure\Result.cs" />
     <Compile Include="Models\PropertyConstraint.cs" />

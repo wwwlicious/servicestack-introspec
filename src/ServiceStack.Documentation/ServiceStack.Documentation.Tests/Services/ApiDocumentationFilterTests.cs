@@ -6,6 +6,7 @@ namespace ServiceStack.Documentation.Tests.Services
 {
     using System;
     using Documentation.DTO;
+    using Documentation.Extensions;
     using Documentation.Models;
     using Documentation.Services;
     using FluentAssertions;
@@ -16,14 +17,15 @@ namespace ServiceStack.Documentation.Tests.Services
         [Fact]
         public void GetApiDocumentation_Throws_IfRequestNull()
         {
-            Action action = () => ApiDocumentationFilter.GetApiDocumentation(null, new ApiDocumentation());
+            Action action = () => new ApiDocumentation().Filter(null);
             action.ShouldThrow<ArgumentNullException>();
         }
 
         [Fact]
         public void GetApiDocumentation_Throws_IfDocumentationNull()
         {
-            Action action = () => ApiDocumentationFilter.GetApiDocumentation(new Filterable(), null);
+            ApiDocumentation documentation = null;
+            Action action = () => documentation.Filter(new Filterable());
             action.ShouldThrow<ArgumentNullException>();
         }
 
@@ -31,7 +33,7 @@ namespace ServiceStack.Documentation.Tests.Services
         public void GetApiDocumentation_ReturnsWholeObject_IfNoFilterCriteria()
         {
             var documentation = new ApiDocumentation { Title = "Test Documentation" };
-            var result = ApiDocumentationFilter.GetApiDocumentation(new Filterable(), documentation);
+            var result = documentation.Filter(new Filterable());
 
             result.Should().Be(documentation);
         }
@@ -48,7 +50,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { DtoName = new[] { "DTO1" } };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Length.Should().Be(1);
             result.Resources[0].Title.Should().Be("DTO1");
@@ -67,7 +69,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { DtoName = new[] { "DTO1", "DTO3" } };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Length.Should().Be(2);
             result.Resources[0].Title.Should().Be("DTO1");
@@ -86,7 +88,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { DtoName = new[] { "sunkilmoon" } };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Should().BeNullOrEmpty();
         }
@@ -103,7 +105,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { Tags = new[] { "Tag1" } };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Length.Should().Be(1);
             result.Resources[0].Tags[0].Should().Be("Tag1");
@@ -122,7 +124,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { Tags = new[] { "Tag1", "Tag2" } };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Length.Should().Be(3);
         }
@@ -139,7 +141,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { Tags = new[] { "sunkilmoon" } };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Should().BeNullOrEmpty();
         }
@@ -156,7 +158,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { Category = "Category1" };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Length.Should().Be(1);
             result.Resources[0].Category.Should().Be("Category1");
@@ -174,7 +176,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable { Category = "unknown" };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
 
             result.Resources.Should().BeNullOrEmpty();
         }
@@ -197,7 +199,7 @@ namespace ServiceStack.Documentation.Tests.Services
                 DtoName = new[] { "DTO3", "DTO2" }
             };
 
-            var result = ApiDocumentationFilter.GetApiDocumentation(filter, documentation);
+            var result = documentation.Filter(filter);
             result.Resources.Length.Should().Be(1);
             result.Resources[0].Title.Should().Be("DTO3");
         }

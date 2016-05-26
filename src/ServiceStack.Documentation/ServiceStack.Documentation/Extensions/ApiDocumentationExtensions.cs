@@ -2,19 +2,18 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this 
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-namespace ServiceStack.Documentation.Services
+namespace ServiceStack.Documentation.Extensions
 {
     using System;
     using System.Linq;
     using System.Linq.Expressions;
     using DTO;
-    using Extensions;
     using Linq;
     using Models;
 
-    public class ApiDocumentationFilter
+    public static class ApiDocumentationExtensions
     {
-        public static ApiDocumentation GetApiDocumentation(IFilterableSpecRequest request, ApiDocumentation documentation)
+        public static ApiDocumentation Filter(this ApiDocumentation documentation, IFilterableSpecRequest request)
         {
             request.ThrowIfNull(nameof(request));
             documentation.ThrowIfNull(nameof(documentation));
