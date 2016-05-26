@@ -69,6 +69,14 @@
     <Compile Include="Extensions\AccessExtensions.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
     <Compile Include="Linq\PredicateBuilder.cs" />
+    <Compile Include="Models\ApiContact.cs" />
+    <Compile Include="Models\ApiPropertyDocumention.cs" />
+    <Compile Include="Models\ApiResourceDocumentation.cs" />
+    <Compile Include="Models\ApiResourceType.cs" />
+    <Compile Include="Models\IApiMetadata.cs" />
+    <Compile Include="Models\IApiResourceType.cs" />
+    <Compile Include="Models\IApiResponseStatus.cs" />
+    <Compile Include="Models\IApiSpec.cs" />
     <Compile Include="Postman\Models\Postman.cs" />
     <Compile Include="Postman\DTO\PostmanRequest.cs" />
     <Compile Include="Postman\DTO\PostmanResponse.cs" />
