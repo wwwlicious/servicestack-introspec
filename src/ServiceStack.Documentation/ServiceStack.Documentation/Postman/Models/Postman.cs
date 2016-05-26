@@ -119,8 +119,6 @@ namespace ServiceStack.Documentation.Postman.Models
 
         [DataMember(Name = "enabled")]
         public bool Enabled { get; set; }
-        
-        /* Parameter, BodyType(data?), PathVariable */
     }
 
     [DataContract]

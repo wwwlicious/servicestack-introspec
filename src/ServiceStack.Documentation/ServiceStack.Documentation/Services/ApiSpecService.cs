@@ -4,8 +4,7 @@
 
 namespace ServiceStack.Documentation.Services
 {
-    using DataAnnotations;
-    using Models;
+    using DTO;
 
     public class ApiSpecService : Service
     {
@@ -17,19 +16,5 @@ namespace ServiceStack.Documentation.Services
             // TODO Filter out by auth permissions
             return new SpecResponse { ApiDocumentation = documentation };
         }
-    }
-
-    [Route(Constants.SpecUri)]
-    [Exclude(Feature.Metadata | Feature.ServiceDiscovery)]
-    public class SpecRequest : IReturn<SpecResponse>, IFilterableSpecRequest
-    {
-        public string[] DtoName { get; set; }
-        public string Category { get; set; }
-        public string[] Tags { get; set; }
-    }
-
-    public class SpecResponse
-    {
-        public ApiDocumentation ApiDocumentation { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace ServiceStack.Documentation.Services
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+    using DTO;
     using Extensions;
     using Linq;
     using Models;

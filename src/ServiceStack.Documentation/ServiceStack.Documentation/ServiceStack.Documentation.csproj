@@ -63,6 +63,9 @@
   <ItemGroup>
     <Compile Include="AbstractApiSpec\TypeSpec.cs" />
     <Compile Include="AbstractApiSpec\DocumentationClassLocator.cs" />
+    <Compile Include="DTO\IFilterableSpecRequest.cs" />
+    <Compile Include="DTO\SpecRequest.cs" />
+    <Compile Include="DTO\SpecResponse.cs" />
     <Compile Include="Extensions\AccessExtensions.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
     <Compile Include="Linq\PredicateBuilder.cs" />
@@ -72,7 +75,6 @@
     <Compile Include="Postman\Services\PostmanSpecExtensions.cs" />
     <Compile Include="Services\ApiDocumentationFilter.cs" />
     <Compile Include="Postman\Services\ApiSpecPostmanService.cs" />
-    <Compile Include="Services\IFilterableSpecRequest.cs" />
     <Compile Include="Utilities\EnumUtilities.cs" />
     <Compile Include="Infrastructure\Result.cs" />
     <Compile Include="Models\PropertyConstraint.cs" />
