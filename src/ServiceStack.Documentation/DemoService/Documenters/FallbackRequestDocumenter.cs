@@ -4,13 +4,13 @@ namespace DemoService.Documenters
     using ServiceStack.Documentation.AbstractApiSpec;
     using ServiceStack.Documentation.Models;
 
-    public class PlainRequestDocumenter : RequestSpec<PlainRequest>
+    public class FallbackRequestDocumenter : RequestSpec<FallbackRequest>
     {
-        public PlainRequestDocumenter()
+        public FallbackRequestDocumenter()
         {
-            Title = "Plain request title from abstract";
-            Description = "Plain request desc from abstract";
-            Notes = "Plain request notes from abstract";
+            Title = "Fallback request title from abstract class";
+            Description = "Fallback request desc from abstract";
+            Notes = "Fallback request notes from abstract";
 
             Category = "Category1";
 
@@ -22,7 +22,7 @@ namespace DemoService.Documenters
                 {
                     Code = 503,
                     Name = "Service Unavailable",
-                    Description = "Service is unavailable, try again in a wee bit"
+                    Description = "Service is unavailable, try again later"
                 },
                 new StatusCode
                 {
@@ -34,7 +34,7 @@ namespace DemoService.Documenters
             AddContentTypes("application/hal+json");
 
             For(t => t.MyField)
-                .With(p => p.Title, "Just some field");
+                .With(p => p.Title, "A field, not a property");
 
             For(t => t.Name)
                 .With(p => p.Title, "Name parameter abstract class definition")
@@ -42,7 +42,7 @@ namespace DemoService.Documenters
                 .With(p => p.Description, "Description from abstract class");
 
             For(t => t.Age)
-                .With(p => p.Title, "This is an optional thing. AC")
+                .With(p => p.Title, "Age is optional")
                 .With(p => p.IsRequired, false)
                 .With(p => p.Constraint, PropertyConstraint.RangeConstraint("Age Range", 0, 120));
 
@@ -63,12 +63,15 @@ namespace DemoService.Documenters
         }
     }
 
-    public class DemoResponseDocumenter : TypeSpec<DemoResponse>
+    public class NameDocumenter : TypeSpec<Name>
     {
-        public DemoResponseDocumenter()
+        public NameDocumenter()
         {
-            Title = "Demo response title from documenter";
-            Description = "Demo response description from documenter";
+            Title = "Title of Name";
+            Description = "This comes from TypeSpec implementation and will be used everywhere that Name is.";
+
+            For(t => t.Forename)
+                .With(p => p.IsRequired, true);
         }
     }
 }

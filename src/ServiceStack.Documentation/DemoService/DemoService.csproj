@@ -78,7 +78,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Documenters\PlainRequestDocumenter.cs" />
+    <Compile Include="DemoService.cs" />
+    <Compile Include="Documenters\FallbackRequestDocumenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
