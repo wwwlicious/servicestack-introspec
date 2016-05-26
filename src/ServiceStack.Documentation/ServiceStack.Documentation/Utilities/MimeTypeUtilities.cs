@@ -15,8 +15,8 @@ namespace ServiceStack.Documentation.Utilities
         private static readonly Dictionary<string, string> mimeDictionary;
         static MimeTypeUtilities()
         {
-            // There's no nice way to get mime type (application/json) from type (json).
-            // MimeTypes class has all known types as constants so build dictionary of these
+            // There's no nice way to get mime type ("application/json") from type ("json").
+            // ServiceStack.MimeTypes class has all known types as constants so build dictionary of these
 
             mimeDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             var fieldInfos = typeof(MimeTypes).GetFields(BindingFlags.Public | BindingFlags.Static);
