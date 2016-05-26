@@ -12,7 +12,7 @@ namespace ServiceStack.Documentation.Postman.Services
     using Models;
     using Text;
 
-    public class PostmanModelGenerator
+    public class PostmanCollectionGenerator
     {
         public Dictionary<string, string> FriendlyTypeNames = new Dictionary<string, string>
         {
@@ -24,7 +24,7 @@ namespace ServiceStack.Documentation.Postman.Services
             {"Single", "float"},
         };
 
-        public PostmanSpecCollection GetPostmanCollection(ApiDocumentation documentation)
+        public PostmanSpecCollection Generate(ApiDocumentation documentation)
         {
             // TODO Use SS AutoMapping for this?
             // Convert apiDocumentation to postman spec
