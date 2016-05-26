@@ -112,5 +112,10 @@ namespace ServiceStack.Documentation.Models.Postman
 
         [DataMember(Name = "enabled")]
         public bool Enabled { get; set; }
+
+        [IgnoreDataMember]
+        public string ParameterType { get; set; } // Should this be an enum?
+        
+        /* Parameter, BodyType(data?), PathVariable */
     }
 }
