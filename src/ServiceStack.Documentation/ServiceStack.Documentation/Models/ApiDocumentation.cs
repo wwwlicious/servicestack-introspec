@@ -115,7 +115,16 @@ namespace ServiceStack.Documentation.Models
         public Type ClrType { get; set; }
 
         // From IApiSpec
-        public string Title { get; set; }
+        private string title;
+        public string Title
+        {
+            get { return title ?? Id; }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    title = value; 
+            }
+        }
         public string Description { get; set; }
         public string Notes { get; set; }
     

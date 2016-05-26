@@ -91,7 +91,8 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
         private void EnrichParameter(ApiPropertyDocumention property, MemberInfo mi)
         {
-            property.Title = property.Title.GetIfNullOrEmpty(() => propertyEnricher.GetTitle(mi));
+            if (property.Title == property.Id || string.IsNullOrEmpty(property.Title))
+                property.Title = propertyEnricher.GetTitle(mi);
             property.Description = property.Description.GetIfNullOrEmpty(() => propertyEnricher.GetDescription(mi));
             property.Notes = property.Notes.GetIfNullOrEmpty(() => propertyEnricher.GetNotes(mi));
             property.ParamType = property.ParamType.GetIfNullOrEmpty(() => propertyEnricher.GetParamType(mi));

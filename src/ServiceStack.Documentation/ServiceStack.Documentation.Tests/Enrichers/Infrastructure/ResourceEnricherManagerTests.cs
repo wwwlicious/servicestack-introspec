@@ -15,7 +15,6 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
 
     public class ResourceEnricherManagerTests
     {
-        private readonly Operation operation;
         private readonly ResourceEnricherManager nullParameterManager;
         private readonly ResourceEnricherManager manager;
         private readonly IResourceEnricher resourceEnricher;
@@ -24,7 +23,6 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         public ResourceEnricherManagerTests()
         {
             nullParameterManager = new ResourceEnricherManager(null, null);
-            operation = new Operation { RequestType = typeof (int), ResponseType = typeof (string) };
 
             resourceEnricher = A.Fake<IResourceEnricher>();
             manager = new ResourceEnricherManager(resourceEnricher, null);
@@ -55,7 +53,8 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         public void EnrichResource_CallsGetTitle_IfResourceHasNoTitle()
         {
             var responseType = typeof(int);
-            manager.EnrichResource(new ApiResourceType(), new Operation { ResponseType = responseType });
+            manager.EnrichResource(new ApiResourceType { TypeName = "string" },
+                new Operation { ResponseType = responseType });
             A.CallTo(() => resourceEnricher.GetTitle(responseType)).MustHaveHappened();
         }
 
