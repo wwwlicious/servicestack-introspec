@@ -26,8 +26,12 @@ namespace ServiceStack.Documentation.Postman.Models
         [DataMember(Name = "description")]
         public string Description { get; set; }
 
-        // order
-        // folders
+        // NOTE If order not specified in collection folders are ignored
+        [DataMember(Name = "order")]
+        public string[] Order { get; set; } = new string[0];
+
+        [DataMember(Name = "folders")]
+        public List<PostmanFolder> Folders { get; set; } = new List<PostmanFolder>();
 
         [DataMember(Name = "timestamp")]
         public long Timestamp { get; set; }
@@ -39,7 +43,7 @@ namespace ServiceStack.Documentation.Postman.Models
         public bool Public { get; set; }
 
         [DataMember(Name = "requests")]
-        public PostmanSpecRequest[] Requests { get; set; } = new PostmanSpecRequest[0];
+        public PostmanSpecRequest[] Requests { get; set; }
     }
 
     [DataContract]
@@ -91,6 +95,9 @@ namespace ServiceStack.Documentation.Postman.Models
         [DataMember(Name = "responses")]
         public string[] Responses { get; set; } = new string[0];
 
+        [DataMember(Name = "folder")]
+        public string FolderId { get; set; }
+
         // tests
 
         // rawModeData
@@ -112,10 +119,23 @@ namespace ServiceStack.Documentation.Postman.Models
 
         [DataMember(Name = "enabled")]
         public bool Enabled { get; set; }
-
-        [IgnoreDataMember]
-        public string ParameterType { get; set; } // Should this be an enum?
         
         /* Parameter, BodyType(data?), PathVariable */
+    }
+
+    [DataContract]
+    public class PostmanFolder
+    {
+        [DataMember(Name = "id")]
+        public string Id { get; set; }
+
+        [DataMember(Name = "name")]
+        public string Name { get; set; }
+
+        [DataMember(Name = "description")]
+        public string Description { get; set; }
+
+        [DataMember(Name = "order")]
+        public List<string> RequestIds { get; set; }
     }
 }

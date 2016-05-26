@@ -48,16 +48,19 @@ namespace ServiceStack.Documentation.Postman.Services
             collection.Description = documentation.Description;
             collection.Timestamp = DateTime.UtcNow.ToUnixTimeMs();
 
-            collection.Requests = GetRequests(documentation, collectionId).ToArray();
+            PopulateRequests(documentation, collection);
 
             return collection;
         }
 
-        private IEnumerable<PostmanSpecRequest> GetRequests(ApiDocumentation documentation, string collectionId)
+        private void PopulateRequests(ApiDocumentation documentation, PostmanSpecCollection collection)
         {
-            // Iterate over all resources
+            var requests = new List<PostmanSpecRequest>();
+
             foreach (var resource in documentation.Resources)
             {
+                var folder = CreateFolder(resource);
+
                 var contentType = GetContentTypes(resource);
 
                 var data = GetPostmanSpecData(resource);
@@ -78,16 +81,19 @@ namespace ServiceStack.Documentation.Postman.Services
                     if (!hasRequestBody)
                         verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
 
+                    var requestId = Guid.NewGuid().ToString();
                     var request = new PostmanSpecRequest
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = requestId,
                         Url = documentation.ApiBaseUrl.CombineWith(verbPath),
                         Method = verb,
                         Time = DateTime.UtcNow.ToUnixTimeMs(),
                         Name = resource.Title,
                         Description = resource.Description,
-                        CollectionId = collectionId,
-                        Headers = $"Accept: {contentType}"
+                        CollectionId = collection.Id,
+                        Headers = $"Accept: {contentType}",
+                        FolderId = folder.Id,
+                        PathVariables = pathVars
                     };
 
                     request.Data = hasRequestBody
@@ -95,11 +101,27 @@ namespace ServiceStack.Documentation.Postman.Services
                                             !pathVariableNames.Contains(t.Key, StringComparer.OrdinalIgnoreCase)).ToList()
                                        : null;
 
-                    request.PathVariables = pathVars;
-
-                    yield return request;
+                    folder.RequestIds.Add(requestId);
+                    requests.Add(request);
                 }
+
+                collection.Folders.Add(folder);
             }
+
+            collection.Requests = requests.ToArray();
+        }
+
+        private static PostmanFolder CreateFolder(ApiResourceDocumentation resource)
+        {
+            var folderId = Guid.NewGuid().ToString();
+            var folder = new PostmanFolder
+            {
+                Name = resource.Title,
+                Description = $"DTO Folder: {resource.Title}",
+                Id = folderId,
+                RequestIds = new List<string>(resource.Verbs.Length)
+            };
+            return folder;
         }
 
         private static Dictionary<string, string> GetPathVariabless(List<PostmanSpecData> data, List<string> pathVariables)
