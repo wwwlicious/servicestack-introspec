@@ -70,6 +70,7 @@
     <Compile Include="Enrichers\Interfaces\ISecurityEnricher.cs" />
     <Compile Include="Extensions\AccessExtensions.cs" />
     <Compile Include="Enrichers\FallbackEnricher.cs" />
+    <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\UrlExtensions.cs" />
     <Compile Include="Linq\PredicateBuilder.cs" />
     <Compile Include="Models\ApiContact.cs" />
