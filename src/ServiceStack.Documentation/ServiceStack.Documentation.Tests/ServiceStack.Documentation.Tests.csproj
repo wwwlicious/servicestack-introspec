@@ -102,7 +102,7 @@
     <Compile Include="Enrichers\Infrastructure\RequestEnricherManagerTests.cs" />
     <Compile Include="Enrichers\ReflectionEnricherTests.cs" />
     <Compile Include="Enrichers\XmlEnricherTests.cs" />
-    <Compile Include="Extensions\AttributeExtensionsTests.cs" />
+    <Compile Include="Extensions\OperationExtensionsTests.cs" />
     <Compile Include="Extensions\CollectionExtensionsTests.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
     <Compile Include="Extensions\UrlExtensionsTests.cs" />

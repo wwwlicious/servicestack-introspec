@@ -87,7 +87,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
         private string[] GetVerbs(Operation operation)
         {
-            // TODO - Look at [Restrict] and [Route] to determine if some should be ignored
+            // TODO - Look at [Restrict] [Route] [Authenticate] to determine if some should be ignored
             return operation.Actions.Contains("ANY")
                 ? DocumenterSettings.ReplacementVerbs as string[] ?? DocumenterSettings.ReplacementVerbs.ToArray()
                 : operation.Actions.ToArray();
