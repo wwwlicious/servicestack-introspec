@@ -9,7 +9,6 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     using Host;
     using Interfaces;
     using Models;
-    using Settings;
 
     /// <summary>
     /// Manages default logic for enriching request DTO objects
@@ -17,56 +16,37 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     public class RequestEnricherManager
     {
         private readonly IRequestEnricher requestEnricher;
-        private readonly ISecurityEnricher securityEnricher;
+        private readonly ActionEnricherManager actionEnricherManager;
         private readonly Action<IApiResourceType, Operation> enrichResource;
 
-        public RequestEnricherManager(IRequestEnricher requestEnricher, ISecurityEnricher securityEnricher, Action<IApiResourceType, Operation> enrichResource)
+        //? Should this rely on IActionEnricher and ISecurityEnricher rather than ActionEnricherManager?
+        public RequestEnricherManager(IRequestEnricher requestEnricher, ActionEnricherManager actionEnricherManager,
+            Action<IApiResourceType, Operation> enrichResource)
         {
             this.requestEnricher = requestEnricher;
-            this.securityEnricher = securityEnricher;
             this.enrichResource = enrichResource;
+
+            this.actionEnricherManager = actionEnricherManager;
         }
 
         /// <summary>
-        /// Enrich supplied IApiResponseStatus object with details in operation
+        /// Enrich supplied IApiRequest object with details in operation
         /// </summary>
-        /// <param name="response">The object to be enriched</param>
+        /// <param name="request">The object to be enriched</param>
         /// <param name="operation">Details of operation to use for enrichment</param>
-        public void EnrichRequest(IApiResponseStatus response, Operation operation)
+        public void EnrichRequest(IApiRequest request, Operation operation)
         {
-            bool unionCollections = DocumenterSettings.CollectionStrategy == EnrichmentStrategy.Union;
-
             if (requestEnricher != null)
             {
-                // The object that has ResponseStatus is built up from request DTO
-                response.Verbs = unionCollections
-                    ? response.Verbs.SafeUnion(() => requestEnricher.GetVerbs(operation))
-                    : response.Verbs.GetIfNullOrEmpty(() => requestEnricher.GetVerbs(operation));
-
-                response.StatusCodes = unionCollections
-                    ? response.StatusCodes.SafeUnion(() => requestEnricher.GetStatusCodes(operation))
-                    : response.StatusCodes.GetIfNullOrEmpty(() => requestEnricher.GetStatusCodes(operation));
-
-                response.RelativePath =
-                    response.RelativePath.GetIfNullOrEmpty(() => requestEnricher.GetRelativePath(operation));
-
-                response.Category = response.Category.GetIfNullOrEmpty(() => requestEnricher.GetCategory(operation));
-
-                response.Tags = unionCollections
-                    ? response.Tags.SafeUnion(() => requestEnricher.GetTags(operation))
-                    : response.Tags.GetIfNullOrEmpty(() => requestEnricher.GetTags(operation));
-
-                response.ContentTypes = unionCollections
-                    ? response.ContentTypes.SafeUnion(() => requestEnricher.GetContentTypes(operation))
-                    : response.ContentTypes.GetIfNullOrEmpty(() => requestEnricher.GetContentTypes(operation));
+                request.Category = request.Category.GetIfNullOrEmpty(() => requestEnricher.GetCategory(operation));
+                request.Tags = request.Tags.GetBasedOnStrategy(() => requestEnricher.GetTags(operation));
             }
 
-            response.ReturnType = response.ReturnType.GetIfNull(() => new ApiResourceType());
+            request.ReturnType = request.ReturnType.GetIfNull(() => new ApiResourceType());
 
-            enrichResource(response.ReturnType, operation);
-
-            if (securityEnricher != null)
-                response.Security = securityEnricher.GetSecurity(operation);
+            //? Is it worth Async'ing these puppies then picking it back up when done?????
+            enrichResource(request.ReturnType, operation);
+            request.Actions = actionEnricherManager.EnrichActions(request.Actions, operation);
         }
     }
 }

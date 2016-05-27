@@ -41,6 +41,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
             if (properties.IsNullOrEmpty())
             {
+                //? Make this static to avoid needing to populate multiple times
                 indexedParams = new Dictionary<string, ApiPropertyDocumention>();
                 newList = true;
                 parameterDocuments = new List<ApiPropertyDocumention>(allMembers.Length);

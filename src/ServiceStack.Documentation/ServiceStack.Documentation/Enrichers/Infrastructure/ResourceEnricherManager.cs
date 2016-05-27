@@ -32,7 +32,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
         public void EnrichResource(IApiResourceType resource, Operation operation)
         {
             // The object that has ResponseStatus is built up from request object
-            var type = resource is IApiResponseStatus ? operation.RequestType : operation.ResponseType;
+            var type = resource is IApiRequest ? operation.RequestType : operation.ResponseType;
 
             if (type == null) return;
 

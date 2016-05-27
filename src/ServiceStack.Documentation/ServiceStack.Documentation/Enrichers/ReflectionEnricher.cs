@@ -21,7 +21,7 @@ namespace ServiceStack.Documentation.Enrichers
     /// Enricher that will use Reflection to enrich object. 
     /// </summary>
     /// <remarks>This primarily looks at Attributes as well as types etc</remarks>
-    public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher, ISecurityEnricher
+    public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher, ISecurityEnricher, IActionEnricher
     {
         private readonly ILog log = LogManager.GetLogger(typeof(ReflectionEnricher));
 
@@ -39,76 +39,12 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string GetNotes(Type type) => type.FirstAttribute<RouteAttribute>()?.Notes;
 
-        public string[] GetVerbs(Operation operation)
+        /*public string[] GetVerbs(Operation operation)
         {
             return operation.Actions.Contains("ANY")
                 ? DocumenterSettings.ReplacementVerbs as string[] ?? DocumenterSettings.ReplacementVerbs.ToArray()
                 : operation.Actions.ToArray();
-        }
-
-        public string[] GetContentTypes(Operation operation)
-        {
-            // Get a list of all available formats
-            var availableFormats = HostContext.MetadataPagesConfig.AvailableFormatConfigs.Select(a => a.Format);
-
-            // NOTE Restriction can come from either DTO or Service
-            RestrictAttribute restrictedTo = operation.RestrictTo;
-            var requestType = operation.RequestType;
-
-            var mimeTypes = new List<string>();
-            foreach (var format in availableFormats.Select(s => s.TrimStart("x-")))
-            {
-                // Verify RestrictAttribute not preventing access
-                var requestAttrResult = EnumUtilities.SafeParse<RequestAttributes>(format);
-                if (!restrictedTo.CanAccess(requestAttrResult)) continue;
-
-                // Verify ExcludeAttribute not preventing access
-                var featureResult = EnumUtilities.SafeParse<Feature>(format);
-                if (requestType.HasAccessToFeature(featureResult))
-                    mimeTypes.Add(MimeTypeUtilities.GetMimeType(format));
-            }
-
-            ProcessAddHeaderAttribute(requestType, mimeTypes);
-
-            return mimeTypes.Distinct().ToArray();
-        }
-
-        public StatusCode[] GetStatusCodes(Operation operation)
-        {
-            // From [ApiResponse] attributes
-            var apiResponseAttributes = operation.RequestType.GetCustomAttributes<ApiResponseAttribute>();
-            var responseAttributes = apiResponseAttributes as ApiResponseAttribute[] ?? apiResponseAttributes.ToArray();
-
-            var list = new List<StatusCode>(responseAttributes.Length + 1);
-            if (HasOneWayMethod(operation))
-                list.Add((StatusCode) HttpStatusCode.NoContent);
-
-            if (responseAttributes.Length == 0) return list.ToArray();
-
-            foreach (var apiResponseAttribute in responseAttributes)
-            {
-                var statusCode = (StatusCode) apiResponseAttribute.StatusCode;
-                statusCode.Description = apiResponseAttribute.Description;
-                list.Add(statusCode);
-            }
-
-            return list.ToArray();
-        }
-
-        public string GetRelativePath(Operation operation)
-        {
-            // TODO Handle multiple routes for same DTO. Anything accessing [Route] will be affected
-            var requestType = operation.RequestType;
-
-            var routeFromAttribute = requestType.FirstAttribute<RouteAttribute>()?.Path;
-            if (!string.IsNullOrWhiteSpace(routeFromAttribute))
-                return routeFromAttribute;
-
-            var emptyType = requestType.CreateInstance();
-
-            // If no route then make one up
-            return operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly();
-        }
+        }*/
 
         public string GetCategory(Operation operation) => null;
         public string[] GetTags(Operation operation) => null;
@@ -137,7 +73,7 @@ namespace ServiceStack.Documentation.Enrichers
             return constraint;
         }
 
-        public ApiSecurity GetSecurity(Operation operation)
+        public ApiSecurity GetSecurity(Operation operation, string verb)
         {
             if (!operation.RequiresAuthentication)
                 return null;
@@ -152,6 +88,7 @@ namespace ServiceStack.Documentation.Enrichers
             return apiSecurity;
         }
 
+        //? extract some of these out to be separate helpers to prevent the class getting too big
         private static bool HasOneWayMethod(Operation operation)
         {
             if (operation.IsOneWay)
@@ -192,6 +129,70 @@ namespace ServiceStack.Documentation.Enrichers
             var contentType = addHeader.ContentType ?? addHeader.DefaultContentType;
             if (!string.IsNullOrEmpty(contentType))
                 mimeTypes.Add(contentType);
+        }
+
+        public string[] GetContentTypes(Operation operation, string verb)
+        {
+            // Get a list of all available formats
+            var availableFormats = HostContext.MetadataPagesConfig.AvailableFormatConfigs.Select(a => a.Format);
+
+            // NOTE Restriction can come from either DTO or Service
+            RestrictAttribute restrictedTo = operation.RestrictTo;
+            var requestType = operation.RequestType;
+
+            var mimeTypes = new List<string>();
+            foreach (var format in availableFormats.Select(s => s.TrimStart("x-")))
+            {
+                // Verify RestrictAttribute not preventing access
+                var requestAttrResult = EnumUtilities.SafeParse<RequestAttributes>(format);
+                if (!restrictedTo.CanAccess(requestAttrResult)) continue;
+
+                // Verify ExcludeAttribute not preventing access
+                var featureResult = EnumUtilities.SafeParse<Feature>(format);
+                if (requestType.HasAccessToFeature(featureResult))
+                    mimeTypes.Add(MimeTypeUtilities.GetMimeType(format));
+            }
+
+            ProcessAddHeaderAttribute(requestType, mimeTypes);
+
+            return mimeTypes.Distinct().ToArray();
+        }
+
+        public string GetRelativePath(Operation operation, string verb)
+        {
+            // TODO Handle multiple routes for same DTO. Anything accessing [Route] will be affected
+            var requestType = operation.RequestType;
+
+            var routeFromAttribute = requestType.FirstAttribute<RouteAttribute>()?.Path;
+            if (!string.IsNullOrWhiteSpace(routeFromAttribute))
+                return routeFromAttribute;
+
+            var emptyType = requestType.CreateInstance();
+
+            // If no route then make one up
+            return operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly();
+        }
+
+        public StatusCode[] GetStatusCodes(Operation operation, string verb)
+        {
+            // From [ApiResponse] attributes
+            var apiResponseAttributes = operation.RequestType.GetCustomAttributes<ApiResponseAttribute>();
+            var responseAttributes = apiResponseAttributes as ApiResponseAttribute[] ?? apiResponseAttributes.ToArray();
+
+            var list = new List<StatusCode>(responseAttributes.Length + 1);
+            if (HasOneWayMethod(operation))
+                list.Add((StatusCode)HttpStatusCode.NoContent);
+
+            if (responseAttributes.Length == 0) return list.ToArray();
+
+            foreach (var apiResponseAttribute in responseAttributes)
+            {
+                var statusCode = (StatusCode)apiResponseAttribute.StatusCode;
+                statusCode.Description = apiResponseAttribute.Description;
+                list.Add(statusCode);
+            }
+
+            return list.ToArray();
         }
     }
 }

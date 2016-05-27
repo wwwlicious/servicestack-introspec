@@ -12,6 +12,15 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     /// </summary>
     public interface ISecurityEnricher : IEnrich
     {
-        ApiSecurity GetSecurity(Operation operation);
+        ApiSecurity GetSecurity(Operation operation, string verb);
+    }
+
+    public interface IActionEnricher : IEnrich
+    {
+        //? Should I pass the entire object rather than just the verb?
+        string[] GetContentTypes(Operation operation, string verb);
+        string GetRelativePath(Operation operation, string verb);
+        //ApiResourceType GetReturnType(Operation operation, string verb);
+        StatusCode[] GetStatusCodes(Operation operation, string verb);
     }
 }

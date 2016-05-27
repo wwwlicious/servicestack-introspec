@@ -5,17 +5,17 @@
 namespace ServiceStack.Documentation.Enrichers.Interfaces
 {
     using Host;
-    using Models;
 
     /// <summary>
     /// Methods for populating a request DTO class
     /// </summary>
     public interface IRequestEnricher : IEnrich
     {
-        string[] GetVerbs(Operation operation);
-        string[] GetContentTypes(Operation operation);
-        StatusCode[] GetStatusCodes(Operation operation);
-        string GetRelativePath(Operation operation);
+        // TODO Remove these
+        //string[] GetVerbs(Operation operation);
+        //string[] GetContentTypes(Operation operation);
+        //StatusCode[] GetStatusCodes(Operation operation);
+        //string GetRelativePath(Operation operation);
 
         string GetCategory(Operation operation);
         string[] GetTags(Operation operation);

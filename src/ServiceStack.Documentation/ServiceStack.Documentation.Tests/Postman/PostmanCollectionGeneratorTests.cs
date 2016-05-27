@@ -37,7 +37,7 @@ namespace ServiceStack.Documentation.Tests.Postman
             collection.Order.Should().NotBeNull();
         }
 
-        [Fact]
+        /*[Fact]
         public void Generate_PopulatesBasicRequestValues()
         {
             const string description = "Documentation Description";
@@ -246,6 +246,6 @@ namespace ServiceStack.Documentation.Tests.Postman
             request.Url.Should().Be(expectedUrl);
             request.PathVariables.Should().ContainKey("Name");
             request.Data.Should().Contain(x => x.Key == "Age");
-        }
+        }*/
     }
 }

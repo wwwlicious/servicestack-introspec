@@ -4,13 +4,15 @@
 
 namespace ServiceStack.Documentation.Models
 {
-    public interface IApiResponseStatus : IApiMetadata, ISecured
+    public interface IApiRequest : IApiMetadata //, ISecured
     {
-        string[] Verbs { get; set; }
+        /*string[] Verbs { get; set; }
         StatusCode[] StatusCodes { get; set; }
         string[] ContentTypes { get; set; }
-        string RelativePath { get; set; }
+        string RelativePath { get; set; }*/
 
-        ApiResourceType ReturnType { get; set; } // Could this be IApiResourceType
+        ApiResourceType ReturnType { get; set; }
+
+        ApiAction[] Actions { get; set; }
     }
 }

@@ -67,7 +67,7 @@ namespace ServiceStack.Documentation.Postman.Services
                 var data = GetPostmanSpecData(resource);
 
                 // Get any pathVariables that are present (variable place holders in route)
-                var pathVariableNames = resource.RelativePath.GetPathParams();
+                /*var pathVariableNames = resource.RelativePath.GetPathParams();
                 string relativePath = pathVariableNames.Aggregate(resource.RelativePath,
                     (current, match) => current.Replace($"{{{match}}}", $":{match}")).EnsureEndsWith("/");
 
@@ -82,10 +82,10 @@ namespace ServiceStack.Documentation.Postman.Services
                     var hasRequestBody = verb.HasRequestBody();
                     string verbPath = relativePath;
                     if (!hasRequestBody)
-                        verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
+                        verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);*/
 
                     var requestId = Guid.NewGuid().ToString();
-                    var request = new PostmanSpecRequest
+                var request = new PostmanSpecRequest();/*
                     {
                         Id = requestId,
                         Url = documentation.ApiBaseUrl.CombineWith(verbPath),
@@ -102,11 +102,11 @@ namespace ServiceStack.Documentation.Postman.Services
                     request.Data = hasRequestBody
                                        ? data.Where(t =>
                                                     !pathVariableNames.Contains(t.Key, StringComparer.OrdinalIgnoreCase)).ToList()
-                                       : null;
+                                       : null;*/
 
                     folder.RequestIds.Add(requestId);
                     requests.Add(request);
-                }
+                //}
 
                 collection.Folders.Add(folder);
             }
@@ -122,7 +122,7 @@ namespace ServiceStack.Documentation.Postman.Services
                 Name = resource.Title,
                 Description = $"DTO Folder: {resource.Title}",
                 Id = folderId,
-                RequestIds = new List<string>(resource.Verbs.Length)
+                //RequestIds = new List<string>(resource.Verbs.Length)
             };
             return folder;
         }
@@ -137,10 +137,11 @@ namespace ServiceStack.Documentation.Postman.Services
         private static string GetContentTypes(ApiResourceDocumentation resource)
         {
             // TODO Tighten up the logic used here
-            var contentType = resource.ContentTypes.Contains(MimeTypes.Json)
+            /*var contentType = resource.ContentTypes.Contains(MimeTypes.Json)
                                   ? MimeTypes.Json
                                   : resource.ContentTypes.First();
-            return contentType;
+            return contentType;*/
+            throw new NotImplementedException();
         }
 
         private static string ProcessQueryStringParams(List<PostmanSpecData> data, List<string> pathVariables, string relativePath)

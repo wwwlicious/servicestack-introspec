@@ -10,7 +10,7 @@ namespace ServiceStack.Documentation.Models
     /// A single API resource (DTO)
     /// </summary>
     [DebuggerDisplay("{Title}")]
-    public class ApiResourceDocumentation : IApiResourceType, IApiResponseStatus
+    public class ApiResourceDocumentation : IApiResourceType, IApiRequest
     {
         // Set when instantiating
         public string TypeName { get; set; }
@@ -31,18 +31,47 @@ namespace ServiceStack.Documentation.Models
         public string Notes { get; set; }
         public ApiPropertyDocumention[] Properties { get; set; }
 
-        // From IApiResponseStatus
-        public string[] Verbs { get; set; }
-        public StatusCode[] StatusCodes { get; set; }
-        public string[] ContentTypes { get; set; }
-        public string RelativePath { get; set; }
-        public ApiResourceType ReturnType { get; set; } // ReturnType w/params
+        // From IApiRequest
+        public ApiAction[] Actions { get; set; }
+        public ApiResourceType ReturnType { get; set; }
 
-        // From IApiMetadata by way of IApiResponseStatus
+        // From IApiMetadata by way of IApiRequest
         public string Category { get; set; }
         public string[] Tags { get; set; }
 
-        // From ISecured by way of IApiResponseStatus
+        /*public string[] Verbs { get; set; }
+        public StatusCode[] StatusCodes { get; set; }
+        public string[] ContentTypes { get; set; }
+        public string RelativePath { get; set; }*/
+
+        // From ISecured by way of IApiRequest
+        // public ApiSecurity Security { get; set; }
+    }
+
+    // Figure out a better name
+    public class ApiAction : IApiAction
+    {
         public ApiSecurity Security { get; set; }
+
+        public string Verb { get; set; }
+
+        public StatusCode[] StatusCodes { get; set; }
+
+        public string[] ContentTypes { get; set; }
+
+        public string RelativePath { get; set; }
+
+        //public ApiResourceType ReturnType { get; set; }
+    }
+
+    public interface IApiAction : ISecured
+    {
+        string[] ContentTypes { get; set; }
+        string RelativePath { get; set; }
+        //ApiResourceType ReturnType { get; set; }
+        StatusCode[] StatusCodes { get; set; }
+        string Verb { get; set; }
+
+        // Restrictions
     }
 }
