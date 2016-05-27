@@ -66,30 +66,31 @@ namespace ServiceStack.Documentation.Postman.Services
 
                 var data = GetPostmanSpecData(resource);
 
-                // Get any pathVariables that are present (variable place holders in route)
-                /*var pathVariableNames = resource.RelativePath.GetPathParams();
-                string relativePath = pathVariableNames.Aggregate(resource.RelativePath,
-                    (current, match) => current.Replace($"{{{match}}}", $":{match}")).EnsureEndsWith("/");
-
-                // Add path vars regardless of verb
-                Dictionary<string, string> pathVars = GetPathVariabless(data, pathVariableNames);
-
                 // Generate a collection request per verb/resource combo
-                foreach (var verb in resource.Verbs)
+                foreach (var action in resource.Actions)
                 {
-                    log.Debug($"Generating PostmanRequest for resource {resource.Title}, {verb}");
+                    // Get any pathVariables that are present (variable place holders in route)
+                    var untoucherRelativePath = action.RelativePaths.First();
+                    var pathVariableNames = untoucherRelativePath.GetPathParams();
+                    string relativePath = pathVariableNames.Aggregate(untoucherRelativePath,
+                        (current, match) => current.Replace($"{{{match}}}", $":{match}")).EnsureEndsWith("/");
 
-                    var hasRequestBody = verb.HasRequestBody();
+                    // Add path vars regardless of verb
+                    Dictionary<string, string> pathVars = GetPathVariabless(data, pathVariableNames);
+
+                    log.Debug($"Generating PostmanRequest for resource {resource.Title}, {action}");
+
+                    var hasRequestBody = action.Verb.HasRequestBody();
                     string verbPath = relativePath;
                     if (!hasRequestBody)
-                        verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);*/
+                        verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
 
                     var requestId = Guid.NewGuid().ToString();
-                var request = new PostmanSpecRequest();/*
+                    var request = new PostmanSpecRequest()
                     {
                         Id = requestId,
                         Url = documentation.ApiBaseUrl.CombineWith(verbPath),
-                        Method = verb,
+                        Method = action.Verb,
                         Time = DateTime.UtcNow.ToUnixTimeMs(),
                         Name = resource.Title,
                         Description = resource.Description,
@@ -101,12 +102,13 @@ namespace ServiceStack.Documentation.Postman.Services
 
                     request.Data = hasRequestBody
                                        ? data.Where(t =>
-                                                    !pathVariableNames.Contains(t.Key, StringComparer.OrdinalIgnoreCase)).ToList()
-                                       : null;*/
+                                                    !pathVariableNames.Contains(t.Key, StringComparer.OrdinalIgnoreCase))
+                                             .ToList()
+                                       : null;
 
                     folder.RequestIds.Add(requestId);
                     requests.Add(request);
-                //}
+                }
 
                 collection.Folders.Add(folder);
             }
@@ -122,7 +124,7 @@ namespace ServiceStack.Documentation.Postman.Services
                 Name = resource.Title,
                 Description = $"DTO Folder: {resource.Title}",
                 Id = folderId,
-                //RequestIds = new List<string>(resource.Verbs.Length)
+                RequestIds = new List<string>(resource.Actions.Length)
             };
             return folder;
         }
@@ -137,11 +139,9 @@ namespace ServiceStack.Documentation.Postman.Services
         private static string GetContentTypes(ApiResourceDocumentation resource)
         {
             // TODO Tighten up the logic used here
-            /*var contentType = resource.ContentTypes.Contains(MimeTypes.Json)
-                                  ? MimeTypes.Json
-                                  : resource.ContentTypes.First();
-            return contentType;*/
-            throw new NotImplementedException();
+            var contentTypes = resource.Actions.SelectMany(s => s.ContentTypes).ToList();
+            var contentType = contentTypes.Contains(MimeTypes.Json)? MimeTypes.Json: contentTypes.First();
+            return contentType;
         }
 
         private static string ProcessQueryStringParams(List<PostmanSpecData> data, List<string> pathVariables, string relativePath)

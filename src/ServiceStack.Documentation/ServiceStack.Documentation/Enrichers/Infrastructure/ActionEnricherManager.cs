@@ -12,7 +12,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     using Models;
     using Settings;
 
-    //! Test this 
+    // TODO Test this 
     public class ActionEnricherManager
     {
         private readonly IActionEnricher actionEnricher;
@@ -26,10 +26,6 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
         public ApiAction[] EnrichActions(ApiAction[] actions, Operation operation)
         {
-            //! Not all enrichers are born equal. If this != IActionEnricher then bail
-            /*if (actionEnricher == null)
-                return actions;*/
-
             // Build a list of all possible Verbs
             // Will need to have run through all operations to get a list o'verbs
             var verbs = GetVerbs(operation);

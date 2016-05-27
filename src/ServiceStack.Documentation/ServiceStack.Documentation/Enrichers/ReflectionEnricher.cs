@@ -9,7 +9,6 @@ namespace ServiceStack.Documentation.Enrichers
     using System.Linq;
     using System.Net;
     using System.Reflection;
-    using System.Runtime.InteropServices;
     using Extensions;
     using Host;
     using Interfaces;
@@ -38,13 +37,6 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetDescription(Type type) => type.GetDescription();
 
         public string GetNotes(Type type) => type.FirstAttribute<RouteAttribute>()?.Notes;
-
-        /*public string[] GetVerbs(Operation operation)
-        {
-            return operation.Actions.Contains("ANY")
-                ? DocumenterSettings.ReplacementVerbs as string[] ?? DocumenterSettings.ReplacementVerbs.ToArray()
-                : operation.Actions.ToArray();
-        }*/
 
         public string GetCategory(Operation operation) => null;
         public string[] GetTags(Operation operation) => null;
@@ -85,8 +77,8 @@ namespace ServiceStack.Documentation.Enrichers
             var roles = operation.GetRoles(verb);
             var permissions = operation.GetPermissions(verb);
 
-            // If auth not for verb route and there are no perms/roles for verb then null
-            if (!hasAuth && (roles == null) && (permissions == null))
+            // If no auth and there are no perms/roles for verb then null
+            if (VerbHasSecurityRestrictions(hasAuth, roles, permissions))
                 return null;
 
             var apiSecurity = new ApiSecurity
@@ -163,7 +155,6 @@ namespace ServiceStack.Documentation.Enrichers
             return list.ToArray();
         }
 
-        //? extract some of these out to be separate helpers to prevent the class getting too big
         private static bool HasOneWayMethod(Operation operation)
         {
             if (operation.IsOneWay)
@@ -205,5 +196,8 @@ namespace ServiceStack.Documentation.Enrichers
             if (!string.IsNullOrEmpty(contentType))
                 mimeTypes.Add(contentType);
         }
+
+        private static bool VerbHasSecurityRestrictions(bool hasAuth, Permissions roles, Permissions permissions)
+            => !hasAuth && (roles == null) && (permissions == null);
     }
 }

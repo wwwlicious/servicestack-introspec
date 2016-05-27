@@ -37,19 +37,25 @@ namespace ServiceStack.Documentation.Tests.Postman
             collection.Order.Should().NotBeNull();
         }
 
-        /*[Fact]
+        [Fact]
         public void Generate_PopulatesBasicRequestValues()
         {
             const string description = "Documentation Description";
 
-            var resources = new ApiResourceDocumentation[]
+            var resources = new[]
             {
                 new ApiResourceDocumentation
                 {
                     Title = "dto",
-                    Verbs = new[] { "GET" },
-                    RelativePath = "/dto",
-                    ContentTypes = new[] { "application/json" },
+                    Actions = new[]
+                    {
+                        new ApiAction
+                        {
+                            Verb = "GET",
+                            RelativePaths = new[] { "/dto" },
+                            ContentTypes = new[] { "application/json" }
+                        }
+                    },
                     Description = description
                 }
             };
@@ -76,21 +82,39 @@ namespace ServiceStack.Documentation.Tests.Postman
         [Fact]
         public void Generate_ReturnsRequestPerResourceVerbCombo()
         {
-            var resources = new ApiResourceDocumentation[]
+            var resources = new[]
             {
                 new ApiResourceDocumentation
                 {
                     Title = "dto",
-                    Verbs = new[] { "GET", "POST" },
-                    RelativePath = "/dto",
-                    ContentTypes = new[] { "application/json" }
+                    Actions = new[]
+                    {
+                        new ApiAction
+                        {
+                            Verb = "GET",
+                            RelativePaths = new[] { "/dto" },
+                            ContentTypes = new[] { "application/json" }
+                        },
+                        new ApiAction
+                        {
+                            Verb = "POST",
+                            RelativePaths = new[] { "/dto" },
+                            ContentTypes = new[] { "application/json" }
+                        }
+                    }
                 },
                 new ApiResourceDocumentation
                 {
                     Title = "anotherdto",
-                    Verbs = new[] { "GET" },
-                    RelativePath = "/anotherdto",
-                    ContentTypes = new[] { "application/json" }
+                    Actions = new[]
+                    {
+                        new ApiAction
+                        {
+                            Verb = "GET",
+                            RelativePaths = new[] { "/anotherdto" },
+                            ContentTypes = new[] { "application/json" }
+                        }
+                    }
                 }
             };
 
@@ -108,19 +132,31 @@ namespace ServiceStack.Documentation.Tests.Postman
         [Fact]
         public void Generate_HandlesPathVariables_AllVerbs()
         {
-            var resources = new ApiResourceDocumentation[]
+            var resources = new[]
             {
                 new ApiResourceDocumentation
                 {
                     Title = "dto",
-                    Verbs = new[] { "GET", "POST" },
-                    RelativePath = "/dto/{Name}/",
-                    ContentTypes = new[] { "application/json" },
-                    Properties = new []
-                        { new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) } }
+                    Actions = new[]
+                    {
+                        new ApiAction
+                        {
+                            Verb = "GET",
+                            RelativePaths = new[] { "/dto/{Name}/" },
+                            ContentTypes = new[] { "application/json" }
+                        },
+                        new ApiAction
+                        {
+                            Verb = "POST",
+                            RelativePaths = new[] { "/dto/{Name}/" },
+                            ContentTypes = new[] { "application/json" }
+                        }
+                    },
+                    Properties = new[]
+                    { new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) } }
                 }
             };
-        
+
             var documentation = new ApiDocumentation
             {
                 Title = "title",
@@ -129,7 +165,7 @@ namespace ServiceStack.Documentation.Tests.Postman
                 ApiBaseUrl = "http://acme.com/api"
             };
 
-            string expectedUrl = "http://acme.com/api/dto/:Name/";
+            const string expectedUrl = "http://acme.com/api/dto/:Name/";
             var collection = generator.Generate(documentation);
             collection.Requests.Length.Should().Be(2);
 
@@ -143,16 +179,22 @@ namespace ServiceStack.Documentation.Tests.Postman
         [Fact]
         public void Generate_HandlesPathVariables_NoTrailingSlash()
         {
-            var resources = new ApiResourceDocumentation[]
+            var resources = new[]
             {
                 new ApiResourceDocumentation
                 {
                     Title = "dto",
-                    Verbs = new[] { "GET" },
-                    RelativePath = "/dto/{Name}",
-                    ContentTypes = new[] { "application/json" },
-                    Properties = new []
-                        { new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) } }
+                    Actions = new[]
+                    {
+                        new ApiAction
+                        {
+                            Verb = "GET",
+                            RelativePaths = new[] { "/dto/{Name}/" },
+                            ContentTypes = new[] { "application/json" }
+                        }
+                    },
+                    Properties = new[]
+                    { new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) } }
                 }
             };
 
@@ -164,7 +206,7 @@ namespace ServiceStack.Documentation.Tests.Postman
                 ApiBaseUrl = "http://acme.com/api"
             };
 
-            string expectedUrl = "http://acme.com/api/dto/:Name/";
+            const string expectedUrl = "http://acme.com/api/dto/:Name/";
             var collection = generator.Generate(documentation);
             collection.Requests.Length.Should().Be(1);
             var request = collection.Requests[0];
@@ -176,14 +218,20 @@ namespace ServiceStack.Documentation.Tests.Postman
         [Fact]
         public void Generate_AddsNonPathVariableParams_ToQueryString_ForGet()
         {
-            var resources = new ApiResourceDocumentation[]
+            var resources = new[]
             {
                 new ApiResourceDocumentation
                 {
                     Title = "dto",
-                    Verbs = new[] { "GET" },
-                    RelativePath = "/dto/{Name}/",
-                    ContentTypes = new[] { "application/json" },
+                    Actions = new[]
+                    {
+                        new ApiAction
+                        {
+                            Verb = "GET",
+                            RelativePaths = new[] { "/dto/{Name}/" },
+                            ContentTypes = new[] { "application/json" }
+                        }
+                    },
                     Properties = new[]
                     {
                         new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) },
@@ -200,12 +248,12 @@ namespace ServiceStack.Documentation.Tests.Postman
                 ApiBaseUrl = "http://acme.com/api"
             };
 
-            string expectedUrl = "http://acme.com/api/dto/:Name/?Age=val-int";
+            const string expectedUrl = "http://acme.com/api/dto/:Name/?Age=val-int";
             var collection = generator.Generate(documentation);
             collection.Requests.Length.Should().Be(1);
 
             var request = collection.Requests[0];
-            
+
             request.Url.Should().Be(expectedUrl);
             request.PathVariables.Should().ContainKey("Name");
         }
@@ -213,14 +261,20 @@ namespace ServiceStack.Documentation.Tests.Postman
         [Fact]
         public void Generate_AddsNonPathVariableParams_ToQueryString_ForPost()
         {
-            var resources = new ApiResourceDocumentation[]
+            var resources = new[]
             {
                 new ApiResourceDocumentation
                 {
                     Title = "dto",
-                    Verbs = new[] { "POST" },
-                    RelativePath = "/dto/{Name}/",
-                    ContentTypes = new[] { "application/json" },
+                    Actions = new[]
+                    {
+                        new ApiAction
+                        {
+                            Verb = "POST",
+                            RelativePaths = new[] { "/dto/{Name}/" },
+                            ContentTypes = new[] { "application/json" }
+                        }
+                    },
                     Properties = new[]
                     {
                         new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) },
@@ -237,7 +291,7 @@ namespace ServiceStack.Documentation.Tests.Postman
                 ApiBaseUrl = "http://acme.com/api"
             };
 
-            string expectedUrl = "http://acme.com/api/dto/:Name/";
+            const string expectedUrl = "http://acme.com/api/dto/:Name/";
             var collection = generator.Generate(documentation);
             collection.Requests.Length.Should().Be(1);
 
@@ -246,6 +300,6 @@ namespace ServiceStack.Documentation.Tests.Postman
             request.Url.Should().Be(expectedUrl);
             request.PathVariables.Should().ContainKey("Name");
             request.Data.Should().Contain(x => x.Key == "Age");
-        }*/
+        }
     }
 }
