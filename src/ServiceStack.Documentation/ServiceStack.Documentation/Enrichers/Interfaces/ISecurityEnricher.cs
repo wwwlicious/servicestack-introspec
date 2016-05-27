@@ -10,7 +10,7 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     /// <summary>
     /// Methods for populating a security information on a resource
     /// </summary>
-    public interface ISecurityEnricher
+    public interface ISecurityEnricher : IEnrich
     {
         ApiSecurity GetSecurity(Operation operation);
     }
