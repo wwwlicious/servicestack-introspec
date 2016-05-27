@@ -11,12 +11,6 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     /// </summary>
     public interface IRequestEnricher : IEnrich
     {
-        // TODO Remove these
-        //string[] GetVerbs(Operation operation);
-        //string[] GetContentTypes(Operation operation);
-        //StatusCode[] GetStatusCodes(Operation operation);
-        //string GetRelativePath(Operation operation);
-
         string GetCategory(Operation operation);
         string[] GetTags(Operation operation);
     }

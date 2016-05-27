@@ -59,7 +59,7 @@ namespace ServiceStack.Documentation.Models
 
         public string[] ContentTypes { get; set; }
 
-        public string RelativePath { get; set; }
+        public string[] RelativePaths { get; set; }
 
         //public ApiResourceType ReturnType { get; set; }
     }
@@ -67,7 +67,7 @@ namespace ServiceStack.Documentation.Models
     public interface IApiAction : ISecured
     {
         string[] ContentTypes { get; set; }
-        string RelativePath { get; set; }
+        string[] RelativePaths { get; set; }
         //ApiResourceType ReturnType { get; set; }
         StatusCode[] StatusCodes { get; set; }
         string Verb { get; set; }

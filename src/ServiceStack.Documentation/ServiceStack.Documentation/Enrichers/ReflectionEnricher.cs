@@ -14,7 +14,6 @@ namespace ServiceStack.Documentation.Enrichers
     using Interfaces;
     using Logging;
     using Models;
-    using Settings;
     using Utilities;
 
     /// <summary>
@@ -88,6 +87,70 @@ namespace ServiceStack.Documentation.Enrichers
             return apiSecurity;
         }
 
+        public string[] GetContentTypes(Operation operation, string verb)
+        {
+            // Get a list of all available formats
+            var availableFormats = HostContext.MetadataPagesConfig.AvailableFormatConfigs.Select(a => a.Format);
+
+            // NOTE Restriction can come from either DTO or Service
+            RestrictAttribute restrictedTo = operation.RestrictTo;
+            var requestType = operation.RequestType;
+
+            var mimeTypes = new List<string>();
+            foreach (var format in availableFormats.Select(s => s.TrimStart("x-")))
+            {
+                // Verify RestrictAttribute not preventing access
+                var requestAttrResult = EnumUtilities.SafeParse<RequestAttributes>(format);
+                if (!restrictedTo.CanAccess(requestAttrResult)) continue;
+
+                // Verify ExcludeAttribute not preventing access
+                var featureResult = EnumUtilities.SafeParse<Feature>(format);
+                if (requestType.HasAccessToFeature(featureResult))
+                    mimeTypes.Add(MimeTypeUtilities.GetMimeType(format));
+            }
+
+            ProcessAddHeaderAttribute(requestType, mimeTypes);
+
+            return mimeTypes.Distinct().ToArray();
+        }
+
+        public string[] GetRelativePaths(Operation operation, string verb)
+        {
+            var requestType = operation.RequestType;
+
+            var routeAttributes = requestType.GetCustomAttributes<RouteAttribute>().Where(
+                    r => r.IsForVerb(verb) && !string.IsNullOrEmpty(r.Path));
+
+            if (!routeAttributes.IsNullOrEmpty())
+                return routeAttributes.Select(r => r.Path).ToArray();
+
+            // If no route then make one up
+            var emptyType = requestType.CreateInstance();
+            return new [] { operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly() };
+        }
+
+        public StatusCode[] GetStatusCodes(Operation operation, string verb)
+        {
+            // From [ApiResponse] attributes
+            var apiResponseAttributes = operation.RequestType.GetCustomAttributes<ApiResponseAttribute>();
+            var responseAttributes = apiResponseAttributes as ApiResponseAttribute[] ?? apiResponseAttributes.ToArray();
+
+            var list = new List<StatusCode>(responseAttributes.Length + 1);
+            if (HasOneWayMethod(operation))
+                list.Add((StatusCode)HttpStatusCode.NoContent);
+
+            if (responseAttributes.Length == 0) return list.ToArray();
+
+            foreach (var apiResponseAttribute in responseAttributes)
+            {
+                var statusCode = (StatusCode)apiResponseAttribute.StatusCode;
+                statusCode.Description = apiResponseAttribute.Description;
+                list.Add(statusCode);
+            }
+
+            return list.ToArray();
+        }
+
         //? extract some of these out to be separate helpers to prevent the class getting too big
         private static bool HasOneWayMethod(Operation operation)
         {
@@ -96,7 +159,7 @@ namespace ServiceStack.Documentation.Enrichers
 
             return operation.ServiceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Any(m =>
-                    m.ReturnType == typeof (void)
+                    m.ReturnType == typeof(void)
                     && m.GetParameters().Any(p => p.ParameterType == operation.RequestType));
         }
 
@@ -129,70 +192,6 @@ namespace ServiceStack.Documentation.Enrichers
             var contentType = addHeader.ContentType ?? addHeader.DefaultContentType;
             if (!string.IsNullOrEmpty(contentType))
                 mimeTypes.Add(contentType);
-        }
-
-        public string[] GetContentTypes(Operation operation, string verb)
-        {
-            // Get a list of all available formats
-            var availableFormats = HostContext.MetadataPagesConfig.AvailableFormatConfigs.Select(a => a.Format);
-
-            // NOTE Restriction can come from either DTO or Service
-            RestrictAttribute restrictedTo = operation.RestrictTo;
-            var requestType = operation.RequestType;
-
-            var mimeTypes = new List<string>();
-            foreach (var format in availableFormats.Select(s => s.TrimStart("x-")))
-            {
-                // Verify RestrictAttribute not preventing access
-                var requestAttrResult = EnumUtilities.SafeParse<RequestAttributes>(format);
-                if (!restrictedTo.CanAccess(requestAttrResult)) continue;
-
-                // Verify ExcludeAttribute not preventing access
-                var featureResult = EnumUtilities.SafeParse<Feature>(format);
-                if (requestType.HasAccessToFeature(featureResult))
-                    mimeTypes.Add(MimeTypeUtilities.GetMimeType(format));
-            }
-
-            ProcessAddHeaderAttribute(requestType, mimeTypes);
-
-            return mimeTypes.Distinct().ToArray();
-        }
-
-        public string GetRelativePath(Operation operation, string verb)
-        {
-            // TODO Handle multiple routes for same DTO. Anything accessing [Route] will be affected
-            var requestType = operation.RequestType;
-
-            var routeFromAttribute = requestType.FirstAttribute<RouteAttribute>()?.Path;
-            if (!string.IsNullOrWhiteSpace(routeFromAttribute))
-                return routeFromAttribute;
-
-            var emptyType = requestType.CreateInstance();
-
-            // If no route then make one up
-            return operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly();
-        }
-
-        public StatusCode[] GetStatusCodes(Operation operation, string verb)
-        {
-            // From [ApiResponse] attributes
-            var apiResponseAttributes = operation.RequestType.GetCustomAttributes<ApiResponseAttribute>();
-            var responseAttributes = apiResponseAttributes as ApiResponseAttribute[] ?? apiResponseAttributes.ToArray();
-
-            var list = new List<StatusCode>(responseAttributes.Length + 1);
-            if (HasOneWayMethod(operation))
-                list.Add((StatusCode)HttpStatusCode.NoContent);
-
-            if (responseAttributes.Length == 0) return list.ToArray();
-
-            foreach (var apiResponseAttribute in responseAttributes)
-            {
-                var statusCode = (StatusCode)apiResponseAttribute.StatusCode;
-                statusCode.Description = apiResponseAttribute.Description;
-                list.Add(statusCode);
-            }
-
-            return list.ToArray();
         }
     }
 }

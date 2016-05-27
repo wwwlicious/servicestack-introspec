@@ -19,7 +19,7 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     {
         //? Should I pass the entire object rather than just the verb?
         string[] GetContentTypes(Operation operation, string verb);
-        string GetRelativePath(Operation operation, string verb);
+        string[] GetRelativePaths(Operation operation, string verb);
         //ApiResourceType GetReturnType(Operation operation, string verb);
         StatusCode[] GetStatusCodes(Operation operation, string verb);
     }
