@@ -100,6 +100,10 @@ namespace ServiceStack.Documentation.Tests.Extensions
         }
 
         [Fact]
+        public void IsForVerb_AuthAttr_False_IfAuthenticateAttributeNull()
+            => ((AuthenticateAttribute)null).IsForVerb("GET").Should().BeFalse();
+
+        [Fact]
         public void IsForVerb_AuthAttr_True_IfAuthenticateAttributeApplyToAll()
             => new AuthenticateAttribute().IsForVerb("GET").Should().BeTrue();
 

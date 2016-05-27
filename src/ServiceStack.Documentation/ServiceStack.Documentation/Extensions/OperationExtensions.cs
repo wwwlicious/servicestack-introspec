@@ -30,7 +30,10 @@ namespace ServiceStack.Documentation.Extensions
 
         public static bool IsForVerb(this AuthenticateAttribute authAttribute, string verb)
         {
-            if ((authAttribute.ApplyTo == ApplyTo.All))
+            if (authAttribute == null)
+                return false;
+
+            if (authAttribute.ApplyTo == ApplyTo.All)
                 return true;
 
             var applyTo = EnumUtilities.SafeParse<ApplyTo>(verb);
@@ -46,7 +49,7 @@ namespace ServiceStack.Documentation.Extensions
             var authenticateAttr = operation.GetRequestAttr<AuthenticateAttribute>();
 
             // NOTE AuthenticateAttribute is AllowMultiple = false so be 0:1
-            return authenticateAttr == null || authenticateAttr.FirstOrDefault().IsForVerb(verb);
+            return authenticateAttr.IsNullOrEmpty() || authenticateAttr.FirstOrDefault().IsForVerb(verb);
         }
 
         public static Permissions GetRoles(this Operation operation, string verb)

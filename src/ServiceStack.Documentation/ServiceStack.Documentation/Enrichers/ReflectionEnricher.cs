@@ -9,6 +9,7 @@ namespace ServiceStack.Documentation.Enrichers
     using System.Linq;
     using System.Net;
     using System.Reflection;
+    using System.Runtime.InteropServices;
     using Extensions;
     using Host;
     using Interfaces;
@@ -77,11 +78,22 @@ namespace ServiceStack.Documentation.Enrichers
             if (!operation.RequiresAuthentication)
                 return null;
 
+            // Check if [Authenticate] is for current verb
+            var hasAuth = operation.AuthenticationAppliesForVerb(verb);
+
+            // check Role + Permission specific for this verb
+            var roles = operation.GetRoles(verb);
+            var permissions = operation.GetPermissions(verb);
+
+            // If auth not for verb route and there are no perms/roles for verb then null
+            if (!hasAuth && (roles == null) && (permissions == null))
+                return null;
+
             var apiSecurity = new ApiSecurity
             {
                 IsProtected = true,
-                Roles = Permissions.Create(operation.RequiredRoles, operation.RequiresAnyRole),
-                Permissions = Permissions.Create(operation.RequiredPermissions, operation.RequiresAnyPermission)
+                Roles = roles,
+                Permissions = permissions
             };
 
             return apiSecurity;
