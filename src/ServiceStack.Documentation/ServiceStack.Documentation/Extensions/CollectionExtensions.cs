@@ -7,23 +7,15 @@ namespace ServiceStack.Documentation.Extensions
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Settings;
 
     public static class CollectionExtensions
     {
-        public static bool IsNullOrEmpty<T>(this T[] array)
-        {
-            return array == null || array.Length == 0;
-        }
+        public static bool IsNullOrEmpty<T>(this T[] array) => array == null || array.Length == 0;
 
-        public static bool IsNullOrEmpty<T>(this IList<T> array)
-        {
-            return array == null || array.Count == 0;
-        }
+        public static bool IsNullOrEmpty<T>(this IList<T> array) => array == null || array.Count == 0;
 
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> array)
-        {
-            return array == null || !array.Any();
-        }
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> array) => array == null || !array.Any();
 
         /// <summary>
         /// Produces the set union of two sequences by using the default equality comparer.
@@ -43,6 +35,20 @@ namespace ServiceStack.Documentation.Extensions
                 return array;
 
             return array.Union(enumerable).ToArray();
+        }
+
+        /// <summary>
+        /// Populates array based on current DocumenterSettings.CollectionStrategy
+        /// </summary>
+        /// <typeparam name="T">Type of array</typeparam>
+        /// <param name="array">Array to get values for</param>
+        /// <param name="getValues">Function to get array</param>
+        /// <returns>New array, construction of which is driven by DocumenterSettings.CollectionStrategy</returns>
+        public static T[] GetBasedOnStrategy<T>(this T[] array, Func<T[]> getValues)
+        {
+            bool unionCollections = DocumenterSettings.CollectionStrategy == EnrichmentStrategy.Union;
+
+            return unionCollections ? array.SafeUnion(getValues) : array.GetIfNullOrEmpty(getValues);
         }
     }
 }

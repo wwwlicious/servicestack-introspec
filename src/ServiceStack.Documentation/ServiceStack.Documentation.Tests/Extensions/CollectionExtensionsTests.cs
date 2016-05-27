@@ -4,12 +4,22 @@
 
 namespace ServiceStack.Documentation.Tests.Extensions
 {
+    using System.Collections.Generic;
     using Documentation.Extensions;
+    using Documentation.Settings;
     using FluentAssertions;
     using Xunit;
 
     public class CollectionExtensionsTests
     {
+        public static IEnumerable<object[]> NullEmpty => new[]
+        {
+            new object[] { null, EnrichmentStrategy.Union },
+            new object[] { new string[0], EnrichmentStrategy.Union },
+            new object[] { null, EnrichmentStrategy.SetIfEmpty },
+            new object[] { new string[0], EnrichmentStrategy.SetIfEmpty }
+        };
+
         [Fact]
         public void IsNullOrEmpty_True_IfNull() => CollectionExtensions.IsNullOrEmpty<string>(null).Should().BeTrue();
 
@@ -45,6 +55,40 @@ namespace ServiceStack.Documentation.Tests.Extensions
             var expected = new[] { "Say", "To", "Frog" };
 
             array.SafeUnion(() => result).Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [MemberData("NullEmpty")]
+        public void GetBasedOnStrategy_ReturnsFuncResult_IfArrayNullOrEmpty_RegardlessOfStrategy(string[] array,
+            EnrichmentStrategy strategy)
+        {
+            var result = new[] { "foo", "bar" };
+            using (DocumenterSettings.With(collectionStrategy: strategy))
+                array.GetBasedOnStrategy(() => result).Should().BeEquivalentTo(result);
+        }
+
+        [Fact]
+        public void GetBasedOnStrategy_ReturnsArray_IfSetIfEmptyStrategy()
+        {
+            var result = new[] { "foo", "bar" };
+            var current = new[] { "baz", "fizz" };
+
+            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty))
+                current.GetBasedOnStrategy(() => result).Should().BeEquivalentTo(current);
+        }
+
+        [Fact]
+        public void GetBasedOnStrategy_ReturnsUnion_IfUnionStrategy()
+        {
+            var result = new[] { "foo", "bar" };
+            var current = new[] { "baz" };
+
+            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
+            {
+                var actual = current.GetBasedOnStrategy(() => result);
+                actual.Length.Should().Be(3);
+                actual.Should().Contain("foo").And.Contain("bar").And.Contain("baz");
+            }
         }
     }
 }
