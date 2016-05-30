@@ -211,5 +211,45 @@ namespace ServiceStack.Documentation.Tests.Extensions
 
             result.Should().Be(1);
         }
+
+        [Fact]
+        public void UpdateList_HandlesNullDictionary()
+        {
+            Dictionary<string, List<int>> dict = null;
+            Action action = () => dict.UpdateList("hi", 1, 2, 3);
+            action.ShouldNotThrow<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void UpdateList_Adds_IfKeyNotPresent()
+        {
+            const string key = "foo";
+            var dict = new Dictionary<string, List<int>>();
+
+            dict.UpdateList(key, 1, 2, 3);
+
+            var result = dict[key];
+            result.Should().Contain(1).And.Contain(2).And.Contain(3);
+        }
+
+        [Fact]
+        public void UpdateList_Updates_IfKeyPresent()
+        {
+            const string key = "foo";
+            var dict = new Dictionary<string, List<int>>
+            {
+                { key, new List<int> { 1, 2, 3 } }
+            };
+
+            dict.UpdateList(key, 4, 5);
+
+            var result = dict[key];
+            result.Should()
+                .Contain(1)
+                .And.Contain(2)
+                .And.Contain(3)
+                .And.Contain(4)
+                .And.Contain(5);
+        }
     }
 }

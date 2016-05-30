@@ -107,5 +107,26 @@ namespace ServiceStack.Documentation.Extensions
             dictionary.Add(key, value);
             return value;
         }
+
+        /// <summary>
+        /// Adds specified values to list in dictionary at provided Key.
+        /// </summary>
+        /// <typeparam name="TKey">Type of dictionary key</typeparam>
+        /// <typeparam name="TValue">Type of dictionary value</typeparam>
+        /// <param name="dictionary">Dictionary to add values to</param>
+        /// <param name="key">Key of value to set</param>
+        /// <param name="values">List of values to add to dictionary at key</param>
+        public static void UpdateList<TKey, TValue>(this Dictionary<TKey, List<TValue>> dictionary, TKey key,
+            params TValue[] values)
+        {
+            if (dictionary == null) return;
+
+            List<TValue> valuesList;
+            if (!dictionary.TryGetValue(key, out valuesList))
+                valuesList = new List<TValue>();
+
+            valuesList.AddRange(values);
+            dictionary[key] = valuesList;
+        }
     }
 }
