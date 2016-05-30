@@ -8,7 +8,6 @@ namespace ServiceStack.Documentation.Tests.Services
     using Documentation.DTO;
     using Documentation.Extensions;
     using Documentation.Models;
-    using Documentation.Services;
     using FluentAssertions;
     using Xunit;
 
@@ -43,8 +42,8 @@ namespace ServiceStack.Documentation.Tests.Services
         {
             var resources = new ApiResourceDocumentation[]
             {
-                new ApiResourceDocumentation { Title = "DTO1" },
-                new ApiResourceDocumentation { Title = "DTO2" }
+                new ApiResourceDocumentation { TypeName = "DTO1" },
+                new ApiResourceDocumentation { TypeName = "DTO2" }
             };
 
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
@@ -53,7 +52,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var result = documentation.Filter(filter);
 
             result.Resources.Length.Should().Be(1);
-            result.Resources[0].Title.Should().Be("DTO1");
+            result.Resources[0].TypeName.Should().Be("DTO1");
         }
 
         [Fact]
@@ -61,9 +60,9 @@ namespace ServiceStack.Documentation.Tests.Services
         {
             var resources = new ApiResourceDocumentation[]
             {
-                new ApiResourceDocumentation { Title = "DTO1" },
-                new ApiResourceDocumentation { Title = "DTO2" },
-                new ApiResourceDocumentation { Title = "DTO3" }
+                new ApiResourceDocumentation { TypeName  = "DTO1" },
+                new ApiResourceDocumentation { TypeName  = "DTO2" },
+                new ApiResourceDocumentation { TypeName  = "DTO3" }
             };
 
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
@@ -72,8 +71,8 @@ namespace ServiceStack.Documentation.Tests.Services
             var result = documentation.Filter(filter);
 
             result.Resources.Length.Should().Be(2);
-            result.Resources[0].Title.Should().Be("DTO1");
-            result.Resources[1].Title.Should().Be("DTO3");
+            result.Resources[0].TypeName.Should().Be("DTO1");
+            result.Resources[1].TypeName.Should().Be("DTO3");
         }
 
         [Fact]
@@ -81,8 +80,8 @@ namespace ServiceStack.Documentation.Tests.Services
         {
             var resources = new ApiResourceDocumentation[]
             {
-                new ApiResourceDocumentation { Title = "DTO1" },
-                new ApiResourceDocumentation { Title = "DTO2" }
+                new ApiResourceDocumentation { TypeName  = "DTO1" },
+                new ApiResourceDocumentation { TypeName  = "DTO2" }
             };
 
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
@@ -186,9 +185,9 @@ namespace ServiceStack.Documentation.Tests.Services
         {
             var resources = new ApiResourceDocumentation[]
             {
-                new ApiResourceDocumentation { Category = "Category1", Tags = new[] { "Tag1" }, Title = "DTO1" },
-                new ApiResourceDocumentation { Category = "Category1", Tags = new[] { "Tag2" }, Title = "DTO2" },
-                new ApiResourceDocumentation { Category = "Category2", Tags = new[] { "Tag2", "Tag3" }, Title = "DTO3" }
+                new ApiResourceDocumentation { Category = "Category1", Tags = new[] { "Tag1" }, TypeName  = "DTO1" },
+                new ApiResourceDocumentation { Category = "Category1", Tags = new[] { "Tag2" }, TypeName  = "DTO2" },
+                new ApiResourceDocumentation { Category = "Category2", Tags = new[] { "Tag2", "Tag3" }, TypeName  = "DTO3" }
             };
 
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
@@ -201,7 +200,7 @@ namespace ServiceStack.Documentation.Tests.Services
 
             var result = documentation.Filter(filter);
             result.Resources.Length.Should().Be(1);
-            result.Resources[0].Title.Should().Be("DTO3");
+            result.Resources[0].TypeName.Should().Be("DTO3");
         }
     }
 

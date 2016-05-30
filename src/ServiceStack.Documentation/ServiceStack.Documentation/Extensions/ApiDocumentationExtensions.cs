@@ -33,7 +33,7 @@ namespace ServiceStack.Documentation.Extensions
             if (!request.DtoName.IsNullOrEmpty())
             {
                 hasFilter = true;
-                predicate = predicate.And(doc => request.DtoName.Contains(doc.Title, StringComparer.OrdinalIgnoreCase));
+                predicate = predicate.And(doc => request.DtoName.Contains(doc.TypeName, StringComparer.OrdinalIgnoreCase));
             }
 
             if (!request.Tags.IsNullOrEmpty())
