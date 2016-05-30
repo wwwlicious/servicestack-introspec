@@ -48,15 +48,6 @@ namespace ServiceStack.Documentation.Settings
         }
 
         /// <summary>
-        /// The default verbs to be set for a request/response object.
-        /// </summary>
-        public static IEnumerable<string> DefaultVerbs
-        {
-            get { return DocumenterSettingsScope.Current.DefaultVerbs; }
-            set { DocumenterSettingsScope.Current.DefaultVerbs = value; }
-        }
-
-        /// <summary>
         /// The default status codes to be set for a request/response object.
         /// </summary>
         public static IEnumerable<StatusCode> DefaultStatusCodes
@@ -99,7 +90,6 @@ namespace ServiceStack.Documentation.Settings
             IEnumerable<Assembly> assemblies = null,
             EnrichmentStrategy collectionStrategy = EnrichmentStrategy.Union,
             string fallbackNotes = null,
-            IEnumerable<string> defaultVerbs = null,
             IEnumerable<StatusCode> defaultStatusCodes = null,
             string fallbackCategory = null,
             IEnumerable<string> defaultTags = null,
@@ -111,7 +101,6 @@ namespace ServiceStack.Documentation.Settings
                 CollectionStrategy = collectionStrategy,
                 Assemblies = assemblies,
                 FallbackNotes = fallbackNotes,
-                DefaultVerbs = defaultVerbs,
                 DefaultStatusCodes = defaultStatusCodes,
                 FallbackCategory = fallbackCategory,
                 DefaultTags = defaultTags,

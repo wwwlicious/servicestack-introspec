@@ -14,7 +14,7 @@ namespace ServiceStack.Documentation.Enrichers
     /// <summary>
     /// Enricher that will use global settings properties to enrich object
     /// </summary>
-    public class FallbackEnricher : IResourceEnricher, IRequestEnricher
+    public class FallbackEnricher : IResourceEnricher, IRequestEnricher, IActionEnricher
     {
         public string GetTitle(Type type) => null;
 
@@ -22,13 +22,11 @@ namespace ServiceStack.Documentation.Enrichers
 
         public string GetNotes(Type type) => DocumenterSettings.FallbackNotes;
 
-        public string[] GetVerbs(Operation operation) => DocumenterSettings.DefaultVerbs?.ToArray();
+        public string[] GetContentTypes(Operation operation, string verb) => DocumenterSettings.DefaultContentTypes?.ToArray();
 
-        public string[] GetContentTypes(Operation operation) => DocumenterSettings.DefaultContentTypes?.ToArray();
+        public StatusCode[] GetStatusCodes(Operation operation, string verb) => DocumenterSettings.DefaultStatusCodes?.ToArray();
 
-        public StatusCode[] GetStatusCodes(Operation operation) => DocumenterSettings.DefaultStatusCodes?.ToArray();
-
-        public string GetRelativePath(Operation operation) => null;
+        public string[] GetRelativePaths(Operation operation, string verb) => null;
 
         public string GetCategory(Operation operation) => DocumenterSettings.FallbackCategory;
 

@@ -143,34 +143,6 @@ namespace ServiceStack.Documentation.Tests.Settings
         }
 
         [Fact]
-        public void DefaultVerbs_DefaultNull()
-        {
-            using (var scope = DocumenterSettings.BeginScope())
-                scope.DefaultVerbs.Should().BeNull();
-        }
-
-        [Fact]
-        public void With_DefaultVerbs_SetsDefaultVerbs()
-        {
-            var verbs = new[] { "PATCH", "POST" };
-            var settings = DocumenterSettings.With(defaultVerbs: verbs);
-            settings.DefaultVerbs.Should().BeEquivalentTo(verbs);
-        }
-
-        [Fact]
-        public void BeginScope_SetsDefaultVerbsForScope()
-        {
-            var verbs = new[] { "PATCH", "POST" };
-            DocumenterSettings.DefaultVerbs = verbs;
-
-            var scopeVerbs = new[] { "PUT", "DELETE", "OPTIONS" };
-            using (var settings = DocumenterSettings.With(defaultVerbs: scopeVerbs))
-                settings.DefaultVerbs.Should().BeEquivalentTo(scopeVerbs);
-
-            DocumenterSettings.DefaultVerbs.Should().BeEquivalentTo(verbs);
-        }
-
-        [Fact]
         public void DefaultStatusCodes_DefaultNull()
         {
             using (var scope = DocumenterSettings.BeginScope())

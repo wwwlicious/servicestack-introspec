@@ -26,7 +26,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         public void GetDescription_ReturnsNull() => fallback.GetDescription(type).Should().BeNull();
 
         [Fact]
-        public void GetRelativePath_ReturnsNull() => fallback.GetRelativePath(operation).Should().BeNull();
+        public void GetRelativePath_ReturnsNull() => fallback.GetRelativePaths(operation, "GET").Should().BeNull();
 
         [Fact]
         public void GetNotes_ReturnsFallbackNotes_FromSettings()
@@ -37,19 +37,11 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
-        public void GetVerbs_ReturnsVerbs_FromSettings()
-        {
-            var verbs = new[] { "GET", "POST" };
-            using (DocumenterSettings.With(defaultVerbs: verbs))
-                fallback.GetVerbs(operation).Should().BeEquivalentTo(verbs);
-        }
-
-        [Fact]
         public void GetStatusCodes_ReturnsStatusCodes_FromSettings()
         {
             var codes = new[] { (StatusCode)200, (StatusCode)409 };
             using (DocumenterSettings.With(defaultStatusCodes: codes))
-                fallback.GetStatusCodes(operation).Should().BeEquivalentTo(codes);
+                fallback.GetStatusCodes(operation, "GET").Should().BeEquivalentTo(codes);
         }
 
         [Fact]
@@ -73,7 +65,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         {
             var contentTypes = new[] { "test/jsv", "text/csv" };
             using (DocumenterSettings.With(defaultContentTypes: contentTypes))
-                fallback.GetContentTypes(operation).Should().BeEquivalentTo(contentTypes);
+                fallback.GetContentTypes(operation, "GET").Should().BeEquivalentTo(contentTypes);
         }
     }
 }

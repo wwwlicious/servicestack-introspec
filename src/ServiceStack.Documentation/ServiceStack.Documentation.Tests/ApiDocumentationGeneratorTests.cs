@@ -14,6 +14,7 @@ namespace ServiceStack.Documentation.Tests
     using Testing;
     using Xunit;
 
+    [Collection("ApiDocumentationGeneratorTests")]
     public class ApiDocumentationGeneratorTests
     {
         private const string Desc = "I'm jim morrison. I'm dead.";
@@ -38,14 +39,6 @@ namespace ServiceStack.Documentation.Tests
                 Description = Desc,
                 LicenseUrl = new Uri(LicenseUri)
             };
-        }
-
-        [Fact]
-        public void GenerateDocumentation_Throws_IfWebHostUrlNull()
-        {
-            var host = new BasicAppHost { Config = new HostConfig() };
-            Action action = () => generator.GenerateDocumentation(null, host, apiSpecConfig);
-            action.ShouldThrow<ArgumentException>();
         }
 
         [Fact]
@@ -135,6 +128,35 @@ namespace ServiceStack.Documentation.Tests
                     A.CallTo(() => enricher1.Enrich(A<ApiResourceDocumentation>.Ignored, operation2)).MustHaveHappened())
                 .Then(
                     A.CallTo(() => enricher2.Enrich(A<ApiResourceDocumentation>.Ignored, operation2)).MustHaveHappened());
+        }
+    }
+
+    [Collection("ApiDocumentationGeneratorTests")]
+    public class HostlessTests : IDisposable
+    {
+        private readonly AppDomain noAuthDomain;
+        public HostlessTests()
+        {
+            noAuthDomain = AppDomain.CreateDomain("NoAuthDomain", AppDomain.CurrentDomain.Evidence,
+                AppDomain.CurrentDomain.SetupInformation);
+        }
+
+        [Fact]
+        public void GenerateDocumentation_Throws_IfWebHostUrlNull()
+        {
+            var generator = new ApiDocumentationGenerator(null);
+            var host = new BasicAppHost { Config = new HostConfig() };
+
+            Action action = () => generator.GenerateDocumentation(null, host, new ApiSpecConfig());
+            action.ShouldThrow<ArgumentException>();
+        }
+
+        public void Dispose()
+        {
+            if (noAuthDomain != null)
+            {
+                AppDomain.Unload(noAuthDomain);
+            }
         }
     }
 }

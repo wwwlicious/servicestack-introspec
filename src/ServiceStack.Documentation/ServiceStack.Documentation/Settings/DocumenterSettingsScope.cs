@@ -48,11 +48,6 @@ namespace ServiceStack.Documentation.Settings
         public string FallbackNotes { get; internal set; }
 
         /// <summary>
-        /// The default verbs to be set for a request/response object.
-        /// </summary>
-        public IEnumerable<string> DefaultVerbs { get; internal set; }
-
-        /// <summary>
         /// The default status codes to be set for a request/response object.
         /// </summary>
         public IEnumerable<StatusCode> DefaultStatusCodes { get; internal set; }
