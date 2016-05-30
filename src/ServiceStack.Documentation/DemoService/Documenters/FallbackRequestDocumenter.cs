@@ -1,8 +1,8 @@
 ﻿
 namespace DemoService.Documenters
 {
-    using ServiceStack.Documentation.AbstractApiSpec;
     using ServiceStack.Documentation.Models;
+    using ServiceStack.Documentation.TypeSpec;
 
     public class FallbackRequestDocumenter : RequestSpec<FallbackRequest>
     {

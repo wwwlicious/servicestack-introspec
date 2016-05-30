@@ -7,12 +7,12 @@ namespace ServiceStack.Documentation.Enrichers
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using AbstractApiSpec;
     using Extensions;
     using Host;
     using Interfaces;
     using Models;
-    using IApiRequest = AbstractApiSpec.IApiRequest;
+    using TypeSpec;
+    using IApiRequest = TypeSpec.IApiRequest;
 
     /// <summary>
     /// Enricher that will use implementations of RequestSpec and TypeSpec to enrich object

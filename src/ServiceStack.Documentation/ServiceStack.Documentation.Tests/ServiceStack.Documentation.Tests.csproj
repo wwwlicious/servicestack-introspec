@@ -89,10 +89,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractApiSpec\ApiDtoSpecTests.cs" />
-    <Compile Include="AbstractApiSpec\DocumentationClassLocatorTests.cs" />
-    <Compile Include="AbstractApiSpec\PropertyMetadataTests.cs" />
-    <Compile Include="AbstractApiSpec\RequestSpecTests.cs" />
+    <Compile Include="TypeSpec\ApiDtoSpecTests.cs" />
+    <Compile Include="TypeSpec\DocumentationClassLocatorTests.cs" />
+    <Compile Include="TypeSpec\PropertyMetadataTests.cs" />
+    <Compile Include="TypeSpec\RequestSpecTests.cs" />
     <Compile Include="ApiDocumentationGeneratorTests.cs" />
     <Compile Include="ApiSpecFeatureTests.cs" />
     <Compile Include="DTO\SpecRequestTests.cs" />
