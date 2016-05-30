@@ -5,6 +5,8 @@
 namespace ServiceStack.Documentation.TypeSpec
 {
     using System.Collections.Generic;
+    using Extensions;
+    using Html;
     using Models;
 
     /// <summary>
@@ -14,21 +16,51 @@ namespace ServiceStack.Documentation.TypeSpec
     public abstract class RequestSpec<T> : TypeSpec<T>, IApiRequest
         where T : class, new()
     {
-        public List<StatusCode> StatusCodes { get; }
+        private const string GlobalKey = "_all";
+
+        public Dictionary<string, List<StatusCode>> StatusCodes { get; }
         public List<string> Tags { get; }
-        public List<string> ContentTypes { get; }
+        public Dictionary<string, List<string>> ContentTypes { get; }
 
         public string Category { get; protected set; }
 
+        /// <summary>
+        /// Set tags for this DTO
+        /// </summary>
+        /// <param name="tags">List of tags to set for this DTO</param>
         protected void AddTags(params string[] tags) => Tags.AddRange(tags);
-        protected void AddStatusCodes(params StatusCode[] statusCodes) => StatusCodes.AddRange(statusCodes);
-        protected void AddContentTypes(params string[] contentTypes) => ContentTypes.AddRange(contentTypes);
+
+        /// <summary>
+        /// Set status codes for this DTO that are available across all verbs
+        /// </summary>
+        /// <param name="statusCodes">List of status codes to set for this DTO</param>
+        protected void AddStatusCodes(params StatusCode[] statusCodes) => StatusCodes.UpdateList(GlobalKey, statusCodes);
+
+        /// <summary>
+        /// Set content-types for this DTO that are available across all verbs
+        /// </summary>
+        /// <param name="contentTypes">List of content types to set for this DTO</param>
+        protected void AddContentTypes(params string[] contentTypes) => ContentTypes.UpdateList(GlobalKey, contentTypes);
+
+        /// <summary>
+        /// Set status codes for this DTO that may be returned for specified verb
+        /// </summary>
+        /// <param name="verb">The verb to set status codes for</param>
+        /// <param name="statusCodes">List of status codes  to set for this DTO</param>
+        protected void AddStatusCodes(HttpVerbs verb, params StatusCode[] statusCodes) => StatusCodes.UpdateList(verb.ToString(), statusCodes);
+
+        /// <summary>
+        /// Set content-types for this DTO that are available for specified verb
+        /// </summary>
+        /// <param name="verb">The verb to set content types for</param>
+        /// <param name="contentTypes">List of content types to set for this DTO</param>
+        protected void AddContentTypes(HttpVerbs verb, params string[] contentTypes) => ContentTypes.UpdateList(verb.ToString(), contentTypes);
 
         protected RequestSpec()
         {
-            StatusCodes = new List<StatusCode>();
+            StatusCodes = new Dictionary<string, List<StatusCode>>();
             Tags = new List<string>();
-            ContentTypes = new List<string>();
+            ContentTypes = new Dictionary<string, List<string>>();
         }
     }
 }

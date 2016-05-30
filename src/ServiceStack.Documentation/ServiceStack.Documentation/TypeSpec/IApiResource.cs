@@ -17,11 +17,10 @@ namespace ServiceStack.Documentation.TypeSpec
 
     public interface IApiRequest : IApiResource
     {
-        List<StatusCode> StatusCodes { get; }
-        List<string> ContentTypes { get; }
-
-        string Category { get; }
+        Dictionary<string, List<string>> ContentTypes { get; }
+        Dictionary<string, List<StatusCode>> StatusCodes { get; }
         List<string> Tags { get; }
+        string Category { get; }
     }
 
     public interface IApiPropertyResource

@@ -17,7 +17,7 @@ namespace ServiceStack.Documentation.Enrichers
     /// <summary>
     /// Enricher that will use implementations of RequestSpec and TypeSpec to enrich object
     /// </summary>
-    public class AbstractClassEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher
+    public class AbstractClassEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher, IActionEnricher
     {
         private readonly Dictionary<Type, IApiResource> lookup;
 
@@ -30,20 +30,28 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetDescription(Type type) => lookup.SafeGetFromValue(type, v => v.Description, null);
         public string GetNotes(Type type) => lookup.SafeGetFromValue(type, v => v.Notes, null);
 
-        public string[] GetVerbs(Operation operation) => null;
+        public string[] GetContentTypes(Operation operation, string verb)
+        {
+            throw new NotImplementedException();
+        }
 
-        public string[] GetContentTypes(Operation operation)
+        public string[] GetRelativePaths(Operation operation, string verb) => null;
+
+        public StatusCode[] GetStatusCodes(Operation operation, string verb)
+        {
+            throw new NotImplementedException();
+        }
+
+        /*public string[] GetContentTypes(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.ContentTypes.ToArray(), null);
 
         public StatusCode[] GetStatusCodes(Operation operation)
-            => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.StatusCodes.ToArray(), null);
+            => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.StatusCodes.ToArray(), null);*/
 
         public string GetTitle(MemberInfo mi) => GetPropertyValue(mi, property => property?.Title);
 
         public string GetDescription(MemberInfo mi)
             => GetPropertyValue(mi, property => property?.Description);
-
-        public string GetRelativePath(Operation operation) => null;
 
         public string GetCategory(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.Category, null);
