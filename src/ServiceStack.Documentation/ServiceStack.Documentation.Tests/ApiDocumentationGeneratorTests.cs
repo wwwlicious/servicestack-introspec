@@ -14,7 +14,7 @@ namespace ServiceStack.Documentation.Tests
     using Testing;
     using Xunit;
 
-    [Collection("ApiDocumentationGeneratorTests")]
+    [Collection("AppHost")]
     public class ApiDocumentationGeneratorTests
     {
         private const string Desc = "I'm jim morrison. I'm dead.";
@@ -131,7 +131,7 @@ namespace ServiceStack.Documentation.Tests
         }
     }
 
-    [Collection("ApiDocumentationGeneratorTests")]
+    [Collection("AppHost")]
     public class HostlessTests : IDisposable
     {
         private readonly AppDomain noAuthDomain;
@@ -144,11 +144,14 @@ namespace ServiceStack.Documentation.Tests
         [Fact]
         public void GenerateDocumentation_Throws_IfWebHostUrlNull()
         {
-            var generator = new ApiDocumentationGenerator(null);
-            var host = new BasicAppHost { Config = new HostConfig() };
+            noAuthDomain.DoCallBack(() =>
+            {
+                var generator = new ApiDocumentationGenerator(null);
+                var host = new BasicAppHost { Config = new HostConfig() };
 
-            Action action = () => generator.GenerateDocumentation(null, host, new ApiSpecConfig());
-            action.ShouldThrow<ArgumentException>();
+                Action action = () => generator.GenerateDocumentation(null, host, new ApiSpecConfig());
+                action.ShouldThrow<ArgumentException>();
+            });
         }
 
         public void Dispose()

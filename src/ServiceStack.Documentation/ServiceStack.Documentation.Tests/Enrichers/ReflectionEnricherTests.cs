@@ -307,6 +307,16 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             constraint.Min.Should().Be(1);
             constraint.Max.Should().Be(10);
         }
+
+        [Fact]
+        public void GetNotes_ReturnsNull() => enricher.GetNotes(noPropertyInfo).Should().BeNull();
+
+        [Fact]
+        public void GetExternalLinks_ReturnsNull() => enricher.GetExternalLinks(noPropertyInfo).Should().BeNull();
+
+        [Fact]
+        public void GetSecurity_Null_IfNoAuthentication()
+            => enricher.GetSecurity(new Operation { RequiresAuthentication = false }, "GET").Should().BeNull();
     }
 
     [Api("ApiDescription")]
@@ -352,5 +362,4 @@ namespace ServiceStack.Documentation.Tests.Enrichers
 
     [Route("/foo-bar", "GET,POST")]
     public class RootForVerbs { }
-
 }

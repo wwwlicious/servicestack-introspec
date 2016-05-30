@@ -76,19 +76,6 @@ namespace ServiceStack.Documentation.Tests
         }
 
         [Fact]
-        public void Register_AddsDebugLink()
-        {
-            const string href = "/spec";
-
-            var metadataFeature = fixture.AppHost.GetPlugin<MetadataFeature>();
-            metadataFeature.DebugLinks.Should().NotContainKey(href);
-
-            feature.Register(fixture.AppHost);
-
-            metadataFeature.DebugLinks.Should().ContainKey(href);
-        }
-
-        [Fact]
         public void OperationsMapFilter_ExcludesTypesInIgnoreNamespaces()
         {
             var operationsMap = new Dictionary<Type, Operation>

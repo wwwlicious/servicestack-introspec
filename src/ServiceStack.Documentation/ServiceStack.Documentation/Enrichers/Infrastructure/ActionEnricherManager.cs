@@ -12,7 +12,6 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     using Models;
     using Settings;
 
-    // TODO Test this 
     public class ActionEnricherManager : IActionEnricherManager
     {
         private readonly IActionEnricher actionEnricher;
@@ -74,7 +73,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
                     action.ContentTypes.GetBasedOnStrategy(() => actionEnricher.GetContentTypes(operation, verb));
 
                 action.RelativePaths =
-                    action.RelativePaths.GetIfNullOrEmpty(() => actionEnricher.GetRelativePaths(operation, verb));
+                    action.RelativePaths.GetBasedOnStrategy(() => actionEnricher.GetRelativePaths(operation, verb));
             }
 
             if (securityEnricher != null)

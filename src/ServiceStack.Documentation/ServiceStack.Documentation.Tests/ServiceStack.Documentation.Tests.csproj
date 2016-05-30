@@ -89,7 +89,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiDocumentationProviderTests.cs" />
     <Compile Include="Enrichers\AbstractClassEnricherTests.cs" />
+    <Compile Include="Enrichers\Infrastructure\ActionEnricherManagerTests.cs" />
     <Compile Include="TypeSpec\ApiDtoSpecTests.cs" />
     <Compile Include="TypeSpec\DocumentationClassLocatorTests.cs" />
     <Compile Include="TypeSpec\PropertyMetadataTests.cs" />
