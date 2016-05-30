@@ -15,7 +15,7 @@ namespace ServiceStack.Documentation.TypeSpec
         string Notes { get; }
     }
 
-    public interface IApiRequest : IApiResource
+    public interface IApiRequestSpec : IApiResource
     {
         Dictionary<string, List<string>> ContentTypes { get; }
         Dictionary<string, List<StatusCode>> StatusCodes { get; }

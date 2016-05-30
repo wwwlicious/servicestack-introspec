@@ -46,7 +46,7 @@ namespace ServiceStack.Documentation.Tests.Extensions
         }
 
         [Fact]
-        public void SafeGet_ReturnsFallback_IfDictionaryNull()
+        public void SafeGet_Fallback_ReturnsFallback_IfDictionaryNull()
         {
             const string fallback = "fallback";
             Dictionary<string, string> dictionary = null;
@@ -56,7 +56,7 @@ namespace ServiceStack.Documentation.Tests.Extensions
         }
 
         [Fact]
-        public void SafeGet_ReturnsFallback_IfKeyNotFound()
+        public void SafeGet_Fallback_ReturnsFallback_IfKeyNotFound()
         {
             const int fallback = 421;
             var dictionary = new Dictionary<string, int>
@@ -70,7 +70,7 @@ namespace ServiceStack.Documentation.Tests.Extensions
         }
 
         [Fact]
-        public void SafeGet_ReturnsValue_IfKeyFound()
+        public void SafeGet_Fallback_ReturnsValue_IfKeyFound()
         {
             const int fallback = 421;
             var dictionary = new Dictionary<string, int>
@@ -250,6 +250,63 @@ namespace ServiceStack.Documentation.Tests.Extensions
                 .And.Contain(3)
                 .And.Contain(4)
                 .And.Contain(5);
+        }
+
+        [Fact]
+        public void SafeGet_ReturnsDefault_IfDictionaryNull_ReferenceType()
+        {
+            Dictionary<string, string> dictionary = null;
+            var result = dictionary.SafeGet("test");
+
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public void SafeGet_ReturnsDefault_IfDictionaryNull_ValueType()
+        {
+            Dictionary<string, int> dictionary = null;
+            var result = dictionary.SafeGet("test");
+
+            result.Should().Be(0);
+        }
+
+        [Fact]
+        public void SafeGet_ReturnsDefault_IfKeyNotFound_ReferenceType()
+        {
+            var dictionary = new Dictionary<string, string>
+            {
+                { "Test1", "foo" },
+                { "Test2", "bar" }
+            };
+            var result = dictionary.SafeGet("test");
+
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public void SafeGet_ReturnsDefault_IfKeyNotFound_ValueType()
+        {
+            var dictionary = new Dictionary<string, int>
+            {
+                { "Test1", 1 },
+                { "Test2", 2 }
+            };
+            var result = dictionary.SafeGet("test");
+
+            result.Should().Be(0);
+        }
+
+        [Fact]
+        public void SafeGet_ReturnsValue_IfKeyFound()
+        {
+            var dictionary = new Dictionary<string, int>
+            {
+                { "Test1", 1 },
+                { "Test2", 2 }
+            };
+            var result = dictionary.SafeGet("Test1");
+
+            result.Should().Be(1);
         }
     }
 }

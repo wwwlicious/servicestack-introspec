@@ -1,12 +1,13 @@
 ﻿
-namespace DemoService.Documenters
+namespace DemoService.TypeSpecs
 {
     using ServiceStack.Documentation.Models;
     using ServiceStack.Documentation.TypeSpec;
+    using ServiceStack.Html;
 
-    public class FallbackRequestDocumenter : RequestSpec<FallbackRequest>
+    public class FallbackRequestSpec : RequestSpec<FallbackRequest>
     {
-        public FallbackRequestDocumenter()
+        public FallbackRequestSpec()
         {
             Title = "Fallback request title from abstract class";
             Description = "Fallback request desc from abstract";
@@ -29,6 +30,8 @@ namespace DemoService.Documenters
                     Name = "No Content",
                     Description = "A more verbose explanation that won't be shown"
                 });
+
+            AddStatusCodes(HttpVerbs.Get, (StatusCode)201);
 
             AddContentTypes("application/hal+json");
 

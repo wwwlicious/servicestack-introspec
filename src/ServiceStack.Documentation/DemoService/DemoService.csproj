@@ -79,9 +79,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoService.cs" />
-    <Compile Include="Documenters\FallbackRequestDocumenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeSpecs\FallbackRequestSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

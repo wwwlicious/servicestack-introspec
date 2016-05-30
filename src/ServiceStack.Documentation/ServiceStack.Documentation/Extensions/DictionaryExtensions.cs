@@ -27,6 +27,23 @@ namespace ServiceStack.Documentation.Extensions
         }
 
         /// <summary>
+        /// Attempt to get provided key from dictionary. Returns default for type if not found
+        /// </summary>
+        /// <typeparam name="TKey">Type of dictionary key</typeparam>
+        /// <typeparam name="TValue">Type of dictionary value</typeparam>
+        /// <param name="dictionary">Dictionary to get value from</param>
+        /// <param name="key">Key of value to find</param>
+        /// <returns>Value at key from dictionary, or default for type if not found</returns>
+        public static TValue SafeGet<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+        {
+            if (dictionary == null)
+                return default(TValue);
+
+            TValue value;
+            return dictionary.TryGetValue(key, out value) ? value : default(TValue);
+        }
+
+        /// <summary>
         /// Attempt to get provided key from dictionary. Returns fallback if not found
         /// </summary>
         /// <typeparam name="TKey">Type of dictionary key</typeparam>

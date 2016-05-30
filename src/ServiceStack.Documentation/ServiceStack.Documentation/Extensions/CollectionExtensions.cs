@@ -38,6 +38,25 @@ namespace ServiceStack.Documentation.Extensions
         }
 
         /// <summary>
+        /// Produces the set union of two sequences by using the default equality comparer.
+        /// Verifies validity of enumerables by checking for null before running union
+        /// </summary>
+        /// <typeparam name="T">Type of enumerable</typeparam>
+        /// <param name="array">Enumerable whose elemets form first set for the union</param>
+        /// <param name="enumerable">Enumerable whose elemets form second set for the union</param>
+        /// <returns>Array that contains the distinct elements from both input arrays</returns>
+        public static IEnumerable<T> SafeUnion<T>(this IEnumerable<T> array, IEnumerable<T> enumerable)
+        {
+            if (array.IsNullOrEmpty())
+                return enumerable;
+
+            if (enumerable.IsNullOrEmpty())
+                return array;
+
+            return array.Union(enumerable).ToArray();
+        }
+
+        /// <summary>
         /// Populates array based on current DocumenterSettings.CollectionStrategy
         /// </summary>
         /// <typeparam name="T">Type of array</typeparam>

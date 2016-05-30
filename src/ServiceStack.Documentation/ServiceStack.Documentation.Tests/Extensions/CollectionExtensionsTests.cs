@@ -56,6 +56,34 @@ namespace ServiceStack.Documentation.Tests.Extensions
 
             array.SafeUnion(() => result).Should().BeEquivalentTo(expected);
         }
+        
+        [Fact]
+        public void SafeUnion_Enumerable_ReturnsNull_IfBothNull()
+            => CollectionExtensions.SafeUnion(null, (IEnumerable<int>)null).Should().BeNull();
+
+        [Fact]
+        public void SafeUnion_Enumerable_ReturnsSecond_IfFirstIsNull()
+        {
+            var result = new[] { "Say", "To" };
+            CollectionExtensions.SafeUnion(null, result).Should().BeEquivalentTo(result);
+        }
+
+        [Fact]
+        public void SafeUnion_Enumerable_ReturnsFirst_IfSecondIsNull()
+        {
+            var array = new[] { "Say", "To" };
+            array.SafeUnion((IEnumerable<string>)null).Should().BeEquivalentTo(array);
+        }
+
+        [Fact]
+        public void SafeUnion_Enumerable_ReturnsUnion()
+        {
+            var array = new[] { "Say", "To" };
+            var result = new[] { "To", "Frog" };
+            var expected = new[] { "Say", "To", "Frog" };
+
+            array.SafeUnion(result).Should().BeEquivalentTo(expected);
+        }
 
         [Theory]
         [MemberData("NullEmpty")]
