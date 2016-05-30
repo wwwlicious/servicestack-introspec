@@ -19,7 +19,19 @@ namespace ServiceStack.Documentation.TypeSpec
         {
             try
             {
-                var typesToScan = DocumenterSettings.Assemblies.SelectMany(a => a.GetTypes());
+                return GetLookup(DocumenterSettings.Assemblies.SelectMany(a => a.GetTypes()));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error getting documentation classes", ex);
+                return new Dictionary<Type, IApiResource>();
+            }
+        }
+
+        public static Dictionary<Type, IApiResource> GetLookup(IEnumerable<Type> typesToScan)
+        {
+            try
+            {
                 var lookup = FindAllTypeSpecs(typesToScan)
                     .ToDictionary(k => k.BaseType.GenericTypeArguments[0],
                         v => (IApiResource)v.CreateInstance());

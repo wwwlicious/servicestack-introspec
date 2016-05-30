@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ServiceStack.Documentation")]
-[assembly: AssemblyDescription("Uses introspection to try and generate full documentation about service")]
+[assembly: AssemblyDescription("Uses introspection to generate documentation about services in AppHost")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MacLean Electrical")]
 [assembly: AssemblyProduct("ServiceStack.Documentation")]

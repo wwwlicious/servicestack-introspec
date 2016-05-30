@@ -90,6 +90,25 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         }
 
         [Fact]
+        public void GetStatusCodes_401And403_IfRequiresAuthentication()
+        {
+            var operation = new Operation
+            {
+                ServiceType = typeof(AllAttributes),
+                RequestType = typeof(SomeAttributes),
+                ResponseType = typeof(AllAttributes), //This stops it being marked as one way
+                RequiresAuthentication = true
+            };
+
+            var result = enricher.GetStatusCodes(operation, Verb);
+            result.Length.Should().Be(2);
+            result[0].Code.Should().Be(401);
+            result[0].Name.Should().Be("Unauthorized");
+            result[1].Code.Should().Be(403);
+            result[1].Name.Should().Be("Forbidden");
+        }
+
+        [Fact]
         public void GetStatusCodes_ReturnsCodes_IfApiResponseAttribute()
         {
             var operation = new Operation

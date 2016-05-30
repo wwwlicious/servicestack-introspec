@@ -139,9 +139,20 @@ namespace ServiceStack.Documentation.Enrichers
             var apiResponseAttributes = operation.RequestType.GetCustomAttributes<ApiResponseAttribute>();
             var responseAttributes = apiResponseAttributes as ApiResponseAttribute[] ?? apiResponseAttributes.ToArray();
 
-            var list = new List<StatusCode>(responseAttributes.Length + 1);
+            // NOTE +3 as could have 204, 401 and a 403 in addition to those set
+            var list = new List<StatusCode>(responseAttributes.Length + 2);
             if (HasOneWayMethod(operation))
+            {
+                log.Debug($"Operation for request {operation.RequestType.Name} has void return. Adding 204 response.");
                 list.Add((StatusCode)HttpStatusCode.NoContent);
+            }
+
+            if (GetSecurity(operation, verb) != null)
+            {
+                log.Debug($"Operation for request {operation.RequestType.Name} requires auth. Adding 401 + 403 response.");
+                list.Add((StatusCode)401);
+                list.Add((StatusCode)403); // Should 403 only be returned if there's a Permission or Role restriction?
+            }
 
             if (responseAttributes.Length == 0) return list.ToArray();
 

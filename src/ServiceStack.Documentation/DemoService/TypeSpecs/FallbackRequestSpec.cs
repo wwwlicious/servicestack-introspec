@@ -17,7 +17,7 @@ namespace DemoService.TypeSpecs
 
             AddTags("Tag1", "Tag2", "Tag3");
 
-            AddStatusCodes(
+            AddStatusCodes(HttpVerbs.Get,
                 new StatusCode
                 {
                     Code = 503,
@@ -31,7 +31,7 @@ namespace DemoService.TypeSpecs
                     Description = "A more verbose explanation that won't be shown"
                 });
 
-            AddStatusCodes(HttpVerbs.Get, (StatusCode)201);
+            AddStatusCodes(HttpVerbs.Post, (StatusCode) 400);
 
             AddContentTypes("application/hal+json");
 
@@ -53,18 +53,6 @@ namespace DemoService.TypeSpecs
         }
     }
 
-    public class GlassesRequestDocumenter : RequestSpec<GlassesRequest>
-    {
-        public GlassesRequestDocumenter()
-        {
-            Title = "Glasses title documenter";
-            Description = "Glasses desc documenter";
-            Notes = "Glasses notes from documenter";
-
-            For(t => t.SunShining).With(p => p.Title, "Sun shining. Documenter");
-        }
-    }
-
     public class NameDocumenter : TypeSpec<Name>
     {
         public NameDocumenter()
@@ -74,6 +62,16 @@ namespace DemoService.TypeSpecs
 
             For(t => t.Forename)
                 .With(p => p.IsRequired, true);
+        }
+    }
+
+    public class SecureDocumenter : RequestSpec<SecureRequest>
+    {
+        public SecureDocumenter()
+        {
+            AddContentTypes(HttpVerbs.Delete, "application/x-custom");
+
+            AddStatusCodes(HttpVerbs.Delete, ((StatusCode)400).WithDescription("Only for delete"));
         }
     }
 }

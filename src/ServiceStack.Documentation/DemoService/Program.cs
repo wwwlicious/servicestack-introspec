@@ -64,23 +64,22 @@
 
             var apiSpecConfig = new ApiSpecConfig
             {
-                Contact = new ApiContact { Email = "email@address.com", Name = "Donald Gray" },
+                Contact = new ApiContact { Email = "email@address.com", Name = "Joe Bloggs" },
                 Description = "This is a demo app host setup for testing documentation.",
                 LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/")
             };
 
-            //DocumenterSettings.With(verbs: new List<string> { "HEAD", "PATCH" });
-            //DocumenterSettings.AnyVerbs = new List<string> { "HEAD", "PATCH" };
+            //DocumenterSettings.ReplacementVerbs = new[] { "GET", "PUT", "POST", "DELETE" };
             //DocumenterSettings.CollectionStrategy = EnrichmentStrategy.SetIfEmpty;
 
-            JsConfig.IncludePublicFields = true;
+            JsConfig.IncludePublicFields = true; // Serialize Fields 
             DocumenterSettings.DefaultStatusCodes = new List<StatusCode>
             {
                 new StatusCode { Code = 429, Description = "This is rate limited", Name = "Too Many Requests" },
                 ((StatusCode)HttpStatusCode.Forbidden).WithDescription("Set at a global level"),
                 ((StatusCode)200).WithDescription("Ok. Set at a global level")
             };
-            DocumenterSettings.FallbackCategory = "Default Category";
+            DocumenterSettings.FallbackCategory = "Fallback Category";
             DocumenterSettings.DefaultTags = new[] { "DefaultTag" };
 
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";

@@ -50,26 +50,6 @@
         public string Message { get; set; }
     }
 
-    public class GlassesService : Service
-    {
-        public object Any(GlassesRequest request) => new DemoResponse { Message = request.SunShining ? "Wear sun glasses" : "No glasses required" };
-    }
-
-    /// <remarks>I don't really have much to add here</remarks>
-    [Api("Glasses Request Description")]
-    [ApiResponse(HttpStatusCode.OK, "Ok")]
-    [Authenticate]
-    [Restrict(RequestAttributes.Xml | RequestAttributes.Json | RequestAttributes.Jsv)]
-    public class GlassesRequest : IReturn<DemoResponse>, IGet, IPost
-    {
-        /// <summary>
-        /// XML Comment on a property
-        /// </summary>
-        public bool SunShining { get; set; }
-
-        public Name GlassesName { get; set; }
-    }
-
     /// <summary>
     /// This is a description of FallbackRequest from XML
     /// </summary>
@@ -100,7 +80,7 @@
     }
 
     /// <summary>
-    /// This is a response type with embedded properties
+    /// This is a response type with custom class return type
     /// </summary>
     [Api("Response type with embedded type")]
     public class ComplexResponse
@@ -113,35 +93,37 @@
     }
 
     /// <summary>
-    /// This is a response type with more complex thingamies
+    /// This is a class embedded in a return type
     /// </summary>
     [Api("Response type with embedded type")]
     public class SubComplexResponse
     {
-        [ApiMember(Name = "Age", Description = "The age")]
+        [ApiMember(Name = "Age", Description = "The age. From attribute")]
         public int Age { get; set; }
 
-        [ApiMember(Name = "DOB", Description = "The date of the birth")]
+        [ApiMember(Name = "DOB", Description = "The date of the birth. From attribute")]
         public DateTime DateOfBirth { get; set; }
 
-        [ApiMember(Name = "Details of my name", Description = "The age")]
+        [ApiMember(Name = "Details of my name", Description = "The name. From attribute")]
         public Name MyName { get; set; }
+
         public Name YourName { get; set; }
 
         [IgnoreDataMember]
         public Name TheirName { get; set; }
     }
 
-    /// <remarks>The people the people</remarks>
+    /// <summary>This comment won't make it's way to documentation as there's a TypeSpec implementation of this.</summary>
+    /// <remarks>Description of Name class from XML comment</remarks>
     public class Name
     {
         /// <summary>
-        /// This is an xml desc of summary
+        /// This is a desc of Forename from XML
         /// </summary>
         public string Forename { get; set; }
 
         /// <summary>
-        /// Xml surname
+        /// XML Surname
         /// </summary>
         [ApiMember(Name = "Also known as last name")]
         public string Surname { get; set; }
@@ -174,15 +156,6 @@
 
     public class EmptyDtoRequest : IReturn<DemoResponse>{}
 
-    public class PersonRequest{}
-
-    public class PersonRequestResponse{}
-
-    public class PersonService : IService
-    {
-        public object Any(PersonRequest request) => new PersonRequestResponse();
-    }
-
     public class OneWayService : IService
     {
         [RequiresAnyRole("Butcher", "Baker", "Candlestick Maker")]
@@ -190,6 +163,7 @@
     }
 
     [Api("One Way Request. Should have a 204 response")]
+    [RequiredRole("Admin")]
     public class OneWayRequest { }
 
     public class SecureResponse { }
@@ -203,7 +177,22 @@
 
     public class SecureService : IService
     {
-        public object Any(SecureRequest request)
+        public object Get(SecureRequest request)
+        {
+            return new SecureResponse();
+        }
+
+        public object Put(SecureRequest request)
+        {
+            return new SecureResponse();
+        }
+
+        public object Post(SecureRequest request)
+        {
+            return new SecureResponse();
+        }
+
+        public object Delete(SecureRequest request)
         {
             return new SecureResponse();
         }
