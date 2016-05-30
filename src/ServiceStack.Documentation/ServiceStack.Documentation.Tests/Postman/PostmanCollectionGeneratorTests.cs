@@ -73,7 +73,7 @@ namespace ServiceStack.Documentation.Tests.Postman
             var request = collection.Requests.First();
 
             request.CollectionId.Should().Be(collection.Id);
-            request.Url.Should().Be($"{documentation.ApiBaseUrl}/dto/");
+            request.Url.Should().Be($"{documentation.ApiBaseUrl}/dto");
             request.Description.Should().Be(description);
             request.Name.Should().Be("dto");
             request.Method.Should().Be("GET");
@@ -153,7 +153,7 @@ namespace ServiceStack.Documentation.Tests.Postman
                         }
                     },
                     Properties = new[]
-                    { new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) } }
+                    { new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) } }
                 }
             };
 
@@ -194,7 +194,7 @@ namespace ServiceStack.Documentation.Tests.Postman
                         }
                     },
                     Properties = new[]
-                    { new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) } }
+                    { new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) } }
                 }
             };
 
@@ -234,8 +234,8 @@ namespace ServiceStack.Documentation.Tests.Postman
                     },
                     Properties = new[]
                     {
-                        new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) },
-                        new ApiPropertyDocumention { Title = "Age", ClrType = typeof(int) }
+                        new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) },
+                        new ApiPropertyDocumention { Id = "Age", Title = "Age", ClrType = typeof(int) }
                     }
                 }
             };
@@ -277,8 +277,8 @@ namespace ServiceStack.Documentation.Tests.Postman
                     },
                     Properties = new[]
                     {
-                        new ApiPropertyDocumention { Title = "Name", ClrType = typeof(string) },
-                        new ApiPropertyDocumention { Title = "Age", ClrType = typeof(int) }
+                        new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) },
+                        new ApiPropertyDocumention { Id = "Age", Title = "Age", ClrType = typeof(int) }
                     }
                 }
             };

@@ -73,7 +73,10 @@ namespace ServiceStack.Documentation.Postman.Services
                     var untoucherRelativePath = action.RelativePaths.First();
                     var pathVariableNames = untoucherRelativePath.GetPathParams();
                     string relativePath = pathVariableNames.Aggregate(untoucherRelativePath,
-                        (current, match) => current.Replace($"{{{match}}}", $":{match}")).EnsureEndsWith("/");
+                        (current, match) => current.Replace($"{{{match}}}", $":{match}"));
+
+                    if (!pathVariableNames.IsNullOrEmpty())
+                        relativePath = relativePath.EnsureEndsWith("/");
 
                     // Add path vars regardless of verb
                     Dictionary<string, string> pathVars = GetPathVariabless(data, pathVariableNames);
@@ -162,7 +165,7 @@ namespace ServiceStack.Documentation.Postman.Services
                 return new PostmanSpecData
                 {
                     Enabled = true,
-                    Key = r.Title,
+                    Key = r.Id.UrlEncode(),
                     Type = type,
                     Value = $"val-{type}"
                 };
