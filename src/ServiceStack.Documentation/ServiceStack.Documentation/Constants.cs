@@ -7,6 +7,7 @@ namespace ServiceStack.Documentation
     internal static class Constants
     {
         internal const string SpecUri = "/spec";
+        internal const string SpecSummaryUri = "/spec/summary";
         internal const string PostmanSpecUri = "/spec/postman";
 
         internal const string XmlEnricherKey = "xml";

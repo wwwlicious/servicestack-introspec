@@ -13,7 +13,7 @@ namespace ServiceStack.Documentation.Postman.DTO
     public class PostmanRequest : IReturn<PostmanSpecCollection>, IFilterableSpecRequest
     {
         public string[] DtoName { get; set; }
-        public string Category { get; set; }
+        public string[] Categories { get; set; }
         public string[] Tags { get; set; }
     }
 }

@@ -4,14 +4,13 @@
 
 namespace ServiceStack.Documentation.DTO
 {
-    using DataAnnotations;
-
-    [Route(Constants.SpecUri)]
-    [Exclude(Feature.Metadata | Feature.ServiceDiscovery)]
-    public class SpecRequest : IReturn<SpecResponse>, IFilterableSpecRequest
+    public class SpecMetadataResponse
     {
-        public string[] DtoName { get; set; }
+        public string[] DtoNames { get; set; }
         public string[] Categories { get; set; }
         public string[] Tags { get; set; }
+
+        public static SpecMetadataResponse Create(string[] dtoNames, string[] categories, string[] tags)
+            => new SpecMetadataResponse { Categories = categories, DtoNames = dtoNames, Tags = tags };
     }
 }

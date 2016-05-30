@@ -42,10 +42,10 @@ namespace ServiceStack.Documentation.Extensions
                 predicate = predicate.And(doc => request.Tags.Any(t => doc.Tags.Contains(t, StringComparer.OrdinalIgnoreCase)));
             }
 
-            if (!string.IsNullOrEmpty(request.Category))
+            if (!request.Categories.IsNullOrEmpty())
             {
                 hasFilter = true;
-                predicate = predicate.And(doc => string.Equals(request.Category, doc.Category, StringComparison.OrdinalIgnoreCase));
+                predicate = predicate.And(doc => request.Categories.Contains(doc.Category, StringComparer.OrdinalIgnoreCase));
             }
 
             return hasFilter ? predicate : null;

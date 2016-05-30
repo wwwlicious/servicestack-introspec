@@ -61,6 +61,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\SpecMetadataRequest.cs" />
+    <Compile Include="DTO\SpecMetadataResponse.cs" />
+    <Compile Include="Services\ApiSpecMetadataService.cs" />
     <Compile Include="TypeSpec\TypeSpec.cs" />
     <Compile Include="TypeSpec\DocumentationClassLocator.cs" />
     <Compile Include="DTO\IFilterableSpecRequest.cs" />

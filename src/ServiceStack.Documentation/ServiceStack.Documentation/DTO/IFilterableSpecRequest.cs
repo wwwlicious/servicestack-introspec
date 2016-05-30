@@ -10,7 +10,7 @@ namespace ServiceStack.Documentation.DTO
     public interface IFilterableSpecRequest
     {
         string[] DtoName { get; set; }
-        string Category { get; set; }
+        string[] Categories { get; set; }
         string[] Tags { get; set; }
     }
 }

@@ -155,7 +155,7 @@ namespace ServiceStack.Documentation.Tests.Services
             };
 
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
-            var filter = new Filterable { Category = "Category1" };
+            var filter = new Filterable { Categories = new[] { "Category1" } };
 
             var result = documentation.Filter(filter);
 
@@ -173,7 +173,7 @@ namespace ServiceStack.Documentation.Tests.Services
             };
 
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
-            var filter = new Filterable { Category = "unknown" };
+            var filter = new Filterable { Categories = new[] { "unknown" } };
 
             var result = documentation.Filter(filter);
 
@@ -193,7 +193,7 @@ namespace ServiceStack.Documentation.Tests.Services
             var documentation = new ApiDocumentation { Title = "Test Documentation", Resources = resources };
             var filter = new Filterable
             {
-                Category = "Category2",
+                Categories = new[] { "Category2" },
                 Tags = new[] { "Tag2" },
                 DtoName = new[] { "DTO3", "DTO2" }
             };
@@ -207,7 +207,7 @@ namespace ServiceStack.Documentation.Tests.Services
     public class Filterable : IFilterableSpecRequest
     {
         public string[] DtoName { get; set; }
-        public string Category { get; set; }
+        public string[] Categories { get; set; }
         public string[] Tags { get; set; }
     }
 }
