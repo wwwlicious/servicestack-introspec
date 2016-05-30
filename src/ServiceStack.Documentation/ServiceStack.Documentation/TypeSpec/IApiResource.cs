@@ -17,7 +17,6 @@ namespace ServiceStack.Documentation.TypeSpec
 
     public interface IApiRequest : IApiResource
     {
-        List<string> Verbs { get; }
         List<StatusCode> StatusCodes { get; }
         List<string> ContentTypes { get; }
 

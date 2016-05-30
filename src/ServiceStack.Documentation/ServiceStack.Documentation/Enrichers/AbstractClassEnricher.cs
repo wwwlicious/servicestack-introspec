@@ -30,8 +30,7 @@ namespace ServiceStack.Documentation.Enrichers
         public string GetDescription(Type type) => lookup.SafeGetFromValue(type, v => v.Description, null);
         public string GetNotes(Type type) => lookup.SafeGetFromValue(type, v => v.Notes, null);
 
-        public string[] GetVerbs(Operation operation)
-            => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.Verbs.ToArray(), null);
+        public string[] GetVerbs(Operation operation) => null;
 
         public string[] GetContentTypes(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequest)?.ContentTypes.ToArray(), null);

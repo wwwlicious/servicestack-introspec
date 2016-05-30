@@ -17,20 +17,11 @@ namespace ServiceStack.Documentation.Tests.TypeSpec
         public void Ctor_InitialisesLists()
         {
             var d = new RequestDocumenter();
-            d.Verbs.Should().NotBeNull();
             d.StatusCodes.Should().NotBeNull();
             d.Tags.Should().NotBeNull();
             d.ContentTypes.Should().NotBeNull();
         }
-
-        [Fact]
-        public void AddVerbs_PopulatesVerbsCollection()
-        {
-            documenter.SetVerbs("GET", "POST");
-            documenter.Verbs.Count.Should().Be(2);
-            documenter.Verbs.Should().Contain("GET").And.Contain("POST");
-        }
-
+        
         [Fact]
         public void AddTags_PopulatesTagsCollection()
         {
@@ -60,7 +51,6 @@ namespace ServiceStack.Documentation.Tests.TypeSpec
 
     internal class RequestDocumenter : RequestSpec<ToDocument>
     {
-        internal void SetVerbs(params string[] verbs) => AddVerbs(verbs);
         internal void SetTags(params string[] tags) => AddTags(tags);
         internal void SetStatusCodes(params StatusCode[] codes) => AddStatusCodes(codes);
         internal void SetContentTypes(params string[] contentTypes) => AddContentTypes(contentTypes);

@@ -14,7 +14,6 @@ namespace DemoService.Documenters
 
             Category = "Category1";
 
-            AddVerbs("GET", "PUT", "POST");
             AddTags("Tag1", "Tag2", "Tag3");
 
             AddStatusCodes(
