@@ -38,40 +38,5 @@ namespace ServiceStack.Documentation.Models
         // From IApiMetadata by way of IApiRequest
         public string Category { get; set; }
         public string[] Tags { get; set; }
-
-        /*public string[] Verbs { get; set; }
-        public StatusCode[] StatusCodes { get; set; }
-        public string[] ContentTypes { get; set; }
-        public string RelativePath { get; set; }*/
-
-        // From ISecured by way of IApiRequest
-        // public ApiSecurity Security { get; set; }
-    }
-
-    // Figure out a better name
-    public class ApiAction : IApiAction
-    {
-        public ApiSecurity Security { get; set; }
-
-        public string Verb { get; set; }
-
-        public StatusCode[] StatusCodes { get; set; }
-
-        public string[] ContentTypes { get; set; }
-
-        public string[] RelativePaths { get; set; }
-
-        //public ApiResourceType ReturnType { get; set; }
-    }
-
-    public interface IApiAction : ISecured
-    {
-        string[] ContentTypes { get; set; }
-        string[] RelativePaths { get; set; }
-        //ApiResourceType ReturnType { get; set; }
-        StatusCode[] StatusCodes { get; set; }
-        string Verb { get; set; }
-
-        // Restrictions
     }
 }

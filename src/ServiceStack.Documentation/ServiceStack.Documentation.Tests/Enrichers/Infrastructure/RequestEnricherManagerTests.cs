@@ -5,7 +5,6 @@
 namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
 {
     using System;
-    using System.Collections.Generic;
     using Documentation.Enrichers.Infrastructure;
     using Documentation.Enrichers.Interfaces;
     using Documentation.Models;
@@ -21,175 +20,45 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
         private readonly RequestEnricherManager nullParameterManager;
         private readonly RequestEnricherManager manager;
         private readonly IRequestEnricher requestEnricher;
-        private readonly ISecurityEnricher securityEnricher;
+        private readonly IActionEnricherManager actionEnricherManager;
 
-        /*private RequestEnricherManager GetEnricherManager(Action<IApiResourceType, Operation> action)
-            => new RequestEnricherManager(requestEnricher, action, null);
+        private RequestEnricherManager GetEnricherManager(Action<IApiResourceType, Operation> action)
+            => new RequestEnricherManager(requestEnricher, actionEnricherManager, action);
 
         private void ResourceEnricher(IApiResourceType type, Operation operation) {}
 
         public RequestEnricherManagerTests()
         {
-            nullParameterManager = new RequestEnricherManager(null, ResourceEnricher, null);
+            nullParameterManager = new RequestEnricherManager(null, null, ResourceEnricher);
             operation = new Operation { RequestType = typeof(int), ResponseType = typeof(string) };
 
             requestEnricher = A.Fake<IRequestEnricher>();
-            securityEnricher = A.Fake<ISecurityEnricher>();
-            manager = new RequestEnricherManager(requestEnricher, ResourceEnricher, securityEnricher);
+            actionEnricherManager = A.Fake<IActionEnricherManager>();
+            manager = new RequestEnricherManager(requestEnricher, actionEnricherManager, ResourceEnricher);
         }
 
         [Fact]
         public void Ctor_AllowsNullResourceEnricher()
         {
-            Action action = () => new RequestEnricherManager(null, ResourceEnricher, securityEnricher);
+            Action action = () => new RequestEnricherManager(null, null, ResourceEnricher);
             action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [Fact]
-        public void Ctor_AllowsNullSecurityEnricher()
+        public void Ctor_AllowsNullActionEnricherManager()
         {
-            Action action = () => new RequestEnricherManager(requestEnricher, ResourceEnricher, null);
+            Action action = () => new RequestEnricherManager(requestEnricher, null, ResourceEnricher);
             action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [Fact]
-        public void EnrichResponse_HandlesNullResourceAndSecurityEnricher()
+        public void EnrichResponse_HandlesNullResourceAndActionEnricher()
         {
             Action action = () => nullParameterManager.EnrichRequest(new ApiResourceDocumentation(), new Operation());
             action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [Fact]
-        public void EnrichResponse_CallsGetVerbs_IfResourceHasNullVerbs()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation(), operation);
-            A.CallTo(() => requestEnricher.GetVerbs(operation)).MustHaveHappened();
-        }
-
-        /*[Fact]
-        public void EnrichResponse_CallsGetVerbs_IfResourceHasEmptyVerbs()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation { Verbs = new string[0]}, operation);
-            A.CallTo(() => requestEnricher.GetVerbs(operation)).MustHaveHappened();
-        }
-
-        [Fact]
-        public void EnrichResponse_SetsVerbs_IfResourceHasEmptyVerbs()
-        {
-            var verbs = new[] { "GET", "DELETE" };
-            A.CallTo(() => requestEnricher.GetVerbs(operation)).Returns(verbs);
-            var apiResourceDocumentation = new ApiResourceDocumentation { Verbs = new string[0] };
-
-            manager.EnrichRequest(apiResourceDocumentation, operation);
-
-            apiResourceDocumentation.Verbs.Should().BeEquivalentTo(verbs);
-        }
-
-        [Fact]
-        public void EnrichResponse_CallsGetVerbs_IfResourceHasVerbs_AndUnionAsStrategy()
-        {
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { Verbs = new[] { "GET" } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                A.CallTo(() => requestEnricher.GetVerbs(operation)).MustHaveHappened();
-            }
-        }
-
-        [Fact]
-        public void EnrichResponse_ReturnsAllVerbs_IfResourceHasVerbs_AndUnionAsStrategy()
-        {
-            var verbs = new[] { "GET", "DELETE" };
-            A.CallTo(() => requestEnricher.GetVerbs(operation)).Returns(verbs);
-
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { Verbs = new[] { "PUT", "GET" } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                apiResourceDocumentation.Verbs.Length.Should().Be(3);
-                apiResourceDocumentation.Verbs.Should().Contain("GET").And.Contain("DELETE").And.Contain("PUT");
-            }
-        }
-
-        [Fact]
-        public void EnrichResponse_DoesNotCallGetVerbs_IfResourceHasVerbs_AndSetIfEmptyAsStrategy()
-        {
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { Verbs = new[] { "GET" } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                A.CallTo(() => requestEnricher.GetVerbs(operation)).MustNotHaveHappened();
-            }
-        }*/
-
-       /* [Fact]
-        public void EnrichResponse_CallsGetStatusCodes_IfResourceHasNullStatusCodes()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation(), operation);
-            A.CallTo(() => requestEnricher.GetStatusCodes(operation)).MustHaveHappened();
-        }
-
-        /*[Fact]
-        public void EnrichResponse_CallsGetStatusCodes_IfResourceHasEmptyStatusCodes()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation { StatusCodes = new StatusCode[0]}, operation);
-            A.CallTo(() => requestEnricher.GetStatusCodes(operation)).MustHaveHappened();
-        }
-
-        [Fact]
-        public void EnrichResponse_SetsStatusCodes_IfResourceHasEmptyStatusCodes()
-        {
-            var statusCodes = new[] { (StatusCode) 200 };
-            A.CallTo(() => requestEnricher.GetStatusCodes(operation)).Returns(statusCodes);
-            var apiResourceDocumentation = new ApiResourceDocumentation { StatusCodes = new StatusCode[0] };
-
-            manager.EnrichRequest(apiResourceDocumentation, operation);
-
-            apiResourceDocumentation.StatusCodes.Should().Equal(statusCodes);
-        }
-
-        [Fact]
-        public void EnrichResponse_CallsGetStatusCodes_IfResourceHasStatusCodes_AndUnionAsStrategy()
-        {
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { StatusCodes = new[] { new StatusCode() } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                A.CallTo(() => requestEnricher.GetStatusCodes(operation)).MustHaveHappened();
-            }
-        }
-
-        [Fact]
-        public void EnrichResponse_ReturnsAllStatusCodes_IfResourceHasStatusCodes_AndUnionAsStrategy()
-        {
-            var ok = (StatusCode) 200;
-            var forbidden = (StatusCode) 403;
-
-            var statusCodes = new[] { ok };
-            A.CallTo(() => requestEnricher.GetStatusCodes(operation)).Returns(statusCodes);
-
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { StatusCodes = new[] { forbidden, ok } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-
-                apiResourceDocumentation.StatusCodes.Length.Should().Be(2);
-                apiResourceDocumentation.StatusCodes.Should().Contain(ok).And.Contain(forbidden);
-            }
-        }
-
-        [Fact]
-        public void EnrichResponse_DoesNotCallGetStatusCodes_IfResourceHasStatusCodes_AndSetIfEmptyAsStrategy()
-        {
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { StatusCodes = new[] { new StatusCode() } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                A.CallTo(() => requestEnricher.GetStatusCodes(operation)).MustNotHaveHappened();
-            }
-        }*/
-
-       /* [Fact]
         public void EnrichResource_CallsEnrichResourceAction_WithPassedOperation()
         {
             var enricherManager = GetEnricherManager((type, op) => { op.Should().Be(operation); });
@@ -306,119 +175,6 @@ namespace ServiceStack.Documentation.Tests.Enrichers.Infrastructure
             apiResourceDocumentation.Category.Should().Be(returnCat);
         }
 
-        /*[Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void EnrichResponse_CallsGetRelativePath_IfResourceHasNullOrEmptyRelativePath(string relativePath)
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation { RelativePath = relativePath }, operation);
-            A.CallTo(() => requestEnricher.GetRelativePath(operation)).MustHaveHappened();
-        }
-
-        [Fact]
-        public void EnrichResponse_DoesNotCallGetRelativePath_IfRelativePathHasValue()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation { RelativePath = "/here/there" }, operation);
-            A.CallTo(() => requestEnricher.GetRelativePath(operation)).MustNotHaveHappened();
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void EnrichResponse_SetsRelativePath_IfResourceHasNullOrEmptyRelativePath(string relativePath)
-        {
-            const string returnPath = "/api/value";
-            A.CallTo(() => requestEnricher.GetRelativePath(operation)).Returns(returnPath);
-
-            var apiResourceDocumentation = new ApiResourceDocumentation { RelativePath = relativePath };
-            manager.EnrichRequest(apiResourceDocumentation, operation);
-
-            apiResourceDocumentation.RelativePath.Should().Be(returnPath);
-        }
-
-        [Fact]
-        public void EnrichResponse_CallsGetContentTypes_IfResourceHasNullVerbs()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation(), operation);
-            A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustHaveHappened();
-        }
-
-        [Fact]
-        public void EnrichResponse_CallsGetContentTypes_IfResourceHasEmptyVerbs()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation { ContentTypes = new string[0] }, operation);
-            A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustHaveHappened();
-        }
-
-        [Fact]
-        public void EnrichResponse_SetsContentTypes_IfResourceHasEmptyVerbs()
-        {
-            var contentTypes = new[] { "text/jsv", "text/xml" };
-            A.CallTo(() => requestEnricher.GetContentTypes(operation)).Returns(contentTypes);
-            var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new string[0] };
-
-            manager.EnrichRequest(apiResourceDocumentation, operation);
-
-            apiResourceDocumentation.ContentTypes.Should().BeEquivalentTo(contentTypes);
-        }
-
-        [Fact]
-        public void EnrichResponse_CallsGetContentTypes_IfResourceHasContentTypes_AndUnionAsStrategy()
-        {
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new[] { "text/jsv" } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustHaveHappened();
-            }
-        }
-
-        [Fact]
-        public void EnrichResponse_ReturnsAllContentTypes_IfResourceHasContentTypes_AndUnionAsStrategy()
-        {
-            var contentTypes = new[] { "text/jsv", "text/csv" };
-            A.CallTo(() => requestEnricher.GetContentTypes(operation)).Returns(contentTypes);
-
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new[] { "text/jsv", "application/json" } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                apiResourceDocumentation.ContentTypes.Length.Should().Be(3);
-                apiResourceDocumentation.ContentTypes.Should().Contain("text/jsv").And.Contain("text/csv").And.Contain("application/json");
-            }
-        }
-
-        [Fact]
-        public void EnrichResponse_DoesNotCallGetContentTypes_IfResourceHasContentTypes_AndSetIfEmptyAsStrategy()
-        {
-            using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty))
-            {
-                var apiResourceDocumentation = new ApiResourceDocumentation { ContentTypes = new[] { "text/jsv" } };
-                manager.EnrichRequest(apiResourceDocumentation, operation);
-                A.CallTo(() => requestEnricher.GetContentTypes(operation)).MustNotHaveHappened();
-            }
-        }
-
-        [Fact]
-        public void EnrichResponse_CallsGetSecurity()
-        {
-            manager.EnrichRequest(new ApiResourceDocumentation(), operation);
-            A.CallTo(() => securityEnricher.GetSecurity(operation)).MustHaveHappened();
-        }
-
-        [Fact]
-        public void EnrichResponse_ReturnsSecurity()
-        {
-            var apiResourceDocumentation = new ApiResourceDocumentation();
-            var apiSecurity = new ApiSecurity
-            {
-                IsProtected = true,
-                Permissions = new Permissions { AllOf = new List<string> { "me" } }
-            };
-            A.CallTo(() => securityEnricher.GetSecurity(operation)).Returns(apiSecurity);
-
-            manager.EnrichRequest(apiResourceDocumentation, operation);
-            apiResourceDocumentation.Security.Should().Be(apiSecurity);
-        }*/
+        
     }
 }

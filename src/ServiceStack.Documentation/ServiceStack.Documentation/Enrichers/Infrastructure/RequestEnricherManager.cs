@@ -16,11 +16,10 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     public class RequestEnricherManager
     {
         private readonly IRequestEnricher requestEnricher;
-        private readonly ActionEnricherManager actionEnricherManager;
+        private readonly IActionEnricherManager actionEnricherManager;
         private readonly Action<IApiResourceType, Operation> enrichResource;
 
-        //? Should this rely on IActionEnricher and ISecurityEnricher rather than ActionEnricherManager?
-        public RequestEnricherManager(IRequestEnricher requestEnricher, ActionEnricherManager actionEnricherManager,
+        public RequestEnricherManager(IRequestEnricher requestEnricher, IActionEnricherManager actionEnricherManager,
             Action<IApiResourceType, Operation> enrichResource)
         {
             this.requestEnricher = requestEnricher;
@@ -44,7 +43,6 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
 
             request.ReturnType = request.ReturnType.GetIfNull(() => new ApiResourceType());
 
-            //? Is it worth Async'ing these puppies then picking it back up when done?????
             enrichResource(request.ReturnType, operation);
             request.Actions = actionEnricherManager.EnrichActions(request.Actions, operation);
         }

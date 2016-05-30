@@ -5,12 +5,10 @@
 namespace ServiceStack.Documentation.Tests.Enrichers
 {
     using System;
-    using System.Collections.Generic;
     using System.Reflection;
     using DataAnnotations;
     using Documentation.Enrichers;
     using Documentation.Models;
-    using Documentation.Settings;
     using Fixtures;
     using FluentAssertions;
     using Host;
@@ -19,8 +17,9 @@ namespace ServiceStack.Documentation.Tests.Enrichers
     [Collection("AppHost")]
     public class ReflectionEnricherTests
     {
-        /*private ReflectionEnricher enricher = new ReflectionEnricher();
+        private ReflectionEnricher enricher = new ReflectionEnricher();
         private readonly AppHostFixture fixture;
+        private const string Verb = "GET";
 
         private static PropertyInfo noPropertyInfo => typeof(SomeAttributes).GetProperty("NoAttr");
         private static PropertyInfo propertyInfo => typeof (SomeAttributes).GetProperty("Thing");
@@ -49,26 +48,6 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             => enricher.GetNotes(typeof(AllAttributes)).Should().Be("These are some notes");
 
         [Fact]
-        public void GetVerbs_ReturnsVerbsFromSettings_IfOperationActionsContainsAny()
-        {
-            var defaultVerbs = new[] { "GET", "PUT", "HEAD", "LESSERKNOWN" };
-            using (DocumenterSettings.With(replacementVerbs: defaultVerbs))
-            {
-                var operation = new Operation { Actions = new List<string> { "GET", "PUT", "ANY" } };
-                var result = enricher.GetVerbs(operation);
-                result.Should().BeEquivalentTo(defaultVerbs);
-            }
-        }
-
-        [Fact]
-        public void GetVerbs_ReturnsVerbs()
-        {
-            var operation = new Operation { Actions = new List<string> { "GET", "POST", "PUT" } };
-            var result = enricher.GetVerbs(operation);
-            result.Should().BeEquivalentTo("GET", "POST", "PUT" );
-        }
-
-        [Fact]
         public void GetStatusCodes_ReturnsEmptyArray_IfNoApiResponseAttribute()
         {
             var operation = new Operation
@@ -77,7 +56,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
                 RequestType = typeof (SomeAttributes),
                 ResponseType = typeof (AllAttributes) //This stops it being marked as one way
             };
-            var result = enricher.GetStatusCodes(operation);
+            var result = enricher.GetStatusCodes(operation, Verb);
             result.Should().BeEmpty();
         }
 
@@ -89,7 +68,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
                 ServiceType = typeof(OneAttribute),
                 RequestType = typeof(SomeAttributes)
             };
-            var result = enricher.GetStatusCodes(operation);
+            var result = enricher.GetStatusCodes(operation, Verb);
             result.Length.Should().Be(1);
             result[0].Code.Should().Be(204);
             result[0].Name.Should().Be("No Content");
@@ -104,7 +83,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
                 RequestType = typeof(SomeAttributes),
                 ResponseType = typeof(AllAttributes) //This stops it being marked as one way
             };
-            var result = enricher.GetStatusCodes(operation);
+            var result = enricher.GetStatusCodes(operation, Verb);
             result.Length.Should().Be(1);
             result[0].Code.Should().Be(204);
             result[0].Name.Should().Be("No Content");
@@ -120,7 +99,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
                 ResponseType = typeof(AllAttributes) //This stops it being marked as one way
             };
 
-            var result = enricher.GetStatusCodes(operation);
+            var result = enricher.GetStatusCodes(operation, Verb);
             result.Length.Should().Be(2);
             result[0].Code.Should().Be(201);
             result[0].Description.Should().Be("Thing created");
@@ -140,7 +119,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
                 RequestType = typeof(AllAttributes),
             };
 
-            var result = enricher.GetStatusCodes(operation);
+            var result = enricher.GetStatusCodes(operation, Verb);
             result.Length.Should().Be(3);
 
             result[0].Code.Should().Be(204);
@@ -192,31 +171,51 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             => enricher.GetIsRequired(propertyInfo).Should().BeTrue();
 
         [Fact]
-        public void GetRelativePath_ReturnsPath_IfRouteAttribute()
+        public void GetRelativePaths_ReturnsPath_IfRouteAttribute()
         {
             var operation = new Operation { RequestType = typeof(AllAttributes) };
-            enricher.GetRelativePaths(operation).Should().Be("/here");
+            var relativePaths = enricher.GetRelativePaths(operation, Verb);
+            relativePaths.Length.Should().Be(1);
+            relativePaths.Should().Contain("/here");
         }
 
         [Fact]
-        public void GetRelativePath_ReturnsOneWayPath_IfNoRouteAttribute_AndOneWay()
+        public void GetRelativePaths_ReturnsOneWayPath_IfNoRouteAttribute_AndOneWay()
         {
             var operation = new Operation { RequestType = typeof(SomeAttributes) };
-            enricher.GetRelativePaths(operation).Should().Be("/json/oneway/SomeAttributes");
+            var relativePaths = enricher.GetRelativePaths(operation, Verb);
+            relativePaths.Length.Should().Be(1);
+            relativePaths.Should().Contain("/json/oneway/SomeAttributes");
         }
 
         [Fact]
-        public void GetRelativePath_ReturnsReplyPath_IfNoRouteAttribute_AndNotOneWay()
+        public void GetRelativePaths_ReturnsReplyPath_IfNoRouteAttribute_AndNotOneWay()
         {
             var operation = new Operation { RequestType = typeof(SomeAttributes), ResponseType = typeof(OneAttribute) };
-            enricher.GetRelativePaths(operation).Should().Be("/json/reply/SomeAttributes");
+            var relativePaths = enricher.GetRelativePaths(operation, Verb);
+            relativePaths.Length.Should().Be(1);
+            relativePaths.Should().Contain("/json/reply/SomeAttributes");
         }
 
         [Fact]
-        public void GetRelativePath_ReturnsOneWayPath_IfRouteAttributeWithEmptyPath_AndOneWay()
+        public void GetRelativePaths_ReturnsOneWayPath_IfRouteAttributeWithEmptyPath_AndOneWay()
         {
             var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
-            enricher.GetRelativePaths(operation).Should().Be("/json/oneway/EmptyRouteAttribute");
+            var relativePaths = enricher.GetRelativePaths(operation, Verb);
+            relativePaths.Length.Should().Be(1);
+            relativePaths.Should().Contain("/json/oneway/EmptyRouteAttribute");
+        }
+
+        [Theory]
+        [InlineData("GET", "/foo-bar")]
+        [InlineData("POST", "/foo-bar")]
+        [InlineData("PUT", "/json/oneway/RootForVerbs")]
+        public void GetRelativePaths_ReturnsPath_IfRouteAttributeWithPathForVerb(string verb, string path)
+        {
+            var operation = new Operation { RequestType = typeof(RootForVerbs) };
+            var relativePaths = enricher.GetRelativePaths(operation, verb);
+            relativePaths.Length.Should().Be(1);
+            relativePaths.Should().Contain(path);
         }
 
         [Fact]
@@ -229,7 +228,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         public void GetContentTypes_ReturnsAllDefault()
         {
             var operation = new Operation { RequestType = typeof(SomeAttributes) };
-            var contentTypes = enricher.GetContentTypes(operation);
+            var contentTypes = enricher.GetContentTypes(operation, Verb);
 
             contentTypes.Length.Should().Be(6);
             contentTypes.Should().Contain(MimeTypes.Xml)
@@ -249,7 +248,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
                 RequestType = requestType,
                 RestrictTo = requestType.FirstAttribute<RestrictAttribute>()
             };
-            var contentTypes = enricher.GetContentTypes(operation);
+            var contentTypes = enricher.GetContentTypes(operation, Verb);
 
             contentTypes.Length.Should().Be(2);
             contentTypes.Should().Contain(MimeTypes.Json)
@@ -260,7 +259,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         public void GetContentTypes_ObeysExcludeAttribute()
         {
             var operation = new Operation { RequestType = typeof(AllAttributes) };
-            var contentTypes = enricher.GetContentTypes(operation);
+            var contentTypes = enricher.GetContentTypes(operation, Verb);
 
             contentTypes.Length.Should().Be(4);
             contentTypes.Should().Contain(MimeTypes.Xml)
@@ -273,7 +272,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
         public void GetContentTypes_ObeysAddHeader()
         {
             var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
-            var contentTypes = enricher.GetContentTypes(operation);
+            var contentTypes = enricher.GetContentTypes(operation, Verb);
 
             contentTypes.Should().Contain(MimeTypes.Bson);
         }
@@ -307,7 +306,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
             constraint.Values.Should().BeNull();
             constraint.Min.Should().Be(1);
             constraint.Max.Should().Be(10);
-        }*/
+        }
     }
 
     [Api("ApiDescription")]
@@ -340,7 +339,7 @@ namespace ServiceStack.Documentation.Tests.Enrichers
 
     [DataAnnotations.Description("ServiceStackDescription")]
     [Restrict(RequestAttributes.Json | RequestAttributes.Jsv)]
-    public class OneAttribute
+    public class OneAttribute : IService
     {
         public void Holla(SomeAttributes requestDto) { }
 
@@ -350,5 +349,8 @@ namespace ServiceStack.Documentation.Tests.Enrichers
     [Route("")]
     [AddHeader(ContentType = MimeTypes.Bson)]
     public class EmptyRouteAttribute { }
-    
+
+    [Route("/foo-bar", "GET,POST")]
+    public class RootForVerbs { }
+
 }

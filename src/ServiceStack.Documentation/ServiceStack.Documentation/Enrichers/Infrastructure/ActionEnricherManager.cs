@@ -13,7 +13,7 @@ namespace ServiceStack.Documentation.Enrichers.Infrastructure
     using Settings;
 
     // TODO Test this 
-    public class ActionEnricherManager
+    public class ActionEnricherManager : IActionEnricherManager
     {
         private readonly IActionEnricher actionEnricher;
         private readonly ISecurityEnricher securityEnricher;

@@ -7,11 +7,10 @@ namespace ServiceStack.Documentation.Enrichers.Interfaces
     using Host;
     using Models;
 
-    /// <summary>
-    /// Methods for populating a security information on a resource
-    /// </summary>
-    public interface ISecurityEnricher : IEnrich
+    public interface IActionEnricher : IEnrich
     {
-        ApiSecurity GetSecurity(Operation operation, string verb);
+        string[] GetContentTypes(Operation operation, string verb);
+        string[] GetRelativePaths(Operation operation, string verb);
+        StatusCode[] GetStatusCodes(Operation operation, string verb);
     }
 }

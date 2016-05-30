@@ -7,9 +7,19 @@ namespace ServiceStack.Documentation.Models
     using System.Collections.Generic;
     using Extensions;
 
+    /// <summary>
+    /// Represents a group of permission
+    /// </summary>
     public class Permissions
     {
+        /// <summary>
+        /// Specifies that Any of these permissions are required
+        /// </summary>
         public IList<string> AnyOf { get; set; }
+
+        /// <summary>
+        /// A list of permissions, all of which must be present for access
+        /// </summary>
         public IList<string> AllOf { get; set; }
 
         public static Permissions Create(IList<string> anyOf, IList<string> allOf)

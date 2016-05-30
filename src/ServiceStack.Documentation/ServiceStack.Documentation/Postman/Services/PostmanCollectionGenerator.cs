@@ -86,7 +86,7 @@ namespace ServiceStack.Documentation.Postman.Services
                         verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
 
                     var requestId = Guid.NewGuid().ToString();
-                    var request = new PostmanSpecRequest()
+                    var request = new PostmanSpecRequest
                     {
                         Id = requestId,
                         Url = documentation.ApiBaseUrl.CombineWith(verbPath),
