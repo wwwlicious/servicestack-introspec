@@ -6,6 +6,7 @@ namespace ServiceStack.IntroSpec
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using Enrichers;
     using Enrichers.Infrastructure;
@@ -79,10 +80,21 @@ namespace ServiceStack.IntroSpec
             var operations = appHost.Metadata.OperationsMap.FilterValues(OperationsMapFilter);
 
             // Generate documentation from these 
-            log.Debug("Generating documentation...");
+            Stopwatch s = null;
+            if (log.IsDebugEnabled)
+            {
+                log.Debug("Generating documentation...");
+                s = new Stopwatch();
+                s.Start();
+            }
+
             Documentation = DocumentationGenerator.GenerateDocumentation(operations, appHost, config);
 
-            log.Debug("Generated documentation");
+            if (log.IsDebugEnabled)
+            {
+                s.Stop();
+                log.Debug($"Generated documentation. Took {s.ElapsedMilliseconds}ms");
+            }
         }
 
         /// <summary>
