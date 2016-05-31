@@ -307,6 +307,9 @@ The values that are returned are the 3 fields that can be used to filter the oth
 In future this will be used to power a separate application that can aggregrate documentation from multiple different services.
 
 ### Postman
+The 3rd service that is registered can be found at `/spec/postman` and generates JSON that can be consumed by the Postman REST client.
 
-## Settings
-DocumenterSettings class
+Although there is an existing [Postman Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Postman) for ServiceStack which does the same thing, Postman was the easiest format to output the specification information as.
+
+### Restrictions
+The plugin currently does not respect authenticate attributes, it will document them but not restrict visibility or access.
