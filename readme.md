@@ -30,10 +30,12 @@ public override void Configure(Container container)
 When the service starts up this will generate a list of all documentation. The plugin will also render a service which can be accessed at `/spec` to view the generated documentation.
 
 ## Documenting DTOs
-The plugin uses a series of 'enrichers' to generate documentation, these are called in the order as outlined below. By default the approach is for each enricher to only set a value if it has not already been set. The exception for this is if the value is an array (e.g. an array of StatusCodes that may be returned) in this instance the strategy is to union results from various enrichers. This default can be controlled via the `DocumenterSettings` class.
+The plugin uses a series of 'enrichers' to generate documentation, these are called in the order listed below. The general approach is to use Reflection to get as much information as possible which can then be augmented (with descriptions, notes etc) from further sources.
+
+By default the approach is for each enricher to only set a value if it has not already been set. The exception for this is if the value is an array (e.g. an array of StatusCodes that may be returned) in this instance the strategy is to union results from various enrichers. This default can be controlled via the `DocumenterSettings.CollectionStrategy` setting.
 
 ### ReflectionEnricher
-As the name suggests the `ReflectionEnricher` uses reflection to get details about DTOs. The majority of values are taken from attributes.
+The `ReflectionEnricher` uses reflection to get details about DTOs. This uses 
 
 For example the following class would look at a combination of `[Api]`, `[ApiResponse]`, `[Route]`, `[ApiMember]`, `[IgnoreDataMember]` and `[ApiAllowableValues]` attributes to generate the documentation.
 
@@ -100,7 +102,7 @@ public class DemoRequestDocumenter : RequestDtoSpec<DemoRequest>
             .With(p => p.Description, "This is a description of name");
 
         For(t => t.Age)
-            .With(p => p.Title, "This is an optional thing.")
+            .With(p => p.Title, "This is optional.")
             .With(p => p.IsRequired, false);
     }
 }
@@ -139,8 +141,8 @@ public class DemoRequest : IReturn<DemoResponse>
 
     public string Ignored { get; set; }
 
-    /// <summary>This is an optional thing.</summary>
-    public int Optional { get; set; }
+    /// <summary>Age Parameter</summary>
+    public int Age{ get; set; }
 }
 
 /// <summary>
@@ -156,11 +158,39 @@ public class DemoResponse
 
 The XML documentation comments are for general documentation about classes and not specifically for documentating APIs and DTOs but if need be these values can be used.
 
+### FallbackEnricher
+This will use global settings within the `DocumenterSetting` object for setting both fallback values (e.g. `.FallbackNotes` for if no other `Notes` are found) or default values (e.g. `.DefaultTags` which are used alongside tags from other sources.
+```csharp
+DocumenterSettings.FallbackNotes = "Default notes";
+DocumenterSettings.FallbackCategory = "Fallback Category";
+DocumenterSettings.DefaultTags = new[] { "DefaultTag" };
+DocumenterSettings.DefaultStatusCodes = new List<StatusCode>
+{
+   ((StatusCode)429).WithDescription("This is rate limited"),
+};
+Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+```
+The `.With()` method can be used to set multiple values:
+```csharp
+DocumenterSettings.With(fallbackNotes: "Default notes",
+    fallbackCategory: "Fallback Category", 
+    defaultTags: new[] { "DefaultTag" },
+    defaultStatusCodes: new List<StatusCode>{
+        ((StatusCode) 429).WithDescription("This is rate limited")
+    });
+Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+```
+
+
+
+
+
+
 _TODO: Full details of where each property comes from. Fuller example_
 
 ## Customising
 The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` objects that contain the requests to be documented. This filter can be customised by providing a predicate to the plugin using the `ApiSpecFeature.WithOperationsFilter()` method. The default filter excludes any types that have `[Exclude(Feature.Metadata]` or `[Exclude(Feature.ServiceDiscovery]` or any restrictions.
 
 
-
 ## Settings
+DocumenterSettings class
