@@ -49,7 +49,16 @@ namespace ServiceStack.IntroSpec.Enrichers
 
         public string GetNotes(Operation operation, string verb)
         {
-            throw new NotImplementedException();
+            var apiRequest = lookup.SafeGet(operation.RequestType, (IApiRequestSpec)null) as IApiRequestSpec;
+            if (apiRequest == null) return null;
+
+            var dictionary = apiRequest.RouteNotes;
+
+            string verbNotes;
+            if (dictionary.TryGetValue(verb, out verbNotes))
+                return verbNotes;
+
+            return dictionary.SafeGet(Constants.GlobalSettingsKey);
         }
 
         public string GetTitle(MemberInfo mi) 

@@ -19,6 +19,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         private AbstractClassEnricher GetEnricher() => new AbstractClassEnricher();
         private Type dtoType = typeof(MyDto);
         private Type nonDtoType = typeof(MyNonDto);
+        private Type notesDtoType = typeof(MyNotesDto);
 
         [Fact]
         public void GetContentTypes_TypeSpec_ReturnsNull()
@@ -87,6 +88,46 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
                 result.Should().Contain((StatusCode)200).And.Contain((StatusCode)201);
             }
         }
+
+        [Fact]
+        public void GetNotes_ForVerb_ReturnsNull_NoNotes()
+        {
+            using (DocumenterSettings.With(assemblies: new[] { typeof(AbstractClassEnricherTests).Assembly }))
+            {
+                var operation = new Operation { RequestType = nonDtoType };
+                GetEnricher().GetNotes(operation, "GET").Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public void GetNotes_ForVerb_ReturnsGlobal_IfNoVerbSpecific()
+        {
+            using (DocumenterSettings.With(assemblies: new[] { typeof(AbstractClassEnricherTests).Assembly }))
+            {
+                var operation = new Operation { RequestType = dtoType };
+                GetEnricher().GetNotes(operation, "GET").Should().Be("GlobalNotes");
+            }
+        }
+
+        [Fact]
+        public void GetNotes_ForVerb_ReturnsVerb_IfVerbSpecific()
+        {
+            using (DocumenterSettings.With(assemblies: new[] { typeof(AbstractClassEnricherTests).Assembly }))
+            {
+                var operation = new Operation { RequestType = notesDtoType };
+                GetEnricher().GetNotes(operation, "GET").Should().Be("Verb notes");
+            }
+        }
+
+        [Fact]
+        public void GetNotes_ForVerb_ReturnsGlobal_IfVerbSpecific_ForDifferentVerb()
+        {
+            using (DocumenterSettings.With(assemblies: new[] { typeof(AbstractClassEnricherTests).Assembly }))
+            {
+                var operation = new Operation { RequestType = notesDtoType };
+                GetEnricher().GetNotes(operation, "PUT").Should().Be("GlobalNotes");
+            }
+        }
     }
 
     public class MyDto
@@ -95,6 +136,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         public int Bar { get; set; }
     }
 
+    public class MyNotesDto { }
     public class MyNonDto { }
 
     public class MyDtoSpec : RequestSpec<MyDto>
@@ -106,6 +148,17 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
 
             AddStatusCodes((StatusCode)200);
             AddStatusCodes(HttpVerbs.Put, (StatusCode)201);
+
+            AddRouteNotes("GlobalNotes");
+        }
+    }
+
+    public class NotesSpec : RequestSpec<MyNotesDto>
+    {
+        public NotesSpec()
+        {
+            AddRouteNotes("GlobalNotes");
+            AddRouteNotes(HttpVerbs.Get, "Verb notes");
         }
     }
 

@@ -73,6 +73,24 @@ namespace ServiceStack.IntroSpec.Tests.TypeSpec
             documenter.ContentTypes[verbString].Count.Should().Be(2);
             documenter.ContentTypes[verbString].Should().Contain("text/json").And.Contain("text/xml");
         }
+
+        [Fact]
+        public void AddRouteNotes_NoVerb_PopulatesRouteNotesCollection()
+        {
+            const string notes = "foo bar baz";
+            documenter.SetNotes(notes);
+            documenter.RouteNotes[GlobalKey].Should().Be(notes);
+        }
+
+        [Fact]
+        public void AddRouteNotes_Verb_PopulatesRouteNotesCollection()
+        {
+            var verb = HttpVerbs.Get;
+            var verbString = verb.ToString();
+            const string notes = "foo bar baz";
+            documenter.SetNotes(verb, notes);
+            documenter.RouteNotes[verbString].Should().Be(notes);
+        }
     }
 
     internal class RequestDocumenter : RequestSpec<ToDocument>
@@ -84,5 +102,8 @@ namespace ServiceStack.IntroSpec.Tests.TypeSpec
 
         internal void SetContentTypes(params string[] contentTypes) => AddContentTypes(contentTypes);
         internal void SetContentTypes(HttpVerbs verb, params string[] contentTypes) => AddContentTypes(verb, contentTypes);
+
+        internal void SetNotes(string notes) => AddRouteNotes(notes);
+        internal void SetNotes(HttpVerbs verb, string notes) => AddRouteNotes(verb, notes);
     }
 }

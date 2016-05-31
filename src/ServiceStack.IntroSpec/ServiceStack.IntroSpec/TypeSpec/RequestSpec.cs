@@ -19,6 +19,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
     {
         public Dictionary<string, List<StatusCode>> StatusCodes { get; }
         public List<string> Tags { get; }
+        public Dictionary<string, string> RouteNotes { get; }
         public Dictionary<string, List<string>> ContentTypes { get; }
 
         public string Category { get; protected set; }
@@ -44,6 +45,13 @@ namespace ServiceStack.IntroSpec.TypeSpec
             => ContentTypes.UpdateList(Constants.GlobalSettingsKey, contentTypes);
 
         /// <summary>
+        /// Set route notes for this DTO for all verbs
+        /// </summary>
+        /// <param name="notes">Notes to set for this DTO</param>
+        protected void AddRouteNotes(string notes)
+            => RouteNotes[Constants.GlobalSettingsKey] = notes;
+
+        /// <summary>
         /// Set status codes for this DTO that may be returned for specified verb
         /// </summary>
         /// <param name="verb">The verb to set status codes for</param>
@@ -59,9 +67,18 @@ namespace ServiceStack.IntroSpec.TypeSpec
         protected void AddContentTypes(HttpVerbs verb, params string[] contentTypes)
             => ContentTypes.UpdateList(verb.ToString(), contentTypes);
 
+        /// <summary>
+        /// Set route notes for this DTO for specified verb
+        /// </summary>
+        /// <param name="verb">The verb to set notes for</param>
+        /// <param name="notes">Notes to set for this DTO</param>
+        protected void AddRouteNotes(HttpVerbs verb, string notes)
+            => RouteNotes[verb.ToString()] = notes;
+
         protected RequestSpec()
         {
             StatusCodes = new Dictionary<string, List<StatusCode>>(StringComparer.OrdinalIgnoreCase);
+            RouteNotes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             Tags = new List<string>();
             ContentTypes = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         }

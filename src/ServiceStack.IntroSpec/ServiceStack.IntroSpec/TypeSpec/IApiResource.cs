@@ -19,6 +19,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
     {
         Dictionary<string, List<string>> ContentTypes { get; }
         Dictionary<string, List<StatusCode>> StatusCodes { get; }
+        Dictionary<string, string> RouteNotes { get; }
         List<string> Tags { get; }
         string Category { get; }
     }
