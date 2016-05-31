@@ -34,6 +34,7 @@ This comes from implementations of `TypeSpec<T>` or `RequestSpec<T>` so has prop
 | Property Description | `Description` | Uses `.For()` syntax to edit values for property |
 | Property Constraints | `Constraints` | Uses `.For()` syntax to edit values for property |
 | Property Is Required | `IsRequired` | Uses `.For()` syntax to edit values for property |
+| Property Allow Multiple | `AllowMultiple` | Uses `.For()` syntax to edit values for property |
 
 ### XML Enricher
 | Field | Source | Notes |

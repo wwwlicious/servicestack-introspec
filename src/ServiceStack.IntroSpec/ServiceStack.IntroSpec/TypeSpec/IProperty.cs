@@ -12,5 +12,6 @@ namespace ServiceStack.IntroSpec.TypeSpec
         string Description { get; set; }
         bool? IsRequired { get; set; }
         PropertyConstraint Constraint { get; set; }
+        bool? AllowMultiple { get; set; }
     }
 }

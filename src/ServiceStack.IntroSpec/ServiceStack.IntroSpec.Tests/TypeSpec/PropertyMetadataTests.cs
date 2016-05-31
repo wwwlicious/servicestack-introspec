@@ -61,6 +61,15 @@ namespace ServiceStack.IntroSpec.Tests.TypeSpec
 
             metadata.Constraint.Should().Be(propertyConstraint);
         }
+
+        [Fact]
+        public void With_SetsAllowMultiple()
+        {
+            var metadata = GetPropertyMetadata();
+            metadata.With(x => x.AllowMultiple, true);
+
+            metadata.AllowMultiple.Should().BeTrue();
+        }
     }
 
     public class MetadataTestClass

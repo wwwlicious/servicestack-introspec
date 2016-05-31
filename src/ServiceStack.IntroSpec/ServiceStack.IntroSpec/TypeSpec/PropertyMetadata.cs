@@ -19,6 +19,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
         public string Description { get; set; }
         public bool? IsRequired { get; set; }
         public PropertyConstraint Constraint { get; set; }
+        public bool? AllowMultiple { get; set; }
 
         internal MemberInfo MemberInfo { get; private set; }
 
