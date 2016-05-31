@@ -16,7 +16,7 @@ Reflection is the main source of information as it is what the underlying framew
 | Property Description | `[ApiMemberAttribute].Description` | |
 | Property Allow Multiple | `[ApiMemberAttribute].AllowMultiple` | |
 | Property Constraints | `[ApiAllowableValues]` | |
-| Property Is Required | `[ApiMemberAttribute].IsRequired` | |
+| Property Is Required | `[ApiMemberAttribute].IsRequired` or true if type is `Nullable<>` | |
 | Property Param Type | `[ApiMemberAttribute].ParameterType` | |
 
 ### Abstract Class Enricher

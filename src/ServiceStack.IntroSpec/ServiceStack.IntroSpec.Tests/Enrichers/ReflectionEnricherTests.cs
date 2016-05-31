@@ -198,12 +198,19 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             => enricher.GetAllowMultiple(propertyInfo).Should().BeTrue();
 
         [Fact]
-        public void GetIsRequired_PI_ReturnsNull_NoAttribute()
+        public void GetIsRequired_ReturnsNull_NoAttribute()
             => enricher.GetIsRequired(noPropertyInfo).Should().NotHaveValue();
 
         [Fact]
-        public void GetIsRequired_PI_Returns_ApiAttributeName()
+        public void GetIsRequired_Returns_ApiAttribute()
             => enricher.GetIsRequired(propertyInfo).Should().BeTrue();
+
+        [Fact]
+        public void GetIsRequired_ReturnsTrue_NullableType_NoAttribute()
+        {
+            var nullableProp = typeof(SomeAttributes).GetProperty("OptionalVal");
+            enricher.GetIsRequired(nullableProp).Should().BeFalse();
+        }
 
         [Fact]
         public void GetRelativePaths_ReturnsPath_IfRouteAttribute()
@@ -380,6 +387,8 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
 
         [ApiMember(AllowMultiple = true, ParameterType = "body", Description = "we're no here", IsRequired = true, Name = "batcat")]
         public string Thing { get; set; }
+
+        public int? OptionalVal { get; set; }
     }
 
     public class OneWay : IService

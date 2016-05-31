@@ -45,7 +45,16 @@ namespace ServiceStack.IntroSpec.Enrichers
         public string GetDescription(MemberInfo mi) => GetApiMemberAttribute(mi)?.Description;
         public string GetParamType(MemberInfo mi) => GetApiMemberAttribute(mi)?.ParameterType;
         public bool? GetAllowMultiple(MemberInfo mi) => GetApiMemberAttribute(mi)?.AllowMultiple;
-        public bool? GetIsRequired(MemberInfo mi) => GetApiMemberAttribute(mi)?.IsRequired;
+
+        public bool? GetIsRequired(MemberInfo mi)
+        {
+            var apiMemberAttribute = GetApiMemberAttribute(mi);
+
+            if (apiMemberAttribute != null)
+                return apiMemberAttribute.IsRequired;
+
+            return mi.GetFieldPropertyType().IsNullableType() ? false : (bool?) null;
+        }
 
         public string GetNotes(MemberInfo mi) => null;
         public string[] GetExternalLinks(MemberInfo mi) => null;
