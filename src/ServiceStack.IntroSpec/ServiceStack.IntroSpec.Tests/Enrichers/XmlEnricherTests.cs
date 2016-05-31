@@ -7,11 +7,14 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
     using System;
     using System.Reflection;
     using FakeItEasy;
+    using Fixtures;
     using FluentAssertions;
+    using Host;
     using IntroSpec.Enrichers;
     using IntroSpec.XmlDocumentation;
     using Xunit;
 
+    [Collection("AppHost")]
     public class XmlEnricherTests
     {
         private readonly XmlEnricher nullEnricher = new XmlEnricher(null);
@@ -21,6 +24,12 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         private XmlEnricher enricher => new XmlEnricher(lookup);
 
         private static PropertyInfo GetProperty() => Type.GetProperty("TheProp");
+        private readonly AppHostFixture fixture;
+
+        public XmlEnricherTests(AppHostFixture fixture)
+        {
+            this.fixture = fixture;
+        }
 
         [Fact]
         public void GetTitle_ReturnsNull_IfLookupNull() 
@@ -176,6 +185,28 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             const string name = "mr November";
             A.CallTo(() => lookup.GetXmlMember(GetProperty())).Returns(new XmlMember { Name = name });
             enricher.GetTitle(GetProperty()).Should().BeNull();
+        }
+
+        [Fact]
+        public void GetStatusCodes_Null_IfLookupNull()
+            => enricher.GetStatusCodes(new Operation(), "GET").Should().BeNull();
+
+        [Theory]
+        [InlineData("T:System.ArgumentException", "Argument Wrong", 400)]
+        [InlineData("T:System.NotImplementedException", "Can't do that", 405)]
+        public void GetStatusCodes_ReturnsException_DependantOnType(string exceptionName, string exceptionText, int expected)
+        {
+            var operation = new Operation { RequestType = Type };
+
+            A.CallTo(() => lookup.GetXmlMember(Type)).Returns(new XmlMember
+            {
+                Exceptions = new[] { new XmlHasCref { Reference = exceptionName, Text = exceptionText } }
+            });
+
+            var result = enricher.GetStatusCodes(operation, "GET");
+            result.Length.Should().Be(1);
+            result[0].Code.Should().Be(expected);
+            result[0].Description.Should().Be(exceptionText);
         }
     }
 

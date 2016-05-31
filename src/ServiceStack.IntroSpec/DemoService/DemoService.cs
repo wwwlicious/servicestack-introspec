@@ -168,6 +168,8 @@
 
     public class SecureResponse { }
 
+    /// <exception cref="ArgumentException">May throw argument exception</exception>
+    /// <exception cref="UnauthorizedAccessException"></exception>
     [Authenticate(ApplyTo.Get | ApplyTo.Put | ApplyTo.Post | ApplyTo.Delete)]
     [RequiredRole("Admin")]
     [RequiredPermission("CanAccess")]

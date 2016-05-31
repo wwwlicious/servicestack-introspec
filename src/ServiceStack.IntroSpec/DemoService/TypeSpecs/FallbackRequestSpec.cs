@@ -35,6 +35,8 @@ namespace DemoService.TypeSpecs
 
             AddContentTypes("application/hal+json");
 
+            AddRouteNotes(HttpVerbs.Get, "This is a note about GET route");
+
             For(t => t.MyField)
                 .With(p => p.Title, "A field, not a property");
 

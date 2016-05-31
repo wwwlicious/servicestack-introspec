@@ -44,6 +44,7 @@ This comes from implementations of `TypeSpec<T>` or `RequestSpec<T>` so has prop
 | Type Notes | `<remarks>` | |
 | Property Description | `<summary>` | |
 | Property Notes | `<remarks>` | |
+| Status Codes | `<exception>` | Will apply across all verbs. Uses ServiceStack logic for working out StatusCode from Exception type. |
 
 ### Fallback Enricher
 | Field | Source | Notes |
