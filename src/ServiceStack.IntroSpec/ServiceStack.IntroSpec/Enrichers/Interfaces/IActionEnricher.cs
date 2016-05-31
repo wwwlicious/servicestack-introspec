@@ -12,5 +12,6 @@ namespace ServiceStack.IntroSpec.Enrichers.Interfaces
         string[] GetContentTypes(Operation operation, string verb);
         string[] GetRelativePaths(Operation operation, string verb);
         StatusCode[] GetStatusCodes(Operation operation, string verb);
+        string GetNotes(Operation operation, string verb);
     }
 }

@@ -47,6 +47,11 @@ namespace ServiceStack.IntroSpec.Enrichers
         public StatusCode[] GetStatusCodes(Operation operation, string verb)
             => GetFromDictionary(operation, verb, request => request.StatusCodes);
 
+        public string GetNotes(Operation operation, string verb)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetTitle(MemberInfo mi) 
             => GetPropertyValue(mi, property => property?.Title);
 

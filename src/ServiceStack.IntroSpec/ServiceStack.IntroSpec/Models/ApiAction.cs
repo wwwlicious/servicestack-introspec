@@ -8,6 +8,7 @@ namespace ServiceStack.IntroSpec.Models
     {
         public ApiSecurity Security { get; set; }
         public string Verb { get; set; }
+        public string Notes { get; set; }
         public StatusCode[] StatusCodes { get; set; }
         public string[] ContentTypes { get; set; }
         public string[] RelativePaths { get; set; }

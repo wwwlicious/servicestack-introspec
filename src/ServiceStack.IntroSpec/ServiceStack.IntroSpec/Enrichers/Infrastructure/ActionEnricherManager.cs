@@ -74,6 +74,8 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
                 action.RelativePaths =
                     action.RelativePaths.GetBasedOnStrategy(() => actionEnricher.GetRelativePaths(operation, verb));
+
+                action.Notes = action.Notes.GetIfNullOrEmpty(() => actionEnricher.GetNotes(operation, verb));
             }
 
             if (securityEnricher != null)

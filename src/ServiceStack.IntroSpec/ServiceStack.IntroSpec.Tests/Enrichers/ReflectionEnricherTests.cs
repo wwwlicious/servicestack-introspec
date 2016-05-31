@@ -40,12 +40,36 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             => enricher.GetDescription(type).Should().Be(expected);
 
         [Fact]
-        public void GetNotes_ReturnsNull_IfNoRouteAttribute()
+        public void GetNotes_ReturnsNull()
             => enricher.GetNotes(typeof (SomeAttributes)).Should().BeNull();
 
         [Fact]
-        public void GetNotes_ReturnsNotes_IfRouteAttribute()
-            => enricher.GetNotes(typeof(AllAttributes)).Should().Be("These are some notes");
+        public void GetNotes_ForVerb_ReturnsNull_IfNoRouteAttribute()
+        {
+            var operation = new Operation { RequestType = typeof(SomeAttributes) };
+            enricher.GetNotes(operation, "GET").Should().BeNull();
+        }
+
+        [Fact]
+        public void GetNotes_ForVerb_ReturnsNotes_IfRouteAttributeForVerb()
+        {
+            var operation = new Operation { RequestType = typeof(AllAttributes) };
+            enricher.GetNotes(operation, "GET").Should().Be("These are some notes");
+        }
+
+        [Fact]
+        public void GetNotes_ForVerb_ReturnsNull_IfNoRouteAttributeForVerb()
+        {
+            var operation = new Operation { RequestType = typeof(AllAttributes) };
+            enricher.GetNotes(operation, "DELETE").Should().BeNull();
+        }
+
+        [Fact]
+        public void GetNotes_ForVerb_ReturnsNull_IfRouteAttributeForVerbWithoutNotes()
+        {
+            var operation = new Operation { RequestType = typeof(AllAttributes) };
+            enricher.GetNotes(operation, "POST").Should().BeNull();
+        }
 
         [Fact]
         public void GetStatusCodes_ReturnsEmptyArray_IfNoApiResponseAttribute()
@@ -351,7 +375,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         }
 
         [Fact]
-        public void GetNotes_ReturnsNull() => enricher.GetNotes(noPropertyInfo).Should().BeNull();
+        public void GetNotes_MI_ReturnsNull() => enricher.GetNotes(noPropertyInfo).Should().BeNull();
 
         [Fact]
         public void GetExternalLinks_ReturnsNull() => enricher.GetExternalLinks(noPropertyInfo).Should().BeNull();
@@ -364,7 +388,8 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
     [Api("ApiDescription")]
     [System.ComponentModel.Description("ComponentModelDescription")]
     [DataAnnotations.Description("ServiceStackDescription")]
-    [Route("/here", Notes = "These are some notes")]
+    [Route("/here", Notes = "These are some notes", Verbs = "GET")]
+    [Route("/there", Verbs = "POST")]
     [ApiResponse(201, "Thing created")]
     [ApiResponse(503, "Not available")]
     [Exclude(Feature.Soap)]

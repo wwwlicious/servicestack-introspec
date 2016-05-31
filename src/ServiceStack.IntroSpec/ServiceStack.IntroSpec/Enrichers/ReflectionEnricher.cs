@@ -36,8 +36,7 @@ namespace ServiceStack.IntroSpec.Enrichers
         // [Api] then [ComponentModel.Description] then [DataAnnotations.Description]
         public string GetDescription(Type type) => type.GetDescription();
 
-        public string GetNotes(Type type) => type.FirstAttribute<RouteAttribute>()?.Notes;
-
+        public string GetNotes(Type type) => null;
         public string GetCategory(Operation operation) => null;
         public string[] GetTags(Operation operation) => null;
 
@@ -130,9 +129,8 @@ namespace ServiceStack.IntroSpec.Enrichers
         public string[] GetRelativePaths(Operation operation, string verb)
         {
             var requestType = operation.RequestType;
-
-            var routeAttributes = requestType.GetCustomAttributes<RouteAttribute>().Where(
-                    r => r.IsForVerb(verb) && !string.IsNullOrEmpty(r.Path));
+            var routeAttributes = GetRouteAttributesForVerb(requestType, verb)
+                .Where(r => !string.IsNullOrEmpty(r.Path)).ToList();
 
             if (!routeAttributes.IsNullOrEmpty())
                 return routeAttributes.Select(r => r.Path).ToArray();
@@ -173,6 +171,15 @@ namespace ServiceStack.IntroSpec.Enrichers
             }
 
             return list.ToArray();
+        }
+
+        public string GetNotes(Operation operation, string verb)
+        {
+            var requestType = operation.RequestType;
+            var routeAttributes = GetRouteAttributesForVerb(requestType, verb)
+                .Where(r => !string.IsNullOrEmpty(r.Notes)).ToList();
+
+            return routeAttributes.IsNullOrEmpty() ? null : string.Join(". ", routeAttributes.Select(r => r.Notes));
         }
 
         private static bool HasOneWayMethod(Operation operation, string verb)
@@ -226,6 +233,13 @@ namespace ServiceStack.IntroSpec.Enrichers
                                    m.ReturnType == typeof(void)
                                    && m.GetParameters().Any(p => p.ParameterType == operation.RequestType))
                             .Select(o => o.Name).ToList();
+        }
+
+        private static IEnumerable<RouteAttribute> GetRouteAttributesForVerb(Type requestType, string verb)
+        {
+            var routeAttributes = requestType.GetCustomAttributes<RouteAttribute>().Where(
+                r => r.IsForVerb(verb));
+            return routeAttributes;
         }
     }
 }

@@ -7,11 +7,11 @@ Reflection is the main source of information as it is what the underlying framew
 | --- | --- | --- |
 | Type.Title | Type.Name | |
 | Type Description | `[Api]` -> `[ComponentModel].Description` -> `[DataAnnotations].Description` | |
-| Type Notes | `[RouteAttribute].Notes` | |
 | Security | `[Authenticate]` + `[RequiresAnyRole]` + `[RequiredRole]` + `[RequiresAnyPermission]` + `[RequiredPermission]` | Per verb |
 | Content Types | `MetadataPagesConfig.AvailableFormatConfigs` + `[AddHeader].ContentType` -> `[AddHeader].DefaultContentType`. Filtered by `[Restrict]` + `[Exclude]` | Per verb |
-| Relative Path | `[Route]` or OneWay / Reply URL | Per verb |
-| Status Codes | `[ApiResponse]`. 401 + 403 added if requires authentication. 204 added if oneway. | |
+| Relative Path | `[Route].Path` or OneWay / Reply URL | Per verb |
+| Status Codes | `[ApiResponse]`. 401 + 403 added if requires authentication. 204 added if oneway. | Per Verb |
+| Route Notes | `[Route].Notes` | Per Verb |
 | Property Title | `[ApiMemberAttribute].Name` | |
 | Property Description | `[ApiMemberAttribute].Description` | |
 | Property Allow Multiple | `[ApiMemberAttribute].AllowMultiple` | |

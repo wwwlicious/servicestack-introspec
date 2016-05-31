@@ -10,5 +10,6 @@ namespace ServiceStack.IntroSpec.Models
         string[] RelativePaths { get; set; }
         StatusCode[] StatusCodes { get; set; }
         string Verb { get; set; }
+        string Notes { get; set; }
     }
 }
