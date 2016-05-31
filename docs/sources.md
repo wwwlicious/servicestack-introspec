@@ -1,6 +1,16 @@
 ## Information Sources
 The following tables document where the various reflections read information from.
 
+By default the approach is for each enricher to only set a value if it has not already been set. The exception for this is if the value is an array (e.g. an array of StatusCodes that may be returned) in this instance the strategy is to union results from various enrichers. This default can be controlled via the `DocumenterSettings.CollectionStrategy` setting.
+
+The fields that each provider populates differs as not every source can supply all data. There are 5 interfaces that the enrichers can implement:
+
+* `IResourceEnricher` - a Resource is any request/response DTO type, or types embedded in a request/response DTO.
+* `IPropertyEnricher` - a property is an individual property of a resource.
+* `IRequestEnricher` - the IRequestEnricher is for populating fields related to Request DTOs.
+* `IActionEnricher` - an Action is a Verb for a request (e.g. PersonRequest GET and PersonRequest POST are 2 different actions). This allows for handling of different routes or authentication settings per verb.
+* `ISecurityEnricher` - for populating any security information (roles, permissions etc).
+
 ### Reflection Enricher
 Reflection is the main source of information as it is what the underlying framework uses to process/restrict/construct requests.
 | Field | Source | Notes |

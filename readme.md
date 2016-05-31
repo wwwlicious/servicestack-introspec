@@ -1,6 +1,8 @@
 # ServiceStack.IntroSpec
 
-A plugin for [ServiceStack](https://servicestack.net/) that generates a series of POCOs documenting all available services as well as request and response DTOs. These POCOs will allow the data tbe be visualised in a number of standard API documentation formats (e.g. postman, swagger, RAML).
+A plugin for [ServiceStack](https://servicestack.net/) that generates a series of POCOs documenting all available services as well as request and response DTOs. These POCOs will allow the data to be be visualised in a number of standard API documentation formats (e.g. postman, swagger, RAML).
+
+![Formats](assets/MultiFormat.png)
 
 The plugin uses introspection on a number of different sources to generate as rich a set of documentation possible.
 
@@ -27,15 +29,17 @@ public override void Configure(Container container)
 }
 ```
 
-When the service starts up this will generate a list of all documentation. The plugin will also render a service which can be accessed at `/spec` to view the generated documentation.
+When the service starts up this will generate a list of all documentation.
 
 ## Documenting DTOs
-The plugin uses a series of 'enrichers' to generate documentation, these are called in the order listed below. The general approach is to use Reflection to get as much information as possible which can then be augmented (with descriptions, notes etc) from further sources.
+The plugin uses the `Metadata Plugin` as the seed for all operations then uses a series of 'enrichers' to generate documentation, these are called in the order listed below. The general approach is to use Reflection to get as much information as possible which can then be augmented (with descriptions, notes etc) from further sources.
 
-By default the approach is for each enricher to only set a value if it has not already been set. The exception for this is if the value is an array (e.g. an array of StatusCodes that may be returned) in this instance the strategy is to union results from various enrichers. This default can be controlled via the `DocumenterSettings.CollectionStrategy` setting.
+![Enrichment](assets/Enrichment.png)
+
+For full details of the sources of data for the various enrichers please see [Sources](/docs/sources.md)
 
 ### ReflectionEnricher
-The `ReflectionEnricher` uses reflection to get details about DTOs. This uses 
+The `ReflectionEnricher` uses reflection to generate documentation. This is the best source of information as it uses many of the same mechanisms as ServiceStack to determine information.
 
 For example the following class would look at a combination of `[Api]`, `[ApiResponse]`, `[Route]`, `[ApiMember]`, `[IgnoreDataMember]` and `[ApiAllowableValues]` attributes to generate the documentation.
 
@@ -64,30 +68,27 @@ public class DemoResponse
 	public string Message { get; set; }
 }
 ```
-Although some of these attributes are originally for alternative purposes they give a good description of the DTO.
-
-_TODO: Full details of where each property comes from_
+This approach uses a combination of attributes, DTO and service types and implemented interfaces to generate a good description of a service.
 
 ### AbstractClassEnricher
-This uses an approach similar to [FluentValidation](https://github.com/ServiceStack/ServiceStack/wiki/Validation#fluentvalidation-for-request-dtos). 
+This uses an approach similar to [FluentValidation](https://github.com/ServiceStack/ServiceStack/wiki/Validation#fluentvalidation-for-request-dtos) to provide additional information about objects.
 
-The enricher scans for implementations of `RequestSpec<T>` (for RequestDTOs) `TypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
+The enricher scans for implementations of `RequestSpec<T>` (for Request DTOs) `TypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
 
 ```charp
-public class DemoRequestDocumenter : RequestDtoSpec<DemoRequest>
+public class DemoRequestDocumenter : RequestSpec<DemoRequest>
 {
     public DemoRequestDocumenter()
     {
         Title = "Plain request title from abstract";
         Description = "Demo Request Description";
-        Notes = "Notes about request";
+        Notes = "Notes about demo request";
 
         Category = "Category1";
 
-        AddVerbs("GET", "POST");
         AddTags("Tag1", "Tag2", "Tag3");
 
-        AddStatusCodes(
+        AddStatusCodes(HttpVerbs.Post,
             new StatusCode
             {
                 Code = 500,
@@ -96,10 +97,12 @@ public class DemoRequestDocumenter : RequestDtoSpec<DemoRequest>
             },
             (StatusCode)HttpStatusCode.OK);
 
+		AddContentTypes(HttpVerbs.Get, "application/x-custom-type");
+
         For(t => t.Name)
             .With(p => p.Title, "Name parameter")
             .With(p => p.IsRequired, true)
-            .With(p => p.Description, "This is a description of name");
+            .With(p => p.Description, "This is a description of name.");
 
         For(t => t.Age)
             .With(p => p.Title, "This is optional.")
@@ -107,7 +110,7 @@ public class DemoRequestDocumenter : RequestDtoSpec<DemoRequest>
     }
 }
 
-public class DemoResponseDocumenter : ApiDtoSpec<DemoResponse>
+public class DemoResponseDocumenter : TypeSpec<DemoResponse>
 {
     public DemoResponseDocumenter()
     {
@@ -116,17 +119,13 @@ public class DemoResponseDocumenter : ApiDtoSpec<DemoResponse>
 		
 		For(t => t.Message)
 			.With(p => p.Title, "Response Message")
-            .With(p => p.Description, "The returned message");
+            .With(p => p.Description, "The message returned from service.");
     }
 }
 ```
-This approach allows for very explicit setting of properties as these classes are specifically for this purpose.
-_TODO: Full details of where each property comes from_
-
+This approach allows for very explicit setting of properties. Whilst they will have no effect to the processing of requests it provides the ability to generate rich documentation about DTOs.
 ### XmlEnricher
-This uses the standard C# Xml Documentation Comments to generate documentation. 
-
-For this to work the XML documentation file must be generated for the service. To do so RMC project -> Properties -> Build -> check "XML documentation file" box, _insert screenshot_.
+This uses the standard [C# Xml Documentation Comments](https://msdn.microsoft.com/en-us/library/b2s063f7(v=vs.140).aspx) to generate documentation. 
 
 ```csharp
 /// <summary>
@@ -158,8 +157,10 @@ public class DemoResponse
 
 The XML documentation comments are for general documentation about classes and not specifically for documentating APIs and DTOs but if need be these values can be used.
 
+__Note:__ for this to work the XML documentation file must be generated for the service. To do so RMC project -> Properties -> Build -> check "XML documentation file" box.
+
 ### FallbackEnricher
-This will use global settings within the `DocumenterSetting` object for setting both fallback values (e.g. `.FallbackNotes` for if no other `Notes` are found) or default values (e.g. `.DefaultTags` which are used alongside tags from other sources.
+This will use global settings within the `DocumenterSetting` object for setting both fallback values (e.g. `.FallbackNotes` for if no other `Notes` are found) or default values (e.g. `.DefaultTags` which are combined with tags from other sources).
 ```csharp
 DocumenterSettings.FallbackNotes = "Default notes";
 DocumenterSettings.FallbackCategory = "Fallback Category";
@@ -181,16 +182,131 @@ DocumenterSettings.With(fallbackNotes: "Default notes",
 Plugins.Add(new ApiSpecFeature(apiSpecConfig));
 ```
 
-
-
-
-
-
-_TODO: Full details of where each property comes from. Fuller example_
-
 ## Customising
 The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` objects that contain the requests to be documented. This filter can be customised by providing a predicate to the plugin using the `ApiSpecFeature.WithOperationsFilter()` method. The default filter excludes any types that have `[Exclude(Feature.Metadata]` or `[Exclude(Feature.ServiceDiscovery]` or any restrictions.
 
+
+## Output
+3 services are registered as part of this service
+
+### Spec
+
+The plugin will also register a service which can be accessed at `/spec` to view the raw generated documentation POCOs.
+
+This endpoint can optionally be filtered by `?requestDto`, `?tags` and/or `?categories`.
+
+Example output is:
+```json
+{
+  "ApiDocumentation": {
+    "Title": "DemoDocumentationService",
+    "ApiVersion": "2.0",
+    "ApiBaseUrl": "http://127.0.0.1:8090/",
+    "Description": "This is a demo app host setup for testing documentation.",
+    "LicenceUrl": "http://mozilla.org/MPL/2.0/",
+    "Contact": {
+      "Name": "Joe Bloggs",
+      "Email": "email@address.com"
+    },
+    "Resources": [
+      {
+        "TypeName": "FallbackRequest",
+        "Title": "Fallback request title",
+        "Description": "Fallback request desc",
+        "Properties": [
+          {
+            "Id": "Name",
+            "ClrType": "System.String, mscorlib",
+            "Title": "Name parameter abstract class definition",
+            "IsRequired": true
+          },
+          {
+            "Id": "Age",
+            "ClrType": "System.Int32, mscorlib",
+            "Title": "Age is optional",
+            "IsRequired": false,
+            "Contraints": {
+              "Name": "Age Range",
+              "Min": 0,
+              "Max": 120,
+              "Type": "Range"
+            }
+          }
+        ],
+        "Actions": [
+          {
+            "Verb": "GET",
+            "Notes": "This is a note about GET route",
+            "StatusCodes": [
+              {
+                "Code": 429,
+                "Description": "This is rate limited",
+                "Name": "Too Many Requests"
+              },
+              {
+                "Code": 200,
+                "Name": "OK"
+              }
+            ],
+            "ContentTypes": [
+              "application/xml",
+              "application/json"
+            ],
+            "RelativePaths": [
+              "/fallback"
+            ]
+          }
+        ],
+        "ReturnType": {
+          "Title": "ComplexResponse"
+          "Properties": [
+            {
+              "Id": "Message",
+              "ClrType": "System.String, mscorlib",
+              "Title": "Message",
+              "Description": "The returned message"
+            }
+          ]
+        },
+        "Category": "Category1",
+        "Tags": [
+          "Tag1",
+          "DefaultTag"
+        ]
+      }
+    ]
+  }
+}
+```
+### Spec Metadata
+The plugin will also register a service which can be accessed at `/spec/summary` to view the raw generated documentation POCOs. This will return some metadata about the documentation.
+
+The values that are returned are the 3 fields that can be used to filter the other 2 services: Request DTO Name, Tags and Category. E.g.
+
+```json
+{
+  "DtoNames": [
+    "DemoRequest",
+    "FallbackRequest",
+    "EmptyDtoRequest",
+    "OneWayRequest",
+    "SecureRequest"
+  ],
+  "Categories": [
+    "Fallback Category",
+    "Category1"
+  ],
+  "Tags": [
+    "DefaultTag",
+    "Tag1",
+    "Tag2",
+    "Tag3"
+  ]
+}
+```
+In future this will be used to power a separate application that can aggregrate documentation from multiple different services.
+
+### Postman
 
 ## Settings
 DocumenterSettings class
