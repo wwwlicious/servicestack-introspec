@@ -60,22 +60,25 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             result.Should().BeEmpty();
         }
 
-        [Fact]
-        public void GetStatusCodes_204_IfNoResponseType()
+        [Theory]
+        [InlineData("GET")]
+        [InlineData("POST")]
+        [InlineData("PUT")]
+        public void GetStatusCodes_204_IfNoOneWayRequest(string verb)
         {
             var operation = new Operation
             {
-                ServiceType = typeof(OneAttribute),
+                ServiceType = typeof(OneWay),
                 RequestType = typeof(SomeAttributes)
             };
-            var result = enricher.GetStatusCodes(operation, Verb);
+            var result = enricher.GetStatusCodes(operation, verb);
             result.Length.Should().Be(1);
             result[0].Code.Should().Be(204);
             result[0].Name.Should().Be("No Content");
         }
 
         [Fact]
-        public void GetStatusCodes_204_IfContainsVoidReturn()
+        public void GetStatusCodes_204_IfVoidReturnForVerb()
         {
             var operation = new Operation
             {
@@ -87,6 +90,19 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             result.Length.Should().Be(1);
             result[0].Code.Should().Be(204);
             result[0].Name.Should().Be("No Content");
+        }
+
+        [Fact]
+        public void GetStatusCodes_No204_IfNoReturnForVerb()
+        {
+            var operation = new Operation
+            {
+                ServiceType = typeof(OneAttribute),
+                RequestType = typeof(SomeAttributes),
+                ResponseType = typeof(AllAttributes) //This stops it being marked as one way
+            };
+            var result = enricher.GetStatusCodes(operation, "POST");
+            result.Length.Should().Be(0);
         }
 
         [Fact]
@@ -366,11 +382,18 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         public string Thing { get; set; }
     }
 
+    public class OneWay : IService
+    {
+        public void Any(SomeAttributes requestDto) { }
+    }
+
     [DataAnnotations.Description("ServiceStackDescription")]
     [Restrict(RequestAttributes.Json | RequestAttributes.Jsv)]
     public class OneAttribute : IService
     {
-        public void Holla(SomeAttributes requestDto) { }
+        public void Get(SomeAttributes requestDto) { }
+
+        public object Post(SomeAttributes requestDto) => Response();
 
         public string Response() => "travel is dangerous";
     }

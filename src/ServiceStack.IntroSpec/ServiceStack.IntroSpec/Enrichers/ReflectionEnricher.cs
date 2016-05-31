@@ -141,7 +141,7 @@ namespace ServiceStack.IntroSpec.Enrichers
 
             // NOTE +3 as could have 204, 401 and a 403 in addition to those set
             var list = new List<StatusCode>(responseAttributes.Length + 2);
-            if (HasOneWayMethod(operation))
+            if (HasOneWayMethod(operation, verb))
             {
                 log.Debug($"Operation for request {operation.RequestType.Name} has void return. Adding 204 response.");
                 list.Add((StatusCode)HttpStatusCode.NoContent);
@@ -166,15 +166,14 @@ namespace ServiceStack.IntroSpec.Enrichers
             return list.ToArray();
         }
 
-        private static bool HasOneWayMethod(Operation operation)
+        private static bool HasOneWayMethod(Operation operation, string verb)
         {
             if (operation.IsOneWay)
                 return true;
 
-            return operation.ServiceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Any(m =>
-                    m.ReturnType == typeof(void)
-                    && m.GetParameters().Any(p => p.ParameterType == operation.RequestType));
+            var voidOperations = GetVoidReturningServiceOperations(operation);
+
+            return !voidOperations.IsNullOrEmpty() && voidOperations.Contains(verb, StringComparer.OrdinalIgnoreCase);
         }
 
         private ApiMemberAttribute GetApiMemberAttribute(MemberInfo pi)
@@ -210,5 +209,14 @@ namespace ServiceStack.IntroSpec.Enrichers
 
         private static bool VerbHasSecurityRestrictions(bool hasAuth, Permissions roles, Permissions permissions)
             => !hasAuth && (roles == null) && (permissions == null);
+
+        private static List<string> GetVoidReturningServiceOperations(Operation operation)
+        {
+            return operation.ServiceType.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                            .Where(m =>
+                                   m.ReturnType == typeof(void)
+                                   && m.GetParameters().Any(p => p.ParameterType == operation.RequestType))
+                            .Select(o => o.Name).ToList();
+        }
     }
 }
