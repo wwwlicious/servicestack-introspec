@@ -83,6 +83,15 @@ namespace ServiceStack.IntroSpec.Settings
             set { DocumenterSettingsScope.Current.DefaultContentTypes = value; }
         }
 
+        /// <summary>
+        /// The default notes to be set for a route.
+        /// </summary>
+        public static string FallbackRouteNotes
+        {
+            get { return DocumenterSettingsScope.Current.FallbackRouteNotes; }
+            set { DocumenterSettingsScope.Current.FallbackRouteNotes = value; }
+        }
+
         public static DocumenterSettingsScope BeginScope() => new DocumenterSettingsScope();
 
         public static DocumenterSettingsScope With(
@@ -93,7 +102,8 @@ namespace ServiceStack.IntroSpec.Settings
             IEnumerable<StatusCode> defaultStatusCodes = null,
             string fallbackCategory = null,
             IEnumerable<string> defaultTags = null,
-            IEnumerable<string> defaultContentTypes = null)
+            IEnumerable<string> defaultContentTypes = null,
+            string fallbackRouteNotes = null)
         {
             return new DocumenterSettingsScope
             {
@@ -104,7 +114,8 @@ namespace ServiceStack.IntroSpec.Settings
                 DefaultStatusCodes = defaultStatusCodes,
                 FallbackCategory = fallbackCategory,
                 DefaultTags = defaultTags,
-                DefaultContentTypes = defaultContentTypes
+                DefaultContentTypes = defaultContentTypes,
+                FallbackRouteNotes = fallbackRouteNotes
             };
         }
     }

@@ -30,6 +30,7 @@ This comes from implementations of `TypeSpec<T>` or `RequestSpec<T>` so has prop
 | Tags | `Tags` | |
 | Content Types | `ContentTypes` | Global or per verb |
 | Status Codes | `StatusCodes` | Global or per verb |
+| Route Notes | `RouteNotes` | Global or per verb |
 | Property Title | `Title` | Uses `.For()` syntax to edit values for property|
 | Property Description | `Description` | Uses `.For()` syntax to edit values for property |
 | Property Constraints | `Constraints` | Uses `.For()` syntax to edit values for property |
@@ -52,3 +53,4 @@ This comes from implementations of `TypeSpec<T>` or `RequestSpec<T>` so has prop
 | Tags | `DocumenterSettings.DefaultTags` | By default these will be combined with any other tags.|
 | Content Types | `DocumenterSettings.DefaultContentTypes` | By default these will be combined with any other content types. |
 | Status Codes | `DocumenterSettings.DefaultStatusCodes` | By default these will be combined with any other status codes. |
+| Route Notes | `DocumenterSettings.FallbackRouteNotes` | This will be used in the event of no other notes being found. |

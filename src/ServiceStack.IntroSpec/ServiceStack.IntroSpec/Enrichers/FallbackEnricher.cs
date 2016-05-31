@@ -25,10 +25,8 @@ namespace ServiceStack.IntroSpec.Enrichers
         public string[] GetContentTypes(Operation operation, string verb) => DocumenterSettings.DefaultContentTypes?.ToArray();
 
         public StatusCode[] GetStatusCodes(Operation operation, string verb) => DocumenterSettings.DefaultStatusCodes?.ToArray();
-        public string GetNotes(Operation operation, string verb)
-        {
-            throw new NotImplementedException();
-        }
+
+        public string GetNotes(Operation operation, string verb) => DocumenterSettings.FallbackRouteNotes;
 
         public string[] GetRelativePaths(Operation operation, string verb) => null;
 

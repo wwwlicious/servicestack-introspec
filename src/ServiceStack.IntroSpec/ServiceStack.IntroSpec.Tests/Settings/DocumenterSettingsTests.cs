@@ -225,5 +225,33 @@ namespace ServiceStack.IntroSpec.Tests.Settings
 
             DocumenterSettings.DefaultContentTypes.Should().BeEquivalentTo(contentTypes);
         }
+        
+        [Fact]
+        public void FallbackRouteNotes_DefaultNull()
+        {
+            using (var scope = DocumenterSettings.BeginScope())
+                scope.FallbackRouteNotes.Should().BeNull();
+        }
+
+        [Fact]
+        public void With_FallbackRouteNotes_SetsNotes()
+        {
+            const string notes = "watertight notes";
+            var settings = DocumenterSettings.With(fallbackRouteNotes: notes);
+            settings.FallbackRouteNotes.Should().Be(notes);
+        }
+
+        [Fact]
+        public void BeginScope_SetsFallbackRouteNotesForScope()
+        {
+            const string notes = "watertight notes";
+            DocumenterSettings.FallbackRouteNotes = notes;
+
+            const string scopeNotes = "snake eyes";
+            using (var settings = DocumenterSettings.With(fallbackRouteNotes: scopeNotes))
+                settings.FallbackRouteNotes.Should().Be(scopeNotes);
+
+            DocumenterSettings.FallbackRouteNotes.Should().Be(notes);
+        }
     }
 }

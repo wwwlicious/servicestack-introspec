@@ -67,5 +67,13 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             using (DocumenterSettings.With(defaultContentTypes: contentTypes))
                 fallback.GetContentTypes(operation, "GET").Should().BeEquivalentTo(contentTypes);
         }
+
+        [Fact]
+        public void GetNotes_ReturnsFallbackRouteNotes_FromSettings()
+        {
+            const string notes = "this is a good route";
+            using (DocumenterSettings.With(fallbackRouteNotes: notes))
+                fallback.GetNotes(operation, "GET").Should().Be(notes);
+        }
     }
 }

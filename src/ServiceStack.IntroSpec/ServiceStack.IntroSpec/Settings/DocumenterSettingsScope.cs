@@ -67,6 +67,11 @@ namespace ServiceStack.IntroSpec.Settings
         /// </summary>
         public IEnumerable<string> DefaultContentTypes { get; internal set; }
 
+        /// <summary>
+        /// The default notes to be set for a route
+        /// </summary>
+        public string FallbackRouteNotes { get; internal set; }
+
         private bool disposed;
         private readonly DocumenterSettingsScope parent;
 
