@@ -50,7 +50,7 @@ namespace ServiceStack.IntroSpec
             "ServiceStack.Admin",
             "ServiceStack.NativeTypes",
             "ServiceStack.Api.Swagger",
-            "ServiceStack.Documentation"
+            "ServiceStack.IntroSpec"
         };
 
         public Func<KeyValuePair<Type, Operation>, bool> OperationsMapFilter { get; private set; } = kvp =>
