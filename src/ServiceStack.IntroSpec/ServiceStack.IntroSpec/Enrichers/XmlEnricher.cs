@@ -20,6 +20,7 @@ namespace ServiceStack.IntroSpec.Enrichers
     public class XmlEnricher : IResourceEnricher, IPropertyEnricher, IActionEnricher
     {
         private readonly IXmlDocumentationLookup lookup;
+        private readonly Dictionary<Type, StatusCode[]> statusCodes = new Dictionary<Type, StatusCode[]>();
         private readonly ILog log = LogManager.GetLogger(typeof(XmlEnricher));
 
         public XmlEnricher(IXmlDocumentationLookup lookup)
@@ -56,6 +57,12 @@ namespace ServiceStack.IntroSpec.Enrichers
         public StatusCode[] GetStatusCodes(Operation operation, string verb)
         {
             var type = operation.RequestType;
+            return statusCodes.SafeGetOrInsert(type, () => GetStatusCodesInternal(type));
+        }
+
+        private StatusCode[] GetStatusCodesInternal(Type type)
+        {
+            log.Debug($"Getting StatusCode information for {type.Name}");
 
             var xmlMember = lookup.GetXmlMember(type);
 
@@ -69,17 +76,17 @@ namespace ServiceStack.IntroSpec.Enrichers
             if (exceptions.IsNullOrEmpty())
                 return null;
 
-            var statusCodes = new List<StatusCode>(xmlMember.Exceptions.Length);
+            var statusCodesWorkingList = new List<StatusCode>(xmlMember.Exceptions.Length);
 
             foreach (var exception in exceptions)
             {
                 var code = GetStatusCodeFromExceptionName(exception.Reference);
                 if (code != null)
-                    statusCodes.Add(code.WithDescription(exception.Text));
+                    statusCodesWorkingList.Add(code.WithDescription(exception.Text));
                 else
-                    statusCodes.Add((StatusCode) 500);
+                    statusCodesWorkingList.Add((StatusCode) 500);
             }
-            return statusCodes.ToArray();
+            return statusCodesWorkingList.ToArray();
         }
 
         private string GetNotesInternal(MemberInfo mi) => GetXmlMember(mi)?.Remarks?.Text;

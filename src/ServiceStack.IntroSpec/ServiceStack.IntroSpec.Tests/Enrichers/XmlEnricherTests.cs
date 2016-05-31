@@ -189,7 +189,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
 
         [Fact]
         public void GetStatusCodes_Null_IfLookupNull()
-            => enricher.GetStatusCodes(new Operation(), "GET").Should().BeNull();
+            => enricher.GetStatusCodes(new Operation { RequestType = Type }, "GET").Should().BeNull();
 
         [Theory]
         [InlineData("T:System.ArgumentException", "Argument Wrong", 400)]
