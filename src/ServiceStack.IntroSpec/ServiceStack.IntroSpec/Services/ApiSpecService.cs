@@ -7,6 +7,9 @@ namespace ServiceStack.IntroSpec.Services
     using DTO;
     using Extensions;
 
+#if !DEBUG
+    [CacheResponse(MaxAge = 300, Duration = 600)]
+#endif
     public class ApiSpecService : Service
     {
         private readonly IApiDocumentationProvider documentationProvider;

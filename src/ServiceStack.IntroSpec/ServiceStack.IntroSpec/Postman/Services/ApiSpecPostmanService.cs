@@ -8,6 +8,9 @@ namespace ServiceStack.IntroSpec.Postman.Services
     using Extensions;
     using IntroSpec.Services;
 
+#if !DEBUG
+    [CacheResponse(MaxAge = 300, Duration = 600)]
+#endif
     public class ApiSpecPostmanService : IService
     {
         private readonly IApiDocumentationProvider documentationProvider;
