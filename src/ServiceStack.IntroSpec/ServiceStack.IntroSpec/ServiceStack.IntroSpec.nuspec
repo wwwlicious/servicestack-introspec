@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ServiceStack.IntroSpec</id>
+    <version>$version$</version>
+    <authors>Donald Gray (@donaldgray)</authors>
+    <description>ServiceStack plugin that uses introspection to generate documentation about services in AppHost</description>
+    <projectUrl>https://github.com/MacLeanElectrical/ServiceStack-IntroSpec</projectUrl>
+    <licenseUrl>https://opensource.org/licenses/MPL-2.0</licenseUrl>
+    <iconUrl>https://servicestack.net/img/logo-32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>servicestack microservices introspection documentation spec specification api</tags>
+    <releaseNotes>See github project for details</releaseNotes>
+    <dependencies>
+      <dependency id="ServiceStack" version="[4.0.56, 5)" />
+    </dependencies>
+  </metadata>
+</package>
