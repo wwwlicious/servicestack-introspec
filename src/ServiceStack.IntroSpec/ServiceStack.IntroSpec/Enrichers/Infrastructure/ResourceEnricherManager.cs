@@ -41,7 +41,6 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
         private void EnrichResource(IApiResourceType resource, Type type)
         {
-            // The object that has ResponseStatus is built up from request object
             if (resourceEnricher != null)
             {
                 if (resource.Title == resource.TypeName)

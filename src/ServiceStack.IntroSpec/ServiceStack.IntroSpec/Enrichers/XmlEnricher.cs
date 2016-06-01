@@ -28,7 +28,6 @@ namespace ServiceStack.IntroSpec.Enrichers
             this.lookup = lookup;
         }
 
-        public string GetTitle(Type type) => null;
         public string GetDescription(Type type) => GetDescriptionInternal(type);
         public string GetNotes(Type type) => GetNotesInternal(type);
 
@@ -44,6 +43,7 @@ namespace ServiceStack.IntroSpec.Enrichers
 
         public string GetNotes(MemberInfo mi) => GetNotesInternal(mi);
 
+        public string GetTitle(Type type) => null;
         public string GetTitle(MemberInfo mi) => null;
         public bool? GetAllowMultiple(MemberInfo mi) => null;
         public string[] GetExternalLinks(MemberInfo mi) => null;

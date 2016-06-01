@@ -13,7 +13,7 @@ namespace ServiceStack.IntroSpec.Models
     public class Permissions
     {
         /// <summary>
-        /// Specifies that Any of these permissions are required
+        /// Specifies that Any of these permissions are required for access
         /// </summary>
         public IList<string> AnyOf { get; set; }
 

@@ -6,7 +6,6 @@ namespace ServiceStack.IntroSpec.Models
 {
     public class ApiResourceType : IApiResourceType
     {
-        // These will need key'd by something (Type?) for finding + enriching
         private string title;
         public string Title
         {

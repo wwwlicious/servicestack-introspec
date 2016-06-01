@@ -7,7 +7,6 @@ namespace ServiceStack.IntroSpec.Models
     public interface IApiRequest : IApiMetadata
     {
         ApiResourceType ReturnType { get; set; }
-
         ApiAction[] Actions { get; set; }
     }
 }

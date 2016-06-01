@@ -19,7 +19,6 @@ namespace ServiceStack.IntroSpec.Enrichers
     /// <summary>
     /// Enricher that will use Reflection to enrich object. 
     /// </summary>
-    /// <remarks>This primarily looks at Attributes as well as types etc</remarks>
     public class ReflectionEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher, ISecurityEnricher, IActionEnricher
     {
         private readonly ILog log = LogManager.GetLogger(typeof(ReflectionEnricher));
@@ -32,14 +31,7 @@ namespace ServiceStack.IntroSpec.Enrichers
         }
 
         public string GetTitle(Type type) => type.Name;
-
-        // [Api] then [ComponentModel.Description] then [DataAnnotations.Description]
         public string GetDescription(Type type) => type.GetDescription();
-
-        public string GetNotes(Type type) => null;
-        public string GetCategory(Operation operation) => null;
-        public string[] GetTags(Operation operation) => null;
-
         public string GetTitle(MemberInfo mi) => GetApiMemberAttribute(mi)?.Name;
         public string GetDescription(MemberInfo mi) => GetApiMemberAttribute(mi)?.Description;
         public string GetParamType(MemberInfo mi) => GetApiMemberAttribute(mi)?.ParameterType;
@@ -55,6 +47,9 @@ namespace ServiceStack.IntroSpec.Enrichers
             return mi.GetFieldPropertyType().IsNullableType() ? false : (bool?) null;
         }
 
+        public string GetNotes(Type type) => null;
+        public string GetCategory(Operation operation) => null;
+        public string[] GetTags(Operation operation) => null;
         public string GetNotes(MemberInfo mi) => null;
         public string[] GetExternalLinks(MemberInfo mi) => null;
 
@@ -147,7 +142,7 @@ namespace ServiceStack.IntroSpec.Enrichers
             var responseAttributes = apiResponseAttributes as ApiResponseAttribute[] ?? apiResponseAttributes.ToArray();
 
             // NOTE +3 as could have 204, 401 and a 403 in addition to those set
-            var list = new List<StatusCode>(responseAttributes.Length + 2);
+            var list = new List<StatusCode>(responseAttributes.Length + 3);
             if (HasOneWayMethod(operation, verb))
             {
                 log.Debug($"Operation for request {operation.RequestType.Name} has void return. Adding 204 response.");

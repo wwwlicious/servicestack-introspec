@@ -108,6 +108,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
             if (property.EmbeddedResource == null)
                 property.EmbeddedResource = new ApiResourceType();
+
             enrichResource(property.EmbeddedResource, fieldPropertyType);
         }
     }

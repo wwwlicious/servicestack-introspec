@@ -11,7 +11,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
     using Models;
 
     /// <summary>
-    /// Documentation class for a request DTO, including Verbs, status codes etc
+    /// Documentation class for a request DTO, including status codes etc
     /// </summary>
     /// <typeparam name="T">DTO Type that is being decorated</typeparam>
     public abstract class RequestSpec<T> : TypeSpec<T>, IApiRequestSpec

@@ -26,15 +26,12 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
         public ApiAction[] EnrichActions(ApiAction[] actions, Operation operation)
         {
             // Build a list of all possible Verbs
-            // Will need to have run through all operations to get a list o'verbs
             var verbs = GetVerbs(operation);
 
             // For each verb create an ApiAction object and populate it's properties.
             Dictionary<string, ApiAction> actionLookup;
             List<ApiAction> actionWorkingSet = null;
             bool newList = false;
-
-            // For every there will be at least 1 verb but possibly more
 
             if (actions.IsNullOrEmpty())
             {
@@ -45,11 +42,10 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             else
                 actionLookup = actions.ToDictionary(k => k.Verb, v => v);
 
-            // Iterate through each verb and update the appropriate actionObject
+            // Iterate through each verb and update the appropriate action object
             foreach (var verb in verbs)
             {
-                // Do I need to seed ApiAction with anything
-                var action = actionLookup.SafeGet(verb, () => new ApiAction { Verb = verb });
+                var action = actionLookup.SafeGet(verb, new ApiAction { Verb = verb });
 
                 EnrichAction(action, operation);
 

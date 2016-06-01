@@ -70,29 +70,30 @@ namespace ServiceStack.IntroSpec.Postman.Services
                 foreach (var action in resource.Actions)
                 {
                     // Get any pathVariables that are present (variable place holders in route)
-                    var untoucherRelativePath = action.RelativePaths.First();
-                    var pathVariableNames = untoucherRelativePath.GetPathParams();
-                    string relativePath = pathVariableNames.Aggregate(untoucherRelativePath,
+                    var untouchedRelativePath = action.RelativePaths.First();
+                    var pathVariableNames = untouchedRelativePath.GetPathParams();
+
+                    // Replace pathVariable names so that /api/{name}/ becomes /api/:name/
+                    string relativePath = pathVariableNames.Aggregate(untouchedRelativePath,
                         (current, match) => current.Replace($"{{{match}}}", $":{match}"));
 
                     if (!pathVariableNames.IsNullOrEmpty())
                         relativePath = relativePath.EnsureEndsWith("/");
 
                     // Add path vars regardless of verb
-                    Dictionary<string, string> pathVars = GetPathVariabless(data, pathVariableNames);
+                    Dictionary<string, string> pathVars = GetPathVariables(data, pathVariableNames);
 
                     log.Debug($"Generating PostmanRequest for resource {resource.Title}, {action}");
 
                     var hasRequestBody = action.Verb.HasRequestBody();
-                    string verbPath = relativePath;
                     if (!hasRequestBody)
-                        verbPath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
+                        relativePath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
 
                     var requestId = Guid.NewGuid().ToString();
                     var request = new PostmanSpecRequest
                     {
                         Id = requestId,
-                        Url = documentation.ApiBaseUrl.CombineWith(verbPath),
+                        Url = documentation.ApiBaseUrl.CombineWith(relativePath),
                         Method = action.Verb,
                         Time = DateTime.UtcNow.ToUnixTimeMs(),
                         Name = resource.Title,
@@ -132,7 +133,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
             return folder;
         }
 
-        private static Dictionary<string, string> GetPathVariabless(List<PostmanSpecData> data, List<string> pathVariables)
+        private static Dictionary<string, string> GetPathVariables(List<PostmanSpecData> data, List<string> pathVariables)
         {
             var pathVars = data.Where(t => pathVariables.Contains(t.Key, StringComparer.OrdinalIgnoreCase))
                                .ToDictionary(k => k.Key, v => v.Value);

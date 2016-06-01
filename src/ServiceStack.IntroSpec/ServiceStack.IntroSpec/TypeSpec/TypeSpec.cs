@@ -11,7 +11,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
     using Extensions;
 
     /// <summary>
-    /// Documentation class for default object exposed in API (nested type, return object etc)
+    /// Documentation class for default object exposed in API
     /// </summary>
     /// <typeparam name="T">Object type that is being decorated</typeparam>
     public abstract class TypeSpec<T> : IApiResource, IApiPropertyResource

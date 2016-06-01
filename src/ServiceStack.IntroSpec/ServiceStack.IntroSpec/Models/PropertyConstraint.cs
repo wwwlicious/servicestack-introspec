@@ -20,7 +20,7 @@ namespace ServiceStack.IntroSpec.Models
                 throw new InvalidOperationException("You must supply either a Min or Max value");
 
             if ((min ?? int.MinValue) > (max ?? int.MaxValue))
-                throw new ArgumentOutOfRangeException(nameof(max), "Min cannot be creater than Max");
+                throw new ArgumentOutOfRangeException(nameof(max), "Min cannot be greater than Max");
 
             return new PropertyConstraint { Name = name, Min = min, Max = max, Type = ConstraintType.Range };
         }

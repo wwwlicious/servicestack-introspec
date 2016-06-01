@@ -8,7 +8,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Interfaces
     using Models;
 
     /// <summary>
-    /// Methods for populating a security information on a resource
+    /// Methods for populating security information for an action
     /// </summary>
     public interface ISecurityEnricher : IEnrich
     {

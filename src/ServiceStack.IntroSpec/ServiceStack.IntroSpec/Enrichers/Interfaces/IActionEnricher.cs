@@ -7,6 +7,9 @@ namespace ServiceStack.IntroSpec.Enrichers.Interfaces
     using Host;
     using Models;
 
+    /// <summary>
+    /// Basic operations for implementing a request action
+    /// </summary>
     public interface IActionEnricher : IEnrich
     {
         string[] GetContentTypes(Operation operation, string verb);

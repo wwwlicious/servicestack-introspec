@@ -24,8 +24,6 @@ namespace ServiceStack.IntroSpec.Models
 
         public ApiResourceDocumentation[] Resources { get; set; }
 
-        // Security
-
         public ApiDocumentation CreateCopy(Func<ApiResourceDocumentation, bool> resourcesFilter)
         {
             var apiDocumentation = MemberwiseClone() as ApiDocumentation;

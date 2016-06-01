@@ -9,6 +9,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Interfaces
     /// <summary>
     /// Methods for populating a resource object
     /// </summary>
+    /// <remarks>Resource is any object returned (embedded in a DTO or the DTO itself).</remarks>
     public interface IResourceEnricher : IEnrich
     {
         string GetTitle(Type type);

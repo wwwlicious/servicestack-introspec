@@ -24,7 +24,6 @@ namespace ServiceStack.IntroSpec.Postman.Services
             // Get the filtered documentation object
             var documentation = documentationProvider.GetApiDocumentation().Filter(request);
             
-            // TODO Look at the cookies that are in the current postman plugin
             var postmanGenerator = new PostmanCollectionGenerator();
             var collection = postmanGenerator.Generate(documentation);
             return collection;

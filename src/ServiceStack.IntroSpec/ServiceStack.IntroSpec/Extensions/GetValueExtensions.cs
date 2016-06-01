@@ -12,25 +12,17 @@ namespace ServiceStack.IntroSpec.Extensions
     public static class GetValueExtensions
     {
         public static string GetIfNullOrEmpty(this string value, Func<string> getValue)
-        {
-            return string.IsNullOrEmpty(value) ? getValue() : value;
-        }
+            => string.IsNullOrEmpty(value) ? getValue() : value;
 
-        public static T GetIfNull<T>(this T value, Func<T> getValue)
-            where T : class
-        {
-            return value ?? getValue();
-        }
+        public static T GetIfNull<T>(this T value, Func<T> getValue) 
+            where T : class 
+            => value ?? getValue();
 
         public static T[] GetIfNullOrEmpty<T>(this T[] array, Func<T[]> getValue)
-        {
-            return array.IsNullOrEmpty() ? getValue() : array;
-        }
+            => array.IsNullOrEmpty() ? getValue() : array;
 
-        public static T? GetIfNoValue<T>(this T? value, Func<T?> getValue)
+        public static T? GetIfNoValue<T>(this T? value, Func<T?> getValue) 
             where T : struct
-        {
-            return !value.HasValue ? getValue() : value;
-        }
+            => !value.HasValue ? getValue() : value;
     }
 }
