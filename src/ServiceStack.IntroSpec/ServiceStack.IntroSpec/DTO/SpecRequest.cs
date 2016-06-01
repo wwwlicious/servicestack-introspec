@@ -11,7 +11,7 @@ namespace ServiceStack.IntroSpec.DTO
     public class SpecRequest : IReturn<SpecResponse>, IFilterableSpecRequest
     {
         public string[] DtoName { get; set; }
-        public string[] Categories { get; set; }
-        public string[] Tags { get; set; }
+        public string[] Category { get; set; }
+        public string[] Tag { get; set; }
     }
 }

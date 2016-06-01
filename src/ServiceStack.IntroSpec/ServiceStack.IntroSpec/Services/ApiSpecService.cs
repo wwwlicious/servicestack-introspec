@@ -25,7 +25,6 @@ namespace ServiceStack.IntroSpec.Services
             // Get the filtered documentation to return
             var documentation = documentationProvider.GetApiDocumentation().Filter(request);
 
-            // TODO Filter out by auth permissions
             return new SpecResponse { ApiDocumentation = documentation };
         }
     }

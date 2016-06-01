@@ -36,16 +36,16 @@ namespace ServiceStack.IntroSpec.Extensions
                 predicate = predicate.And(doc => request.DtoName.Contains(doc.TypeName, StringComparer.OrdinalIgnoreCase));
             }
 
-            if (!request.Tags.IsNullOrEmpty())
+            if (!request.Tag.IsNullOrEmpty())
             {
                 hasFilter = true;
-                predicate = predicate.And(doc => request.Tags.Any(t => doc.Tags.Contains(t, StringComparer.OrdinalIgnoreCase)));
+                predicate = predicate.And(doc => request.Tag.Any(t => doc.Tags.Contains(t, StringComparer.OrdinalIgnoreCase)));
             }
 
-            if (!request.Categories.IsNullOrEmpty())
+            if (!request.Category.IsNullOrEmpty())
             {
                 hasFilter = true;
-                predicate = predicate.And(doc => request.Categories.Contains(doc.Category, StringComparer.OrdinalIgnoreCase));
+                predicate = predicate.And(doc => request.Category.Contains(doc.Category, StringComparer.OrdinalIgnoreCase));
             }
 
             return hasFilter ? predicate : null;
