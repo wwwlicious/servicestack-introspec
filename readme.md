@@ -311,5 +311,7 @@ The 3rd service that is registered can be found at `/spec/postman` and generates
 
 Although there is an existing [Postman Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Postman) for ServiceStack which does the same thing, Postman was the easiest format to output the specification information as.
 
+This endpoint can optionally be filtered by `?requestDto`, `?tags` and/or `?categories`.
+
 ### Restrictions
 The plugin currently does not respect authenticate attributes, it will document them but not restrict visibility or access.

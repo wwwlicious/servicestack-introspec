@@ -11,8 +11,12 @@ The fields that each provider populates differs as not every source can supply a
 * `IActionEnricher` - an Action is a Verb for a request (e.g. PersonRequest GET and PersonRequest POST are 2 different actions). This allows for handling of different routes or authentication settings per verb.
 * `ISecurityEnricher` - for populating any security information (roles, permissions etc).
 
+Each enricher will implement 1 or more of these to provide appropriate data. Whether this data is used or not is determined by the EnricherManager classes.
+
 ### Reflection Enricher
 Reflection is the main source of information as it is what the underlying framework uses to process/restrict/construct requests.
+
+A collection of attributes and Type information is used as the source of information.
 | Field | Source | Notes |
 | --- | --- | --- |
 | Type.Title | Type.Name | |
@@ -30,7 +34,9 @@ Reflection is the main source of information as it is what the underlying framew
 | Property Param Type | `[ApiMemberAttribute].ParameterType` | |
 
 ### Abstract Class Enricher
-This comes from implementations of `TypeSpec<T>` or `RequestSpec<T>` so has properties explicitly set for each field.
+This uses implementations of `TypeSpec<T>` or `RequestSpec<T>` so has properties explicitly set for each field.
+
+By default the EntryAssembly is scanned for implementations of this interface but this can be customised by setting the `DocumenterSettings.Assemblies` property.
 | Field | Source | Notes |
 | --- | --- | --- |
 | Type.Title | `Title` | |
@@ -48,15 +54,19 @@ This comes from implementations of `TypeSpec<T>` or `RequestSpec<T>` so has prop
 | Property Allow Multiple | `AllowMultiple` | Uses `.For()` syntax to edit values for property |
 
 ### XML Enricher
+As mentioned in the main readme, XML documentation file output must be turned on for the XML Documentation Comments to be readable at runtime.
+
 | Field | Source | Notes |
 | --- | --- | --- |
-| Type Description | `<summary>` | |
-| Type Notes | `<remarks>` | |
-| Property Description | `<summary>` | |
-| Property Notes | `<remarks>` | |
+| Type Description | `<summary>` | Summary from declaring class |
+| Type Notes | `<remarks>` | Remarks from declaring class |
+| Property Description | `<summary>` | Summary from property |
+| Property Notes | `<remarks>` | Remarks from property |
 | Status Codes | `<exception>` | Will apply across all verbs. Uses ServiceStack logic for working out StatusCode from Exception type. |
 
 ### Fallback Enricher
+All data that the fallback enricher provides is supplied by properties of the `DocumenterSettings` class.
+
 | Field | Source | Notes |
 | --- | --- | --- |
 | Type Notes | `DocumenterSettings.FallbackNotes` | These will be used in the event of no other notes being found. |
