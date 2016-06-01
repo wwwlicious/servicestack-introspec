@@ -1,6 +1,9 @@
-# ServiceStack.IntroSpec
+# ![Logo](assets/logo_notext.png) ServiceStack.IntroSpec
+
 
 A plugin for [ServiceStack](https://servicestack.net/) that generates a series of POCOs documenting all available services as well as request and response DTOs. These POCOs will allow the data to be be visualised in a number of standard API documentation formats (e.g. postman, swagger, RAML).
+
+---
 
 ![Formats](assets/MultiFormat.png)
 
