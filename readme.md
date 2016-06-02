@@ -85,7 +85,7 @@ This uses an approach similar to [FluentValidation](https://github.com/ServiceSt
 
 The enricher scans for implementations of `AbstractRequestSpec<T>` (for Request DTOs) `AbstractTypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
 
-```charp
+```csharp
 public class DemoRequestSpec : AbstractRequestSpec<DemoRequest>
 {
     public DemoRequestAbstract()
