@@ -9,8 +9,8 @@ namespace ServiceStack.IntroSpec.DTO
     /// </summary>
     public interface IFilterableSpecRequest
     {
-        string[] DtoName { get; set; }
-        string[] Category { get; set; }
-        string[] Tag { get; set; }
+        string[] DtoNames { get; set; }
+        string[] Categories { get; set; }
+        string[] Tags { get; set; }
     }
 }

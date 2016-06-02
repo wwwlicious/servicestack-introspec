@@ -30,22 +30,22 @@ namespace ServiceStack.IntroSpec.Extensions
 
             // The true predicate is just a starter to use as base
             var predicate = PredicateBuilder.True<ApiResourceDocumentation>();
-            if (!request.DtoName.IsNullOrEmpty())
+            if (!request.DtoNames.IsNullOrEmpty())
             {
                 hasFilter = true;
-                predicate = predicate.And(doc => request.DtoName.Contains(doc.TypeName, StringComparer.OrdinalIgnoreCase));
+                predicate = predicate.And(doc => request.DtoNames.Contains(doc.TypeName, StringComparer.OrdinalIgnoreCase));
             }
 
-            if (!request.Tag.IsNullOrEmpty())
+            if (!request.Tags.IsNullOrEmpty())
             {
                 hasFilter = true;
-                predicate = predicate.And(doc => request.Tag.Any(t => doc.Tags.Contains(t, StringComparer.OrdinalIgnoreCase)));
+                predicate = predicate.And(doc => request.Tags.Any(t => doc.Tags.Contains(t, StringComparer.OrdinalIgnoreCase)));
             }
 
-            if (!request.Category.IsNullOrEmpty())
+            if (!request.Categories.IsNullOrEmpty())
             {
                 hasFilter = true;
-                predicate = predicate.And(doc => request.Category.Contains(doc.Category, StringComparer.OrdinalIgnoreCase));
+                predicate = predicate.And(doc => request.Categories.Contains(doc.Category, StringComparer.OrdinalIgnoreCase));
             }
 
             return hasFilter ? predicate : null;

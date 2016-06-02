@@ -4,14 +4,21 @@
 
 namespace ServiceStack.IntroSpec.DTO
 {
+    using System.Runtime.Serialization;
     using DataAnnotations;
 
     [Route(Constants.SpecUri)]
     [Exclude(Feature.Metadata | Feature.ServiceDiscovery)]
+    [DataContract]
     public class SpecRequest : IReturn<SpecResponse>, IFilterableSpecRequest
     {
-        public string[] DtoName { get; set; }
-        public string[] Category { get; set; }
-        public string[] Tag { get; set; }
+        [DataMember(Name = "DtoName")]
+        public string[] DtoNames { get; set; }
+
+        [DataMember(Name = "Category")]
+        public string[] Categories { get; set; }
+
+        [DataMember(Name = "Tag")]
+        public string[] Tags { get; set; }
     }
 }

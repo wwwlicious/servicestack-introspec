@@ -196,7 +196,7 @@ The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` obj
 
 The plugin will also register a service which can be accessed at `/spec` to view the raw generated documentation POCOs.
 
-This endpoint can optionally be filtered by `?requestDto`, `?tags` and/or `?categories`.
+This endpoint can optionally be filtered by `?requestDto`, `?tag` and/or `?category`.
 
 Example output is:
 ```json
@@ -314,7 +314,7 @@ The 3rd service that is registered can be found at `/spec/postman` and generates
 
 Although there is an existing [Postman Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Postman) for ServiceStack which does the same thing, Postman was the easiest format to output the specification information as.
 
-This endpoint can optionally be filtered by `?requestDto`, `?tags` and/or `?categories`.
+This endpoint can optionally be filtered by `?requestDto`, `?tag` and/or `?category`.
 
 ### Restrictions
 The plugin currently does not respect authenticate attributes, it will document them but not restrict visibility or access.

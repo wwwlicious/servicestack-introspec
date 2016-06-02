@@ -4,16 +4,23 @@
 
 namespace ServiceStack.IntroSpec.Postman.DTO
 {
+    using System.Runtime.Serialization;
     using DataAnnotations;
     using IntroSpec.DTO;
     using Models;
 
     [Route(Constants.PostmanSpecUri)]
     [Exclude(Feature.Metadata | Feature.ServiceDiscovery)]
+    [DataContract]
     public class PostmanRequest : IReturn<PostmanSpecCollection>, IFilterableSpecRequest
     {
-        public string[] DtoName { get; set; }
-        public string[] Category { get; set; }
-        public string[] Tag { get; set; }
+        [DataMember(Name = "DtoName")]
+        public string[] DtoNames { get; set; }
+
+        [DataMember(Name = "Category")]
+        public string[] Categories { get; set; }
+
+        [DataMember(Name = "Tag")]
+        public string[] Tags { get; set; }
     }
 }
