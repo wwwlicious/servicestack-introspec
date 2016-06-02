@@ -11,7 +11,7 @@ The plugin uses introspection on a number of different sources to generate as ri
 
 ## Quick Start
 
-The plugin is added like any other. It has a dependency [Metadata Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Metadata-page) and by default requires that `AppHost.Config.WebHostUrl` is set. It also takes an instance of `ApiSpecConfig` as a constructor argument, as a minimum this must be populated with `Contact.Email`, `Contact.Name` and `Description`.
+The plugin is added like any other. It has a dependency [Metadata Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Metadata-page) and by default requires that `AppHost.Config.WebHostUrl` is set. It also takes a delegate to create an instance of `ApiSpecConfig` as a constructor argument, as a minimum this must be populated with `Contact.Email`, `Contact.Name` and `Description`. There is a fluent interface which aids in the creation of the`ApiSpecConfig` object.
 ```csharp
 public override void Configure(Container container)
 {
@@ -21,25 +21,26 @@ public override void Configure(Container container)
         WebHostUrl = "http://api.example.com:8001",
     });
 
-	var apiSpecConfig = new ApiSpecConfig
-    {
-        Contact = new ApiContact { Email = "test@example.com", Name = "Joe Bloggs" },
-        Description = "Service description"
-    };
-
 	// Register plugin
-	Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+    Plugins.Add(new ApiSpecFeature(config =>
+        config.WithDescription("This is a demo app host for testing.")
+              .WithLicenseUrl(new Uri("http://mozilla.org/MPL/2.0/"))
+              .WithContactName("Joe Bloggs")
+              .WithContactEmail("email@address.com")));
 }
 ```
+
+There is a `DocumenterSettings` class that can be used to configure certain behaviours and provide fallback values. See [Settings](docs/settings.md) for details of options.
 
 When the service starts up this will generate a list of all documentation.
 
 ## Documenting DTOs
 The plugin uses the `Metadata Plugin` as the seed for all operations then uses a series of 'enrichers' to generate documentation, these are called in the order listed below. The general approach is to use Reflection to get as much information as possible which can then be augmented (with descriptions, notes etc) from further sources.
 
+### Enrichment
 ![Enrichment](assets/Enrichment.png)
 
-For full details of the sources of data for the various enrichers please see [Sources](/docs/sources.md)
+For full details of the sources of data for the various enrichers please see [Sources](docs/sources.md)
 
 ### ReflectionEnricher
 The `ReflectionEnricher` uses reflection to generate documentation. This is the best source of information as it uses many of the same mechanisms as ServiceStack to determine information.
@@ -317,4 +318,4 @@ Although there is an existing [Postman Plugin](https://github.com/ServiceStack/S
 This endpoint can optionally be filtered by `?requestDto`, `?tag` and/or `?category`.
 
 ### Restrictions
-The plugin currently does not respect authenticate attributes, it will document them but not restrict visibility or access.
+The plugin currently does not respect `AuthenticateAttribute`, it will document them but not restrict visibility or access.
