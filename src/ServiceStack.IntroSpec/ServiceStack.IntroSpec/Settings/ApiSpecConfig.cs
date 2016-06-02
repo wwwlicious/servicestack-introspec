@@ -6,12 +6,54 @@ namespace ServiceStack.IntroSpec.Settings
 {
     using System;
     using Models;
+    using TypeSpec;
 
-    public class ApiSpecConfig
+    public class ApiSpecConfig : IFluentInterface
     {
         public string Description { get; set; }
         public Uri LicenseUrl { get; set; }
 
-        public ApiContact Contact { get; set; }
+        private ApiContact contact;
+        public ApiContact Contact
+        {
+            get { return contact ?? (contact = new ApiContact()); }
+            set { contact = value; }
+        }
+
+        public ApiSpecConfig WithDescription(string description)
+        {
+            Description = description;
+            return this;
+        }
+
+        public ApiSpecConfig WithLicenseUrl(Uri licenseUrl)
+        {
+            LicenseUrl = licenseUrl;
+            return this;
+        }
+
+        public ApiSpecConfig WithContact(ApiContact apiContact)
+        {
+            Contact = apiContact;
+            return this;
+        }
+
+        public ApiSpecConfig WithContactName(string name)
+        {
+            Contact.Name = name;
+            return this;
+        }
+
+        public ApiSpecConfig WithContactUrl(Uri url)
+        {
+            Contact.Url = url;
+            return this;
+        }
+
+        public ApiSpecConfig WithContactEmail(string email)
+        {
+            Contact.Email = email;
+            return this;
+        }
     }
 }

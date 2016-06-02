@@ -23,12 +23,6 @@ namespace ServiceStack.IntroSpec.Tests.Validators
         }
 
         [Fact]
-        public void Contact_IsMandatory()
-        {
-            validator.ShouldHaveValidationErrorFor(v => v.Contact, new ApiSpecConfig { Contact = null });
-        }
-
-        [Fact]
         public void Contact_HasValidator()
         {
             validator.ShouldHaveChildValidator(v => v.Contact, typeof(ApiContactValidator));

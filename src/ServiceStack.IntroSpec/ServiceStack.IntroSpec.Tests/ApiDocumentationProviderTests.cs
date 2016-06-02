@@ -39,7 +39,7 @@ namespace ServiceStack.IntroSpec.Tests
                 generator.GenerateDocumentation(A<IEnumerable<Operation>>.Ignored, fixture.AppHost,
                     A<ApiSpecConfig>.Ignored)).Returns(apiDocumentation);
 
-            fixture.AppHost.LoadPlugin(new ApiSpecFeature(apiSpecConfig).WithGenerator(generator));
+            fixture.AppHost.LoadPlugin(new ApiSpecFeature(config => apiSpecConfig).WithGenerator(generator));
 
             var provider = new ApiDocumentationProvider();
             provider.GetApiDocumentation().Should().Be(apiDocumentation);

@@ -62,13 +62,6 @@
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new SwaggerFeature());
 
-            var apiSpecConfig = new ApiSpecConfig
-            {
-                Contact = new ApiContact { Email = "email@address.com", Name = "Joe Bloggs" },
-                Description = "This is a demo app host setup for testing documentation.",
-                LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/")
-            };
-
             //DocumenterSettings.ReplacementVerbs = new[] { "GET", "PUT", "POST", "DELETE" };
             //DocumenterSettings.CollectionStrategy = EnrichmentStrategy.SetIfEmpty;
 
@@ -81,9 +74,13 @@
             };
             DocumenterSettings.FallbackCategory = "Fallback Category";
             DocumenterSettings.DefaultTags = new[] { "DefaultTag" };
-
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
-            Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+
+            Plugins.Add(new ApiSpecFeature(config =>
+                    config.WithDescription("This is a demo app host setup for testing documentation.")
+                          .WithLicenseUrl(new Uri("http://mozilla.org/MPL/2.0/"))
+                          .WithContactName("Joe Bloggs")
+                          .WithContactEmail("email@address.com")));
         }
     }
 }

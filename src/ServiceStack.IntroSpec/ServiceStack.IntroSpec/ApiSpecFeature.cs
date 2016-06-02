@@ -34,6 +34,8 @@ namespace ServiceStack.IntroSpec
         public IApiDocumentationGenerator DocumentationGenerator { get; private set; }
         public Func<IEnumerable<IApiResourceEnricher>> Enrichers { get; private set; }
 
+        public delegate ApiSpecConfig ApiConfigDelegate(ApiSpecConfig config);
+
         // NOTE Similar to what's in NativeTypesFeature - use that if present?
         public static List<string> IgnoreTypesInNamespaces = new List<string>
         {
@@ -59,12 +61,12 @@ namespace ServiceStack.IntroSpec
             !kvp.Key.ExcludesFeature(Feature.Metadata) &&
             !kvp.Key.ExcludesFeature(Feature.ServiceDiscovery);
 
-        // Take object that represents contact details etc
-        public ApiSpecFeature(ApiSpecConfig config)
+        public ApiSpecFeature(ApiConfigDelegate config)
         {
-            config.ThrowIfNull(nameof(config));
-            ConfigValidator.ValidateAndThrow(config);
-            this.config = config;
+            this.config = config(new ApiSpecConfig());
+            this.config.ThrowIfNull(nameof(this.config));
+
+            ConfigValidator.ValidateAndThrow(this.config);
         }
 
         public void Register(IAppHost appHost)

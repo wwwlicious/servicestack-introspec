@@ -4,13 +4,15 @@
 
 namespace ServiceStack.IntroSpec.Models
 {
+    using System;
+
     /// <summary>
     /// Contact details for this api
     /// </summary>
     public class ApiContact
     {
         public string Name { get; set; }
-        public string Url { get; set; }
+        public Uri Url { get; set; }
         public string Email { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace ServiceStack.IntroSpec.Tests
 
             filter = A.Fake<Func<KeyValuePair<Type, Operation>, bool>>();
 
-            feature = new ApiSpecFeature(apiSpecConfig)
+            feature = new ApiSpecFeature(config => apiSpecConfig)
                 .WithGenerator(generator)
                 .WithOperationsFilter(filter);
         }
@@ -50,14 +50,14 @@ namespace ServiceStack.IntroSpec.Tests
         [Fact]
         public void Ctor_Throws_IfConfigNull()
         {
-            Action action = () => new ApiSpecFeature(null);
+            Action action = () => new ApiSpecFeature(config => null);
             action.ShouldThrow<ArgumentNullException>();
         }
 
         [Fact]
         public void Ctor_Throws_IfConfigInvalid()
         {
-            Action action = () => new ApiSpecFeature(new ApiSpecConfig());
+            Action action = () => new ApiSpecFeature(config => config);
             action.ShouldThrow<ArgumentException>();
         }
 
@@ -85,7 +85,7 @@ namespace ServiceStack.IntroSpec.Tests
                 { typeof(TypesKotlin), new Operation { RequestType = typeof(TypesKotlin) } }
             };
 
-            var filter = new ApiSpecFeature(apiSpecConfig).OperationsMapFilter;
+            var filter = new ApiSpecFeature(config => apiSpecConfig).OperationsMapFilter;
 
             var result = operationsMap.Where(o => filter(o)).Select(o => o.Value).ToList();
             result.Count.Should().Be(1);
@@ -105,7 +105,7 @@ namespace ServiceStack.IntroSpec.Tests
                 { requestType, new Operation { RequestType = requestType } }
             };
 
-            var filter = new ApiSpecFeature(apiSpecConfig).OperationsMapFilter;
+            var filter = new ApiSpecFeature(config => apiSpecConfig).OperationsMapFilter;
 
             var result = operationsMap.Where(o => filter(o)).Select(o => o.Value).ToList();
             result.Count.Should().Be(expectedCount);
