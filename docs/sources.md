@@ -17,6 +17,7 @@ Each enricher will implement 1 or more of these to provide appropriate data. Whe
 Reflection is the main source of information as it is what the underlying framework uses to process/restrict/construct requests.
 
 A collection of attributes and Type information is used as the source of information.
+
 | Field | Source | Notes |
 | --- | --- | --- |
 | Type.Title | Type.Name | |
@@ -37,6 +38,7 @@ A collection of attributes and Type information is used as the source of informa
 This uses implementations of `AbstractTypeSpec<T>` or `AbstractRequestSpec<T>` so has properties explicitly set for each field.
 
 By default the EntryAssembly is scanned for implementations of this interface but this can be customised by setting the `DocumenterSettings.Assemblies` property.
+
 | Field | Source | Notes |
 | --- | --- | --- |
 | Type.Title | `Title` | |
