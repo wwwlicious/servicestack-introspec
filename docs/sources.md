@@ -34,7 +34,7 @@ A collection of attributes and Type information is used as the source of informa
 | Property Param Type | `[ApiMemberAttribute].ParameterType` | |
 
 ### Abstract Class Enricher
-This uses implementations of `TypeSpec<T>` or `RequestSpec<T>` so has properties explicitly set for each field.
+This uses implementations of `AbstractTypeSpec<T>` or `AbstractRequestSpec<T>` so has properties explicitly set for each field.
 
 By default the EntryAssembly is scanned for implementations of this interface but this can be customised by setting the `DocumenterSettings.Assemblies` property.
 | Field | Source | Notes |

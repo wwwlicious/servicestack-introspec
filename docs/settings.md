@@ -35,7 +35,7 @@ The following is a list of the available properties, their use and any defaults.
 | Name | Type | Use | Default |
 | --- | --- | --- | --- |
 | ReplacementVerbs | `IEnumerable<string>` | List of verbs that are output in documetation if `Any` supported by service. | GET, POST |
-| Assemblies | `IEnumerable<Assembly>` | List of assemblies to scan for implementations of `TypeSpec<>` | `Assembly.GetEntryAssembly()` |
+| Assemblies | `IEnumerable<Assembly>` | List of assemblies to scan for implementations of `AbstractTypeSpec<>` | `Assembly.GetEntryAssembly()` |
 | CollectionStrategy | `EnrichmentStrategy` | How to deal with collection properties. Options are `Union` - each enricher will provide values and result will be unique union of these. `SetIfEmpty` - lower level enrichers will only provide values if the collection is null or empty. | `EnrichmentStrategy.Union` |
 | FallbackNotes | `string` | Notes to fallback to if no other provided for resource | |
 | FallbackCategory | `string` | Category to fallback to if no other provided | |

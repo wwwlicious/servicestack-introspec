@@ -77,12 +77,12 @@ This approach uses a combination of attributes, DTO and service types and implem
 ### AbstractClassEnricher
 This uses an approach similar to [FluentValidation](https://github.com/ServiceStack/ServiceStack/wiki/Validation#fluentvalidation-for-request-dtos) to provide additional information about objects.
 
-The enricher scans for implementations of `RequestSpec<T>` (for Request DTOs) `TypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
+The enricher scans for implementations of `AbstractRequestSpec<T>` (for Request DTOs) `AbstractTypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
 
 ```charp
-public class DemoRequestDocumenter : RequestSpec<DemoRequest>
+public class DemoRequestSpec : AbstractRequestSpec<DemoRequest>
 {
-    public DemoRequestDocumenter()
+    public DemoRequestAbstract()
     {
         Title = "Plain request title from abstract";
         Description = "Demo Request Description";
@@ -114,9 +114,9 @@ public class DemoRequestDocumenter : RequestSpec<DemoRequest>
     }
 }
 
-public class DemoResponseDocumenter : TypeSpec<DemoResponse>
+public class DemoResponseSpec : AbstractTypeSpec<DemoResponse>
 {
-    public DemoResponseDocumenter()
+    public DemoResponseSpec()
     {
         Title = "Demo response title from documenter";
         Description = "Demo Response Description";
