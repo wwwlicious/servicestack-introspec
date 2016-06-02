@@ -1,5 +1,6 @@
 # ![Logo](assets/logo_notext.png) ServiceStack.IntroSpec
-
+[![Build status](https://ci.appveyor.com/api/projects/status/a6wkmyvd0d3072vg/branch/master?svg=true)](https://ci.appveyor.com/project/wwwlicious/servicestack-introspec/branch/master)
+[![NuGet version](https://badge.fury.io/nu/ServiceStack.IntroSpec.svg)](https://badge.fury.io/nu/ServiceStack.IntroSpec)
 
 A plugin for [ServiceStack](https://servicestack.net/) that generates a series of POCOs documenting all available services as well as request and response DTOs. These POCOs will allow the data to be be visualised in a number of standard API documentation formats (e.g. postman, swagger, RAML).
 
@@ -10,6 +11,11 @@ A plugin for [ServiceStack](https://servicestack.net/) that generates a series o
 The plugin uses introspection on a number of different sources to generate as rich a set of documentation possible.
 
 ## Quick Start
+
+Install the package [https://www.nuget.org/packages/ServiceStack.IntroSpec](https://www.nuget.org/packages/ServiceStack.IntroSpec/)
+```bash
+PM> Install-Package ServiceStack.IntroSpec
+```
 
 The plugin is added like any other. It has a dependency [Metadata Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Metadata-page) and by default requires that `AppHost.Config.WebHostUrl` is set. It also takes a delegate to create an instance of `ApiSpecConfig` as a constructor argument, as a minimum this must be populated with `Contact.Email`, `Contact.Name` and `Description`. There is a fluent interface which aids in the creation of the`ApiSpecConfig` object.
 ```csharp
