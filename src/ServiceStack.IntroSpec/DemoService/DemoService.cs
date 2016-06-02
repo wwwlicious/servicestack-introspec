@@ -113,7 +113,7 @@
         public Name TheirName { get; set; }
     }
 
-    /// <summary>This comment won't make it's way to documentation as there's a TypeSpec implementation of this.</summary>
+    /// <summary>This comment won't make it's way to documentation as there's a AbstractTypeSpec implementation of this.</summary>
     /// <remarks>Description of Name class from XML comment</remarks>
     public class Name
     {

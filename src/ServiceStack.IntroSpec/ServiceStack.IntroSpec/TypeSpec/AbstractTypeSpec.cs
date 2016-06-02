@@ -14,7 +14,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
     /// Documentation class for default object exposed in API
     /// </summary>
     /// <typeparam name="T">Object type that is being decorated</typeparam>
-    public abstract class TypeSpec<T> : IApiResource, IApiPropertyResource
+    public abstract class AbstractTypeSpec<T> : IApiResource, IApiPropertyResource
         where T : class, new()
     {
         public string Title { get; protected set; }
@@ -23,7 +23,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
 
         private readonly Dictionary<MemberInfo, IProperty> parameterLookup;
 
-        protected TypeSpec()
+        protected AbstractTypeSpec()
         {
             parameterLookup = new Dictionary<MemberInfo, IProperty>();
         }

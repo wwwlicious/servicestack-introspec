@@ -14,7 +14,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
     /// Documentation class for a request DTO, including status codes etc
     /// </summary>
     /// <typeparam name="T">DTO Type that is being decorated</typeparam>
-    public abstract class RequestSpec<T> : TypeSpec<T>, IApiRequestSpec
+    public abstract class AbstractRequestSpec<T> : AbstractTypeSpec<T>, IApiRequestSpec
         where T : class, new()
     {
         public Dictionary<string, List<StatusCode>> StatusCodes { get; }
@@ -75,7 +75,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
         protected void AddRouteNotes(HttpVerbs verb, string notes)
             => RouteNotes[verb.ToString()] = notes;
 
-        protected RequestSpec()
+        protected AbstractRequestSpec()
         {
             StatusCodes = new Dictionary<string, List<StatusCode>>(StringComparer.OrdinalIgnoreCase);
             RouteNotes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

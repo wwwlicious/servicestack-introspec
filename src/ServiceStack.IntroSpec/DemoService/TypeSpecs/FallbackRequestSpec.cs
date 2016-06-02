@@ -5,7 +5,7 @@ namespace DemoService.TypeSpecs
     using ServiceStack.IntroSpec.Models;
     using ServiceStack.IntroSpec.TypeSpec;
 
-    public class FallbackRequestSpec : RequestSpec<FallbackRequest>
+    public class FallbackRequestSpec : AbstractRequestSpec<FallbackRequest>
     {
         public FallbackRequestSpec()
         {
@@ -55,19 +55,19 @@ namespace DemoService.TypeSpecs
         }
     }
 
-    public class NameDocumenter : TypeSpec<Name>
+    public class NameDocumenter : AbstractTypeSpec<Name>
     {
         public NameDocumenter()
         {
             Title = "Title of Name";
-            Description = "This comes from TypeSpec implementation and will be used everywhere that Name is.";
+            Description = "This comes from AbstractTypeSpec implementation and will be used everywhere that Name is.";
 
             For(t => t.Forename)
                 .With(p => p.IsRequired, true);
         }
     }
 
-    public class SecureDocumenter : RequestSpec<SecureRequest>
+    public class SecureDocumenter : AbstractRequestSpec<SecureRequest>
     {
         public SecureDocumenter()
         {

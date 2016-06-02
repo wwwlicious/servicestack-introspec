@@ -139,7 +139,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
     public class MyNotesDto { }
     public class MyNonDto { }
 
-    public class MyDtoSpec : RequestSpec<MyDto>
+    public class MyDtoSpec : AbstractRequestSpec<MyDto>
     {
         public MyDtoSpec()
         {
@@ -153,7 +153,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         }
     }
 
-    public class NotesSpec : RequestSpec<MyNotesDto>
+    public class NotesSpec : AbstractRequestSpec<MyNotesDto>
     {
         public NotesSpec()
         {
@@ -162,5 +162,5 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         }
     }
 
-    public class MyNonDtoSpec : TypeSpec<MyNonDto> { }
+    public class MyNonDtoSpec : AbstractTypeSpec<MyNonDto> { }
 }

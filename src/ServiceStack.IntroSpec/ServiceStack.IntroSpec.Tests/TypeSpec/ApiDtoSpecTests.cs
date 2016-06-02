@@ -40,7 +40,7 @@ namespace ServiceStack.IntroSpec.Tests.TypeSpec
         }
     }
 
-    public class Documenter : TypeSpec<ToDocument>
+    public class Documenter : AbstractTypeSpec<ToDocument>
     {
         public Documenter() {}
         public Documenter(bool addPropertyValue)

@@ -47,7 +47,7 @@ namespace ServiceStack.IntroSpec.TypeSpec
 
         private static IEnumerable<Type> FindAllTypeSpecs(IEnumerable<Type> types)
         {
-            var target = typeof (TypeSpec<>);
+            var target = typeof (AbstractTypeSpec<>);
 
             var foundTypes = from t in types
                 let h = t.GetInheritanceHierarchy().Where(b => b.IsGenericType)

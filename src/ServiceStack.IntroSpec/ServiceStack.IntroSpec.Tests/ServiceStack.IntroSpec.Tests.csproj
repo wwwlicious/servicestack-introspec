@@ -92,7 +92,7 @@
     <Compile Include="TypeSpec\ApiDtoSpecTests.cs" />
     <Compile Include="TypeSpec\DocumentationClassLocatorTests.cs" />
     <Compile Include="TypeSpec\PropertyMetadataTests.cs" />
-    <Compile Include="TypeSpec\RequestSpecTests.cs" />
+    <Compile Include="TypeSpec\AbstractRequestSpecTests.cs" />
     <Compile Include="ApiDocumentationGeneratorTests.cs" />
     <Compile Include="ApiSpecFeatureTests.cs" />
     <Compile Include="DTO\SpecRequestTests.cs" />

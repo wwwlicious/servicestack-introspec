@@ -48,6 +48,6 @@ namespace ServiceStack.IntroSpec.Tests.TypeSpec
     public class AnotherClassToDocument { }
     public class NotDocumented { }
 
-    public class DirectDescendant : TypeSpec<ClassToDocument> { }
-    public class DeeperDescendant : RequestSpec<AnotherClassToDocument> { }
+    public class DirectDescendant : AbstractTypeSpec<ClassToDocument> { }
+    public class DeeperDescendant : AbstractRequestSpec<AnotherClassToDocument> { }
 }

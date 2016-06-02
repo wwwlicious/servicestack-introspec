@@ -23,7 +23,7 @@ namespace ServiceStack.IntroSpec.Settings
         }
 
         /// <summary>
-        /// The assemblies to containing implementations of RequestSpec and TypeSpec. Default: EntryAssembly
+        /// The assemblies to containing implementations of RequestSpec and AbstractTypeSpec. Default: EntryAssembly
         /// </summary>
         private IEnumerable<Assembly> assemblies;
         public IEnumerable<Assembly> Assemblies

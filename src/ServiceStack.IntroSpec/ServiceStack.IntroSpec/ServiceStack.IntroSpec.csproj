@@ -59,7 +59,7 @@
     <Compile Include="DTO\SpecMetadataRequest.cs" />
     <Compile Include="DTO\SpecMetadataResponse.cs" />
     <Compile Include="Services\ApiSpecMetadataService.cs" />
-    <Compile Include="TypeSpec\TypeSpec.cs" />
+    <Compile Include="TypeSpec\AbstractTypeSpec.cs" />
     <Compile Include="TypeSpec\DocumentationClassLocator.cs" />
     <Compile Include="DTO\IFilterableSpecRequest.cs" />
     <Compile Include="DTO\SpecRequest.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Settings\ApiSpecConfig.cs" />
     <Compile Include="ApiSpecFeature.cs" />
-    <Compile Include="TypeSpec\RequestSpec.cs" />
+    <Compile Include="TypeSpec\AbstractRequestSpec.cs" />
     <Compile Include="TypeSpec\IApiResource.cs" />
     <Compile Include="TypeSpec\IFluentInterface.cs" />
     <Compile Include="TypeSpec\IProperty.cs" />

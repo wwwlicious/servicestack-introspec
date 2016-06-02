@@ -10,7 +10,7 @@ namespace ServiceStack.IntroSpec.Tests.TypeSpec
     using IntroSpec.TypeSpec;
     using Xunit;
 
-    public class RequestSpecTests
+    public class AbstractRequestSpecTests
     {
         private const string GlobalKey = "_all";
         private RequestDocumenter documenter = new RequestDocumenter();
@@ -93,7 +93,7 @@ namespace ServiceStack.IntroSpec.Tests.TypeSpec
         }
     }
 
-    internal class RequestDocumenter : RequestSpec<ToDocument>
+    internal class RequestDocumenter : AbstractRequestSpec<ToDocument>
     {
         internal void SetTags(params string[] tags) => AddTags(tags);
 

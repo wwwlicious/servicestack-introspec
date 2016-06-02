@@ -15,7 +15,7 @@ namespace ServiceStack.IntroSpec.Enrichers
     using TypeSpec;
 
     /// <summary>
-    /// Enricher that will use implementations of RequestSpec and TypeSpec to enrich object
+    /// Enricher that will use implementations of AbstractRequestSpec and AbstractTypeSpec to enrich object
     /// </summary>
     public class AbstractClassEnricher : IResourceEnricher, IRequestEnricher, IPropertyEnricher, IActionEnricher
     {
