@@ -197,7 +197,9 @@ The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` obj
 
 
 ## Output
-3 services are registered as part of this service
+3 services are registered as part of this plugin. 
+
+A demo site running this plugin is available at [http://introspec.servicestack.net/](http://introspec.servicestack.net/).
 
 ### Spec
 
