@@ -5,6 +5,8 @@
 namespace ServiceStack.IntroSpec.Tests.Extensions
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using FluentAssertions;
     using IntroSpec.Extensions;
@@ -59,6 +61,22 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var fieldInfo = typeof(FirstClass).GetField("Field");
             fieldInfo.GetFieldPropertyType().Should().Be<DateTime>();
         }
+
+        [Theory]
+        [InlineData(typeof(int[]))]
+        [InlineData(typeof(IEnumerable<int>))]
+        [InlineData(typeof(IList))]
+        [InlineData(typeof(List<int>))]
+        [InlineData(typeof(ICollection<int>))]
+        public void IsCollection_True_ForCollectionTypes(Type collectionType)
+            => collectionType.IsCollection().Should().BeTrue();
+
+        [Theory]
+        [InlineData(typeof(int))]
+        [InlineData(typeof(string))]
+        [InlineData(typeof(SecondClass))]
+        public void IsCollection_False_ForNotCollectionTypes(Type collectionType)
+            => collectionType.IsCollection().Should().BeFalse();
 
         public class FirstClass
         {

@@ -35,6 +35,8 @@ namespace ServiceStack.IntroSpec.Enrichers
         public string GetNotes(Type type) 
             => lookup.SafeGetFromValue(type, v => v.Notes, null);
 
+        public bool? GetAllowMultiple(Type type) => null;
+
         public string GetCategory(Operation operation)
             => lookup.SafeGetFromValue(operation.RequestType, v => (v as IApiRequestSpec)?.Category, null);
 

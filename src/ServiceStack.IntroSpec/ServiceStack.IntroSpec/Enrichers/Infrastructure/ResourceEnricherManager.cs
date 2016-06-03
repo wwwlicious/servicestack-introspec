@@ -48,6 +48,8 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
                 resource.Description = resource.Description.GetIfNullOrEmpty(() => resourceEnricher.GetDescription(type));
                 resource.Notes = resource.Notes.GetIfNullOrEmpty(() => resourceEnricher.GetNotes(type));
+                resource.AllowMultiple =
+                    resource.AllowMultiple.GetIfNoValue(() => resourceEnricher.GetAllowMultiple(type));
             }
 
             resource.Properties = propertyEnricherManager.EnrichParameters(resource.Properties, type);

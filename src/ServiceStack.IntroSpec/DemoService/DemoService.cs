@@ -109,8 +109,7 @@
 
         public Name YourName { get; set; }
 
-        [IgnoreDataMember]
-        public Name TheirName { get; set; }
+        public Name[] TheirNames { get; set; }
     }
 
     /// <summary>This comment won't make it's way to documentation as there's a AbstractTypeSpec implementation of this.</summary>
@@ -127,6 +126,8 @@
         /// </summary>
         [ApiMember(Name = "Also known as last name")]
         public string Surname { get; set; }
+
+        public string[] Attributes { get; set; }
     }
 
     public class MetaDataExcludeService : Service

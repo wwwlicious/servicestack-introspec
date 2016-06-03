@@ -34,6 +34,8 @@ namespace ServiceStack.IntroSpec.Extensions
 
             return (memberInfo as PropertyInfo)?.PropertyType ?? (memberInfo as FieldInfo).FieldType;
         }
-            
+
+        public static bool IsCollection(this Type type)
+            => !(type == typeof(string)) && type.GetInterface("IEnumerable") != null;
     }
 }

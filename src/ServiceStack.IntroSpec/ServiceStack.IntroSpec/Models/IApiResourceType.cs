@@ -8,5 +8,6 @@ namespace ServiceStack.IntroSpec.Models
     {
         string TypeName { get; set; }
         ApiPropertyDocumention[] Properties { get; set; }
+        bool? AllowMultiple { get; set; }
     }
 }

@@ -53,6 +53,7 @@ namespace ServiceStack.IntroSpec.Enrichers
         public string[] GetContentTypes(Operation operation, string verb) => null;
         public string[] GetRelativePaths(Operation operation, string verb) => null;
         public string GetNotes(Operation operation, string verb) => null;
+        public bool? GetAllowMultiple(Type type) => null;
 
         public StatusCode[] GetStatusCodes(Operation operation, string verb)
         {

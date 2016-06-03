@@ -8,6 +8,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Xml;
     using Extensions;
     using Interfaces;
     using Models;
@@ -27,7 +28,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             this.enrichResource = enrichResource;
         }
 
-        public ApiPropertyDocumention[] EnrichParameters(ApiPropertyDocumention[] properties, Type dtoType)
+        public ApiPropertyDocumention[] EnrichParameters(ApiPropertyDocumention[] properties, Type resourceType)
         {
             if (propertyEnricher == null)
                 return properties;
@@ -37,7 +38,11 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             List<ApiPropertyDocumention> parameterDocuments = null;
             bool newList = false;
 
-            MemberInfo[] allMembers = GetMemberInfo(dtoType);
+            // If the type is collection use the element rather than collection type (e.g. if string[] use System.String, not System.Array)
+            if (resourceType.IsCollection())
+                resourceType = resourceType.GetElementType();
+
+            MemberInfo[] allMembers = GetMemberInfo(resourceType);
 
             if (properties.IsNullOrEmpty())
             {
@@ -52,8 +57,12 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             foreach (var mi in allMembers)
             {
                 // Check if the property already exists. if so get it, If not create it 
-                var property = indexedParams.SafeGet(mi.Name,
-                    () => new ApiPropertyDocumention { Id = mi.Name, ClrType = mi.GetFieldPropertyType() });
+                var property = indexedParams.SafeGet(mi.Name, () =>
+                    new ApiPropertyDocumention
+                    {
+                        Id = mi.Name,
+                        ClrType = mi.GetFieldPropertyType()
+                    });
 
                 // Pass it to method to be populated.
                 EnrichParameter(property, mi);
@@ -93,7 +102,11 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             property.Contraints = property.Contraints.GetIfNull(() => propertyEnricher.GetConstraints(mi));
 
             property.IsRequired = property.IsRequired.GetIfNoValue(() => propertyEnricher.GetIsRequired(mi));
-            property.AllowMultiple = property.AllowMultiple.GetIfNoValue(() => propertyEnricher.GetAllowMultiple(mi));
+
+            if (mi.GetFieldPropertyType().IsCollection())
+                property.AllowMultiple = true;
+            else
+                property.AllowMultiple = property.AllowMultiple.GetIfNoValue(() => propertyEnricher.GetAllowMultiple(mi));
 
             property.ExternalLinks = property.ExternalLinks.GetIfNullOrEmpty(() => propertyEnricher.GetExternalLinks(mi));
 

@@ -22,6 +22,7 @@ A collection of attributes and Type information is used as the source of informa
 | --- | --- | --- |
 | Type.Title | Type.Name | |
 | Type Description | `[Api]` -> `[ComponentModel].Description` -> `[DataAnnotations].Description` | |
+| Allow Multiple | If property type is a collection type (e.g. `IEnumerable<>` or `Array`) | |
 | Security | `[Authenticate]` + `[RequiresAnyRole]` + `[RequiredRole]` + `[RequiresAnyPermission]` + `[RequiredPermission]` | Per verb |
 | Content Types | `MetadataPagesConfig.AvailableFormatConfigs` + `[AddHeader].ContentType` -> `[AddHeader].DefaultContentType`. Filtered by `[Restrict]` + `[Exclude]` | Per verb |
 | Relative Path | `[Route].Path` or OneWay / Reply URL | Per verb |

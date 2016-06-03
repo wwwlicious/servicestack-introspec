@@ -15,5 +15,6 @@ namespace ServiceStack.IntroSpec.Enrichers.Interfaces
         string GetTitle(Type type);
         string GetDescription(Type type);
         string GetNotes(Type type);
+        bool? GetAllowMultiple(Type type);
     }
 }

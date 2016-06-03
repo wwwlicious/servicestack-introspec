@@ -94,5 +94,22 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             manager.EnrichResource(new ApiResourceType { Notes = "mo" }, new Operation());
             A.CallTo(() => resourceEnricher.GetNotes(A<Type>.Ignored)).MustNotHaveHappened();
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void EnrichResource_DoesNotCallGetAllowMultiple_IfAllowMultipleHasValue(bool val)
+        {
+            manager.EnrichResource(new ApiResourceType { AllowMultiple = val }, new Operation());
+            A.CallTo(() => resourceEnricher.GetAllowMultiple(A<Type>.Ignored)).MustNotHaveHappened();
+        }
+
+        [Fact]
+        public void EnrichResource_CallsGetAllowMultiple_IfAllowMultipleHasNoValue()
+        {
+            var responseType = typeof(int);
+            manager.EnrichResource(new ApiResourceType { AllowMultiple = null }, new Operation { ResponseType = responseType });
+            A.CallTo(() => resourceEnricher.GetAllowMultiple(responseType)).MustHaveHappened();
+        }
     }
 }

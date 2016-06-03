@@ -47,6 +47,8 @@ namespace ServiceStack.IntroSpec.Enrichers
             return mi.GetFieldPropertyType().IsNullableType() ? false : (bool?) null;
         }
 
+        public bool? GetAllowMultiple(Type type) => type.IsCollection() ? true : (bool?)null;
+
         public string GetNotes(Type type) => null;
         public string GetCategory(Operation operation) => null;
         public string[] GetTags(Operation operation) => null;

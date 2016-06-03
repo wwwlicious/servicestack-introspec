@@ -298,6 +298,21 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             called.Should().BeFalse();
         }
 
+        [Fact]
+        public void EnrichParameters_ArrayType_ReturnsPropertiesOfType()
+        {
+            var actual = manager.EnrichParameters(null, typeof(ComplexProp[]));
+            actual[0].ClrType.Should().Be<IgnoredProps>();
+        }
+
+        [Fact]
+        public void EnrichParameters_AllowMultipleTrue_IfIsCollectionType()
+        {
+            var actual = manager.EnrichParameters(null, typeof(ContainsArray[]));
+            actual[0].ClrType.Should().Be<ComplexProp[]>();
+            actual[0].AllowMultiple.Should().BeTrue();
+        }
+
         private static ApiPropertyDocumention GetApiParameterDocumention() => new ApiPropertyDocumention { Id = "X" };
         private void ResourceEnricher(IApiResourceType resource, Type type) { }
     }
@@ -321,5 +336,15 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
     public class ComplexProp
     {
         public IgnoredProps Props { get; set; }
+    }
+
+    public class ContainsArray
+    {
+        public ComplexProp[] Props { get; set; }
+    }
+
+    public class MasterClass
+    {
+        public ContainsArray[] Array { get; set; }
     }
 }

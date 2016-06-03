@@ -20,5 +20,6 @@ namespace ServiceStack.IntroSpec.Models
         public string Notes { get; set; }
         public string TypeName { get; set; }
         public ApiPropertyDocumention[] Properties { get; set; }
+        public bool? AllowMultiple { get; set; }
     }
 }

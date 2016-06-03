@@ -22,6 +22,8 @@ namespace ServiceStack.IntroSpec.Enrichers
 
         public string GetNotes(Type type) => DocumenterSettings.FallbackNotes;
 
+        public bool? GetAllowMultiple(Type type) => null;
+
         public string[] GetContentTypes(Operation operation, string verb) => DocumenterSettings.DefaultContentTypes?.ToArray();
 
         public StatusCode[] GetStatusCodes(Operation operation, string verb) => DocumenterSettings.DefaultStatusCodes?.ToArray();

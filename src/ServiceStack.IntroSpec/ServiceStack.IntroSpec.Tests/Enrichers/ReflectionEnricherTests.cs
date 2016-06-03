@@ -5,6 +5,8 @@
 namespace ServiceStack.IntroSpec.Tests.Enrichers
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Reflection;
     using DataAnnotations;
     using Fixtures;
@@ -383,6 +385,22 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         [Fact]
         public void GetSecurity_Null_IfNoAuthentication()
             => enricher.GetSecurity(new Operation { RequiresAuthentication = false }, "GET").Should().BeNull();
+
+        [Theory]
+        [InlineData(typeof(int[]))]
+        [InlineData(typeof(IEnumerable<int>))]
+        [InlineData(typeof(IList))]
+        [InlineData(typeof(List<int>))]
+        [InlineData(typeof(ICollection<int>))]
+        public void GetAllowMultiple_True_ForCollectionTypes(Type collectionType)
+            => enricher.GetAllowMultiple(collectionType).Should().BeTrue();
+
+        [Theory]
+        [InlineData(typeof(int))]
+        [InlineData(typeof(string))]
+        [InlineData(typeof(AllAttributes))]
+        public void GetAllowMultiple_Null_ForNonCollectionTypes(Type collectionType)
+            => enricher.GetAllowMultiple(collectionType).Should().NotHaveValue();
     }
 
     [Api("ApiDescription")]
