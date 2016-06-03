@@ -201,7 +201,7 @@ The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` obj
 
 ### Spec
 
-The plugin will also register a service which can be accessed at `/spec` to view the raw generated documentation POCOs.
+The plugin will also register a service which can be accessed at [`/spec`](http://introspec.servicestack.net/spec?format=json) to view the raw generated documentation POCOs.
 
 This endpoint can optionally be filtered by `?requestDto`, `?tag` and/or `?category`.
 
@@ -289,7 +289,7 @@ Example output is:
 }
 ```
 ### Spec Metadata
-The plugin will also register a service which can be accessed at `/spec/summary` to view the raw generated documentation POCOs. This will return some metadata about the documentation.
+The plugin will also register a service which can be accessed at [`/spec/summary`](http://introspec.servicestack.net/spec/summary?format=json) to view the raw generated documentation POCOs. This will return some metadata about the documentation.
 
 The values that are returned are the 3 fields that can be used to filter the other 2 services: Request DTO Name, Tags and Category. E.g.
 
@@ -314,10 +314,10 @@ The values that are returned are the 3 fields that can be used to filter the oth
   ]
 }
 ```
-In future this will be used to power a separate application that can aggregrate documentation from multiple different services.
+In future this will be used to power a separate application that can aggregate documentation from multiple different services.
 
 ### Postman
-The 3rd service that is registered can be found at `/spec/postman` and generates JSON that can be consumed by the Postman REST client.
+The 3rd service that is registered can be found at [`/spec/postman`](http://introspec.servicestack.net/spec/postman) and generates JSON that can be consumed by the Postman REST client.
 
 Although there is an existing [Postman Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Postman) for ServiceStack which does the same thing, Postman was the easiest format to output the specification information as.
 
