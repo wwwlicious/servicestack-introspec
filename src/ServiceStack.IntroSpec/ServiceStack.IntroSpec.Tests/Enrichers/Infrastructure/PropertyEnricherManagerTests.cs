@@ -299,6 +299,18 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
 
         [Fact]
+        public void EnrichParameters_DoesNotCallEnrichResource_IfIsEnumType()
+        {
+            var param = GetApiParameterDocumention();
+
+            bool called = false;
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type) => { called = true; });
+
+            enricherManager.EnrichParameters(new[] { param }, typeof(MyEnum));
+            called.Should().BeFalse();
+        }
+
+        [Fact]
         public void EnrichParameters_ArrayType_ReturnsPropertiesOfType()
         {
             var actual = manager.EnrichParameters(null, typeof(ComplexProp[]));

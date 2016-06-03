@@ -350,7 +350,21 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             => enricher.GetConstraints(noPropertyInfo).Should().BeNull();
 
         [Fact]
-        public void GetConstraints_ReturnsListConstraint()
+        public void GetConstraints_ReturnsListConstraint_IfEnumType()
+        {
+            var pi = typeof(RootForVerbs).GetProperty("EnumType");
+            var constraint = enricher.GetConstraints(pi);
+
+            constraint.Name.Should().Be("MyEnum");
+            constraint.Type.Should().Be(ConstraintType.List);
+            constraint.Values.Should().Contain("One").And.Contain("Two").And.Contain("Three");
+            constraint.Values.Length.Should().Be(3);
+            constraint.Min.Should().NotHaveValue();
+            constraint.Max.Should().NotHaveValue();
+        }
+
+        [Fact]
+        public void GetConstraints_ReturnsListConstraint_IfAttributeFound()
         {
             var pi = typeof(SomeAttributes).GetProperty("List");
             var constraint = enricher.GetConstraints(pi);
@@ -455,5 +469,16 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
     public class EmptyRouteAttribute { }
 
     [Route("/foo-bar", "GET,POST")]
-    public class RootForVerbs { }
+    public class RootForVerbs
+    {
+        [ApiAllowableValues("List", "foo", "bar")]
+        public MyEnum EnumType { get; set; }
+    }
+
+    public enum MyEnum
+    {
+        One,
+        Two,
+        Three
+    }
 }

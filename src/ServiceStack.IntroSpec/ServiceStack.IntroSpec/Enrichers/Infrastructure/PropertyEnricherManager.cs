@@ -116,7 +116,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
         private void EnrichEmbeddedResource(ApiPropertyDocumention property, MemberInfo mi)
         {
             var fieldPropertyType = mi.GetFieldPropertyType();
-            if (fieldPropertyType.IsSystemType())
+            if (fieldPropertyType.IsSystemType() || fieldPropertyType.IsEnum)
                 return;
 
             if (property.EmbeddedResource == null)

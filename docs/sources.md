@@ -31,7 +31,7 @@ A collection of attributes and Type information is used as the source of informa
 | Property Title | `[ApiMemberAttribute].Name` | |
 | Property Description | `[ApiMemberAttribute].Description` | |
 | Property Allow Multiple | `[ApiMemberAttribute].AllowMultiple` | |
-| Property Constraints | `[ApiAllowableValues]` | |
+| Property Constraints | Will generate List constraint if property type is `enum` then fallback to `[ApiAllowableValues]` | |
 | Property Is Required | `[ApiMemberAttribute].IsRequired` or true if type is `Nullable<>` | |
 | Property Param Type | `[ApiMemberAttribute].ParameterType` | |
 

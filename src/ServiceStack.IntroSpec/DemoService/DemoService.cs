@@ -33,6 +33,8 @@
         [ApiAllowableValues("Name", typeof(Names))]
         public string Name { get; set; }
 
+        public Names NameSelection { get; set; }
+
         [IgnoreDataMember]
         public string Ignored { get; set; }
 

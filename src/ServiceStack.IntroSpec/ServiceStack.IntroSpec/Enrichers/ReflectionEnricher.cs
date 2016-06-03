@@ -57,6 +57,13 @@ namespace ServiceStack.IntroSpec.Enrichers
 
         public PropertyConstraint GetConstraints(MemberInfo mi)
         {
+            var propertyType = mi.GetFieldPropertyType();
+            if (propertyType.IsEnum)
+            {
+                log.Debug($"{mi.Name} is of enum type {propertyType.Name}. Generating List constraint.");
+                return PropertyConstraint.ListConstraint(propertyType.Name, propertyType.GetEnumNames());
+            }
+
             var allowableValues = mi.FirstAttribute<ApiAllowableValuesAttribute>();
             if (allowableValues == null)
                 return null;
