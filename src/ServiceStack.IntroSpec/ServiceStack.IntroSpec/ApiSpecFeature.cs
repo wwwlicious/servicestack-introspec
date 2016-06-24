@@ -53,11 +53,12 @@ namespace ServiceStack.IntroSpec
             "ServiceStack.Admin",
             "ServiceStack.NativeTypes",
             "ServiceStack.Api.Swagger",
-            "ServiceStack.IntroSpec"
+            "ServiceStack.IntroSpec",
+            "ServiceStack.IntroSpec.DTO"
         };
 
         public Func<KeyValuePair<Type, Operation>, bool> OperationsMapFilter { get; private set; } = kvp =>
-            !IgnoreTypesInNamespaces.Contains(kvp.Key.Namespace) && 
+            !IgnoreTypesInNamespaces.Contains(kvp.Key.Namespace) &&
             !kvp.Key.ExcludesFeature(Feature.Metadata) &&
             !kvp.Key.ExcludesFeature(Feature.ServiceDiscovery);
 
