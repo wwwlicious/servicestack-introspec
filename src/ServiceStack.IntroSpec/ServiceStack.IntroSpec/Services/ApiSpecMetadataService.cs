@@ -4,8 +4,8 @@
 
 namespace ServiceStack.IntroSpec.Services
 {
-    using System.Linq;
     using DTO;
+    using Utilities;
 
 #if !DEBUG
     [CacheResponse(MaxAge = 300, Duration = 600)]
@@ -24,11 +24,7 @@ namespace ServiceStack.IntroSpec.Services
         {
             var documentation = documentationProvider.GetApiDocumentation();
 
-            return SpecMetadataResponse.Create(
-                documentation.Resources.Select(r => r.TypeName).Distinct().ToArray(),
-                documentation.Resources.Select(r => r.Category).Where(c => !string.IsNullOrEmpty(c)).Distinct().ToArray(),
-                documentation.Resources.SelectMany(r => r.Tags ?? new string[0]).Distinct().ToArray()
-                );
+            return ApiSpecMetadataUtilities.GenerateResponse(documentation);
         }
     }
 }

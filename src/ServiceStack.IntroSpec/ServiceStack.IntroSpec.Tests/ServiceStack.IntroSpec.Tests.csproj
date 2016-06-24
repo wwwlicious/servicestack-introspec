@@ -109,6 +109,7 @@
     <Compile Include="Models\PermissionsTests.cs" />
     <Compile Include="Postman\PostmanCollectionGeneratorTests.cs" />
     <Compile Include="Services\ApiDocumentationFilterTests.cs" />
+    <Compile Include="Utilities\ApiSpecMetadataUtilitiesTests.cs" />
     <Compile Include="Utilities\EnumUtilitiesTests.cs" />
     <Compile Include="Extensions\GetValueExtensionsTests.cs" />
     <Compile Include="Extensions\ReflectionExtensionsTests.cs" />

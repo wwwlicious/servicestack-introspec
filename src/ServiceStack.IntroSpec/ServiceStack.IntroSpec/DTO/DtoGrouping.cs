@@ -6,10 +6,9 @@ namespace ServiceStack.IntroSpec.DTO
 {
     using System.Collections.Generic;
 
-    public class SpecMetadataResponse
+    public class DtoGrouping
     {
+        public string Key { get; set; }
         public IEnumerable<string> DtoNames { get; set; }
-        public IEnumerable<DtoGrouping> Categories { get; set; }
-        public IEnumerable<DtoGrouping> Tags { get; set; }
     }
 }
