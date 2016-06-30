@@ -29,5 +29,24 @@ namespace ServiceStack.IntroSpec.Tests.Models
 
             actual.Should().Be(path);
         }
+
+        [Fact]
+        public void IsAutoRoute_True_IfAutoRoute()
+        {
+            var relativePath = new RelativePath { Source = Constants.RouteSources.AutoRoute };
+
+            relativePath.IsAutoRoute.Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(Constants.RouteSources.Attribute)]
+        public void IsAutoRoute_False_IfNotAutoRoute(string source)
+        {
+            var relativePath = new RelativePath { Source = source };
+
+            relativePath.IsAutoRoute.Should().BeFalse();
+        }
     }
 }

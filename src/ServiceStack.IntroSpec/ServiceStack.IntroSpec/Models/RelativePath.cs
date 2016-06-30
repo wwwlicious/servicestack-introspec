@@ -14,5 +14,7 @@ namespace ServiceStack.IntroSpec.Models
 
         public static implicit operator string(RelativePath path)
             => path?.Path;
+
+        public bool IsAutoRoute => Source == Constants.RouteSources.AutoRoute;
     }
 }
