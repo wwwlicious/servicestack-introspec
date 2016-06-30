@@ -51,7 +51,7 @@ namespace ServiceStack.IntroSpec.Enrichers
         public bool? GetIsRequired(MemberInfo mi) => null;
         public string GetParamType(MemberInfo mi) => null;
         public string[] GetContentTypes(Operation operation, string verb) => null;
-        public string[] GetRelativePaths(Operation operation, string verb) => null;
+        public RelativePath[] GetRelativePaths(Operation operation, string verb) => null;
         public string GetNotes(Operation operation, string verb) => null;
         public bool? GetAllowMultiple(Type type) => null;
 

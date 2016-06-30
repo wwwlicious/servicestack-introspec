@@ -130,18 +130,20 @@ namespace ServiceStack.IntroSpec.Enrichers
             return mimeTypes.Distinct().ToArray();
         }
 
-        public string[] GetRelativePaths(Operation operation, string verb)
+        public RelativePath[] GetRelativePaths(Operation operation, string verb)
         {
             var requestType = operation.RequestType;
             var routeAttributes = GetRouteAttributesForVerb(requestType, verb)
                 .Where(r => !string.IsNullOrEmpty(r.Path)).ToList();
 
             if (!routeAttributes.IsNullOrEmpty())
-                return routeAttributes.Select(r => r.Path).ToArray();
+                return routeAttributes.Select(
+                        r => new RelativePath { Path = r.Path, Source = Constants.RouteSources.Attribute }).ToArray();
 
             // If no route then make one up
             var emptyType = requestType.CreateInstance();
-            return new [] { operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly() };
+            var route = operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly();
+            return new[] { new RelativePath { Path = route, Source = Constants.RouteSources.AutoRoute } };
         }
 
         public StatusCode[] GetStatusCodes(Operation operation, string verb)

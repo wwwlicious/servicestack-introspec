@@ -7,7 +7,7 @@ namespace ServiceStack.IntroSpec.Models
     public interface IApiAction : ISecured
     {
         string[] ContentTypes { get; set; }
-        string[] RelativePaths { get; set; }
+        RelativePath[] RelativePaths { get; set; }
         StatusCode[] StatusCodes { get; set; }
         string Verb { get; set; }
         string Notes { get; set; }

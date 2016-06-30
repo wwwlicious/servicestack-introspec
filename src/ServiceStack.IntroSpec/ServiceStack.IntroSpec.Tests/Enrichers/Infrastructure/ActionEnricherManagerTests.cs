@@ -144,7 +144,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichActions_DoesNotCallGetRelativePaths_IfRelativePathsNotEmpty_SetIfEmptyStrategy()
         {
-            var actions = new[] { new ApiAction { Verb = GetVerb, RelativePaths = new[] { "/path" } } };
+            var actions = new[] { new ApiAction { Verb = GetVerb, RelativePaths = new RelativePath[] { "/path" } } };
             using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty))
                 enricherManager.EnrichActions(actions, operation);
 
@@ -154,7 +154,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichActions_CallsGetContentTypes_IfRelativePathsNotEmpty_UnionStrategy()
         {
-            var actions = new[] { new ApiAction { Verb = GetVerb, RelativePaths = new[] { "/path" } } };
+            var actions = new[] { new ApiAction { Verb = GetVerb, RelativePaths = new RelativePath[] { "/path" } } };
             using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
                 enricherManager.EnrichActions(actions, operation);
 

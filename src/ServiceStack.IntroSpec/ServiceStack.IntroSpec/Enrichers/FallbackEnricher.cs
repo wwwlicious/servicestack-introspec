@@ -30,7 +30,7 @@ namespace ServiceStack.IntroSpec.Enrichers
 
         public string GetNotes(Operation operation, string verb) => DocumenterSettings.FallbackRouteNotes;
 
-        public string[] GetRelativePaths(Operation operation, string verb) => null;
+        public RelativePath[] GetRelativePaths(Operation operation, string verb) => null;
 
         public string GetCategory(Operation operation) => DocumenterSettings.FallbackCategory;
 

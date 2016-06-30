@@ -60,6 +60,7 @@
     <Compile Include="DTO\DtoGrouping.cs" />
     <Compile Include="DTO\SpecMetadataRequest.cs" />
     <Compile Include="DTO\SpecMetadataResponse.cs" />
+    <Compile Include="Models\RelativePath.cs" />
     <Compile Include="Services\ApiSpecMetadataService.cs" />
     <Compile Include="TypeSpec\AbstractTypeSpec.cs" />
     <Compile Include="TypeSpec\DocumentationClassLocator.cs" />

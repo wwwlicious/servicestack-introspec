@@ -11,6 +11,6 @@ namespace ServiceStack.IntroSpec.Models
         public string Notes { get; set; }
         public StatusCode[] StatusCodes { get; set; }
         public string[] ContentTypes { get; set; }
-        public string[] RelativePaths { get; set; }
+        public RelativePath[] RelativePaths { get; set; }
     }
 }

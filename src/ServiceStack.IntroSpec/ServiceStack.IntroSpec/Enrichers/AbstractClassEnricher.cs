@@ -75,7 +75,7 @@ namespace ServiceStack.IntroSpec.Enrichers
         public bool? GetIsRequired(MemberInfo mi)
             => GetPropertyValue(mi, property => property?.IsRequired);
 
-        public string[] GetRelativePaths(Operation operation, string verb) => null;
+        public RelativePath[] GetRelativePaths(Operation operation, string verb) => null;
         public string GetNotes(MemberInfo mi) => null;
         public bool? GetAllowMultiple(MemberInfo mi) => null;
         public string[] GetExternalLinks(MemberInfo mi) => null;

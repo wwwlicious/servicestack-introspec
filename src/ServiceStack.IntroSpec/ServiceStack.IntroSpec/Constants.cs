@@ -4,17 +4,23 @@
 
 namespace ServiceStack.IntroSpec
 {
-    internal static class Constants
+    public static class Constants
     {
-        internal const string SpecUri = "/spec";
-        internal const string SpecSummaryUri = "/spec/summary";
-        internal const string PostmanSpecUri = "/spec/postman";
+        public const string SpecUri = "/spec";
+        public const string SpecSummaryUri = "/spec/summary";
+        public const string PostmanSpecUri = "/spec/postman";
 
-        internal const string XmlEnricherKey = "xml";
-        internal const string ReflectionEnricherKey = "reflection";
-        internal const string ClassEnricherKey = "abstractclass";
-        internal const string FallbackEnricherKey = "fallback";
+        public const string XmlEnricherKey = "xml";
+        public const string ReflectionEnricherKey = "reflection";
+        public const string ClassEnricherKey = "abstractclass";
+        public const string FallbackEnricherKey = "fallback";
 
-        internal const string GlobalSettingsKey = "_all";
+        public const string GlobalSettingsKey = "_all";
+
+        public static class RouteSources
+        {
+            public const string Attribute = "Attribute";
+            public const string AutoRoute = "AutoRoute";
+        }
     }
 }

@@ -244,7 +244,18 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(AllAttributes) };
             var relativePaths = enricher.GetRelativePaths(operation, Verb);
             relativePaths.Length.Should().Be(1);
-            relativePaths.Should().Contain("/here");
+            relativePaths.Should().OnlyContain(x => x.Path == "/here" && x.Source == "Attribute");
+        }
+
+        [Fact]
+        public void GetRelativePaths_HandlesMultipleRouteAttributes()
+        {
+            var operation = new Operation { RequestType = typeof(MultiRoute) };
+            var relativePaths = enricher.GetRelativePaths(operation, Verb);
+            relativePaths.Length.Should().Be(2);
+            relativePaths.Should()
+                         .Contain(x => x.Path == "/here" && x.Source == "Attribute")
+                         .And.Contain(x => x.Path == "/there" && x.Source == "Attribute");
         }
 
         [Fact]
@@ -253,7 +264,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(SomeAttributes) };
             var relativePaths = enricher.GetRelativePaths(operation, Verb);
             relativePaths.Length.Should().Be(1);
-            relativePaths.Should().Contain("/json/oneway/SomeAttributes");
+            relativePaths.Should().OnlyContain(x => x.Path == "/json/oneway/SomeAttributes" && x.Source == "AutoRoute");
         }
 
         [Fact]
@@ -262,7 +273,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(SomeAttributes), ResponseType = typeof(OneAttribute) };
             var relativePaths = enricher.GetRelativePaths(operation, Verb);
             relativePaths.Length.Should().Be(1);
-            relativePaths.Should().Contain("/json/reply/SomeAttributes");
+            relativePaths.Should().OnlyContain(x => x.Path == "/json/reply/SomeAttributes" && x.Source == "AutoRoute");
         }
 
         [Fact]
@@ -271,19 +282,19 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(EmptyRouteAttribute) };
             var relativePaths = enricher.GetRelativePaths(operation, Verb);
             relativePaths.Length.Should().Be(1);
-            relativePaths.Should().Contain("/json/oneway/EmptyRouteAttribute");
+            relativePaths.Should().OnlyContain(x => x.Path == "/json/oneway/EmptyRouteAttribute" && x.Source == "AutoRoute");
         }
 
         [Theory]
-        [InlineData("GET", "/foo-bar")]
-        [InlineData("POST", "/foo-bar")]
-        [InlineData("PUT", "/json/oneway/RootForVerbs")]
-        public void GetRelativePaths_ReturnsPath_IfRouteAttributeWithPathForVerb(string verb, string path)
+        [InlineData("GET", "/foo-bar", "Attribute")]
+        [InlineData("POST", "/foo-bar", "Attribute")]
+        [InlineData("PUT", "/json/oneway/RootForVerbs", "AutoRoute")]
+        public void GetRelativePaths_ReturnsPath_IfRouteAttributeWithPathForVerb(string verb, string path, string source)
         {
             var operation = new Operation { RequestType = typeof(RootForVerbs) };
             var relativePaths = enricher.GetRelativePaths(operation, verb);
             relativePaths.Length.Should().Be(1);
-            relativePaths.Should().Contain(path);
+            relativePaths.Should().OnlyContain(x => x.Path == path && x.Source == source);
         }
 
         [Fact]
@@ -426,6 +437,13 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
     [ApiResponse(503, "Not available")]
     [Exclude(Feature.Soap)]
     public class AllAttributes
+    {
+        
+    }
+
+    [Route("/here", Verbs = "GET")]
+    [Route("/there")]
+    public class MultiRoute
     {
         
     }

@@ -52,7 +52,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         new ApiAction
                         {
                             Verb = "GET",
-                            RelativePaths = new[] { "/dto" },
+                            RelativePaths = new RelativePath[] { "/dto" },
                             ContentTypes = new[] { "application/json" }
                         }
                     },
@@ -92,13 +92,13 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         new ApiAction
                         {
                             Verb = "GET",
-                            RelativePaths = new[] { "/dto" },
+                            RelativePaths = new RelativePath[] { "/dto" },
                             ContentTypes = new[] { "application/json" }
                         },
                         new ApiAction
                         {
                             Verb = "POST",
-                            RelativePaths = new[] { "/dto" },
+                            RelativePaths = new RelativePath[] { "/dto" },
                             ContentTypes = new[] { "application/json" }
                         }
                     }
@@ -111,7 +111,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         new ApiAction
                         {
                             Verb = "GET",
-                            RelativePaths = new[] { "/anotherdto" },
+                            RelativePaths = new RelativePath[] { "/anotherdto" },
                             ContentTypes = new[] { "application/json" }
                         }
                     }
@@ -142,13 +142,13 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         new ApiAction
                         {
                             Verb = "GET",
-                            RelativePaths = new[] { "/dto/{Name}/" },
+                            RelativePaths = new RelativePath[] { "/dto/{Name}/" },
                             ContentTypes = new[] { "application/json" }
                         },
                         new ApiAction
                         {
                             Verb = "POST",
-                            RelativePaths = new[] { "/dto/{Name}/" },
+                            RelativePaths = new RelativePath[] { "/dto/{Name}/" },
                             ContentTypes = new[] { "application/json" }
                         }
                     },
@@ -189,7 +189,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         new ApiAction
                         {
                             Verb = "GET",
-                            RelativePaths = new[] { "/dto/{Name}/" },
+                            RelativePaths = new RelativePath[] { "/dto/{Name}/" },
                             ContentTypes = new[] { "application/json" }
                         }
                     },
@@ -228,7 +228,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         new ApiAction
                         {
                             Verb = "GET",
-                            RelativePaths = new[] { "/dto/{Name}/" },
+                            RelativePaths = new RelativePath[] { "/dto/{Name}/" },
                             ContentTypes = new[] { "application/json" }
                         }
                     },
@@ -271,7 +271,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         new ApiAction
                         {
                             Verb = "POST",
-                            RelativePaths = new[] { "/dto/{Name}/" },
+                            RelativePaths = new RelativePath[] { "/dto/{Name}/" },
                             ContentTypes = new[] { "application/json" }
                         }
                     },

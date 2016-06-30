@@ -42,7 +42,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
 
             PopulateRequests(documentation, collection);
 
-            log.Debug($"Generated PostmanRequest for resource {documentation.Title}");
+            log.Debug($"Generated PostmanCollection for resource {documentation.Title}");
             return collection;
         }
 
@@ -50,7 +50,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
         {
             if (documentation.Resources.IsNullOrEmpty())
             {
-                log.Debug($"ApiDocumentatino for service {documentation.Title} has no resources");
+                log.Debug($"ApiDocumentation for service {documentation.Title} has no resources");
                 return;
             }
 
@@ -70,7 +70,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
                 foreach (var action in resource.Actions)
                 {
                     // Get any pathVariables that are present (variable place holders in route)
-                    var untouchedRelativePath = action.RelativePaths.First();
+                    var untouchedRelativePath = action.RelativePaths.First().Path;
                     var pathVariableNames = untouchedRelativePath.GetPathParams();
 
                     // Replace pathVariable names so that /api/{name}/ becomes /api/:name/
