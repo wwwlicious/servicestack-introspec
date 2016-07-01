@@ -21,6 +21,7 @@ namespace ServiceStack.IntroSpec
         {
             public const string Attribute = "Attribute";
             public const string AutoRoute = "AutoRoute";
+            public const string FallbackRoute = "Fallback";
         }
     }
 }

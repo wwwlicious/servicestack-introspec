@@ -138,12 +138,24 @@ namespace ServiceStack.IntroSpec.Enrichers
 
             if (!routeAttributes.IsNullOrEmpty())
                 return routeAttributes.Select(
-                        r => new RelativePath { Path = r.Path, Source = Constants.RouteSources.Attribute }).ToArray();
+                    r =>
+                    new RelativePath
+                    {
+                        Path = r.Path,
+                        Source = GetRelativePathSource(r)
+                    }).ToArray();
 
             // If no route then make one up
             var emptyType = requestType.CreateInstance();
             var route = operation.IsOneWay ? emptyType.ToOneWayUrlOnly() : emptyType.ToReplyUrlOnly();
             return new[] { new RelativePath { Path = route, Source = Constants.RouteSources.AutoRoute } };
+        }
+
+        private static string GetRelativePathSource(RouteAttribute r)
+        {
+            return r is FallbackRouteAttribute
+                       ? Constants.RouteSources.FallbackRoute
+                       : Constants.RouteSources.Attribute;
         }
 
         public StatusCode[] GetStatusCodes(Operation operation, string verb)

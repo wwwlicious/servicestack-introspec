@@ -259,6 +259,15 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         }
 
         [Fact]
+        public void GetRelativePaths_HandlesFallbackRouteAttribute()
+        {
+            var operation = new Operation { RequestType = typeof(FallbackRoute) };
+            var relativePaths = enricher.GetRelativePaths(operation, Verb);
+            relativePaths.Length.Should().Be(1);
+            relativePaths.Should().Contain(x => x.Path == "/fallback" && x.Source == "Fallback");
+        }
+
+        [Fact]
         public void GetRelativePaths_ReturnsOneWayPath_IfNoRouteAttribute_AndOneWay()
         {
             var operation = new Operation { RequestType = typeof(SomeAttributes) };
@@ -443,13 +452,13 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
 
     [Route("/here", Verbs = "GET")]
     [Route("/there")]
-    public class MultiRoute
-    {
-        
-    }
+    public class MultiRoute {}
+
+    [FallbackRoute("/fallback")]
+    public class FallbackRoute { }
 
     [System.ComponentModel.Description("ComponentModelDescription")]
-    [DataAnnotations.Description("ServiceStackDescription")]
+    [Description("ServiceStackDescription")]
     public class SomeAttributes
     {
         public int NoAttr { get; set; }
@@ -471,7 +480,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         public void Any(SomeAttributes requestDto) { }
     }
 
-    [DataAnnotations.Description("ServiceStackDescription")]
+    [Description("ServiceStackDescription")]
     [Restrict(RequestAttributes.Json | RequestAttributes.Jsv)]
     public class OneAttribute : IService
     {
