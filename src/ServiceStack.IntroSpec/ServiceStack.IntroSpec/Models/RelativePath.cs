@@ -16,5 +16,6 @@ namespace ServiceStack.IntroSpec.Models
             => path?.Path;
 
         public bool IsAutoRoute => Source == Constants.RouteSources.AutoRoute;
+        public bool IsFallback => Source == Constants.RouteSources.FallbackRoute;
     }
 }

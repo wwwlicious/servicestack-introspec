@@ -48,5 +48,24 @@ namespace ServiceStack.IntroSpec.Tests.Models
 
             relativePath.IsAutoRoute.Should().BeFalse();
         }
+
+        [Fact]
+        public void IsFallbackRoute_True_IfFallback()
+        {
+            var relativePath = new RelativePath { Source = Constants.RouteSources.FallbackRoute };
+
+            relativePath.IsFallback.Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(Constants.RouteSources.AutoRoute)]
+        public void IsFallbackRoute_False_IfNotFallback(string source)
+        {
+            var relativePath = new RelativePath { Source = source };
+
+            relativePath.IsFallback.Should().BeFalse();
+        }
     }
 }
