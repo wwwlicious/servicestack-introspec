@@ -52,28 +52,36 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
 
         [Fact]
-        public void EnrichResponse_HandlesNullResourceAndActionEnricher()
+        public void EnrichRequest_HandlesNullResourceAndActionEnricher()
         {
             Action action = () => nullParameterManager.EnrichRequest(new ApiResourceDocumentation(), new Operation());
             action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [Fact]
-        public void EnrichResource_CallsEnrichResourceAction_WithPassedOperation()
+        public void EnrichRequest_CallsEnrichResourceAction_WithPassedOperation()
         {
             var enricherManager = GetEnricherManager((type, op) => { op.Should().Be(operation); });
             enricherManager.EnrichRequest(new ApiResourceDocumentation(), operation);
         }
 
         [Fact]
-        public void EnrichResource_CallsEnrichResourceAction_WithEmptyResourceType_IfReturnTypeNull()
+        public void EnrichRequest_CallsEnrichResourceAction_WithNull_IfReturnTypeNull()
         {
-            var enricherManager = GetEnricherManager((returnType, op) => { returnType.Should().NotBeNull(); });
+            var nullReturnOp = new Operation { RequestType = typeof(string) };
+            var enricherManager = GetEnricherManager((returnType, op) => { returnType.Should().BeNull(); });
+            enricherManager.EnrichRequest(new ApiResourceDocumentation(), nullReturnOp);
+        }
+
+        [Fact]
+        public void EnrichRequest_SetsTypeName_OnReturnType_IfReturnTypeNull()
+        {
+            var enricherManager = GetEnricherManager((returnType, op) => { returnType.TypeName.Should().Be("String"); });
             enricherManager.EnrichRequest(new ApiResourceDocumentation(), operation);
         }
 
         [Fact]
-        public void EnrichResource_CallsEnrichResourceAction_WithApiResourceType_IfReturnTypeNotNull()
+        public void EnrichRequest_CallsEnrichResourceAction_WithApiResourceType_IfReturnTypeNotNull()
         {
             var apiResourceType = new ApiResourceType { Title = "meow the jewels" };
             var enricherManager = GetEnricherManager((returnType, op) => { returnType.Should().Be(apiResourceType); });
@@ -82,21 +90,21 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
 
         [Fact]
-        public void EnrichResponse_CallsGetTags_IfResourceHasNullTags()
+        public void EnrichRequest_CallsGetTags_IfResourceHasNullTags()
         {
             manager.EnrichRequest(new ApiResourceDocumentation(), operation);
             A.CallTo(() => requestEnricher.GetTags(operation)).MustHaveHappened();
         }
 
         [Fact]
-        public void EnrichResponse_CallsGetTags_IfResourceHasEmptyTags()
+        public void EnrichRequeste_CallsGetTags_IfResourceHasEmptyTags()
         {
             manager.EnrichRequest(new ApiResourceDocumentation { Tags = new string[0]}, operation);
             A.CallTo(() => requestEnricher.GetTags(operation)).MustHaveHappened();
         }
 
         [Fact]
-        public void EnrichResponse_SetsTags_IfResourceHasEmptyTags()
+        public void EnrichRequest_SetsTags_IfResourceHasEmptyTags()
         {
             var tags = new[] { "Tag1" };
             A.CallTo(() => requestEnricher.GetTags(operation)).Returns(tags);
@@ -108,7 +116,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
 
         [Fact]
-        public void EnrichResponse_CallsGetTags_IfResourceHasTags_AndUnionAsStrategy()
+        public void EnrichRequest_CallsGetTags_IfResourceHasTags_AndUnionAsStrategy()
         {
             using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.Union))
             {
@@ -119,7 +127,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
 
         [Fact]
-        public void EnrichResponse_ReturnsAllTags_IfResourceHasTags_AndUnionAsStrategy()
+        public void EnrichRequest_ReturnsAllTags_IfResourceHasTags_AndUnionAsStrategy()
         {
             var tags = new[] { "Tag98", "Tag1" };
             A.CallTo(() => requestEnricher.GetTags(operation)).Returns(tags);
@@ -135,7 +143,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
 
         [Fact]
-        public void EnrichResponse_DoesNotCallGetTags_IfResourceHasTags_AndSetIfEmptyAsStrategy()
+        public void EnrichRequest_DoesNotCallGetTags_IfResourceHasTags_AndSetIfEmptyAsStrategy()
         {
             using (DocumenterSettings.With(collectionStrategy: EnrichmentStrategy.SetIfEmpty))
             {
@@ -148,14 +156,14 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void EnrichResponse_CallsGetCategory_IfResourceHasNullOrEmptyCategory(string category)
+        public void EnrichRequest_CallsGetCategory_IfResourceHasNullOrEmptyCategory(string category)
         {
             manager.EnrichRequest(new ApiResourceDocumentation { Category = category }, operation);
             A.CallTo(() => requestEnricher.GetCategory(operation)).MustHaveHappened();
         }
 
         [Fact]
-        public void EnrichResponse_DoesNotCallGetCategory_IfCategoryHasValue()
+        public void EnrichRequest_DoesNotCallGetCategory_IfCategoryHasValue()
         {
             manager.EnrichRequest(new ApiResourceDocumentation { Category = "cat2" }, operation);
             A.CallTo(() => requestEnricher.GetCategory(operation)).MustNotHaveHappened();
@@ -164,7 +172,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void EnrichResponse_SetsCategory_IfResourceHasNullOrEmptyCategory(string category)
+        public void EnrichRequest_SetsCategory_IfResourceHasNullOrEmptyCategory(string category)
         {
             const string returnCat = "asdasdasd";
             A.CallTo(() => requestEnricher.GetCategory(operation)).Returns(returnCat);

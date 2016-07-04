@@ -41,10 +41,15 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 request.Tags = request.Tags.GetBasedOnStrategy(() => requestEnricher.GetTags(operation));
             }
 
-            request.ReturnType = request.ReturnType.GetIfNull(() => new ApiResourceType());
+            request.ReturnType =
+                request.ReturnType.GetIfNull(() => CreateApiResourceReturnType(operation));
 
             enrichResource(request.ReturnType, operation);
             request.Actions = actionEnricherManager.EnrichActions(request.Actions, operation);
         }
+
+        private static ApiResourceType CreateApiResourceReturnType(Operation operation)
+            => operation.ResponseType == null ? null : new ApiResourceType { TypeName = operation.ResponseType.Name };
+
     }
 }

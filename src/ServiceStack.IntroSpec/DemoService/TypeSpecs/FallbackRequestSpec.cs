@@ -76,4 +76,12 @@ namespace DemoService.TypeSpecs
             AddStatusCodes(HttpVerbs.Delete, ((StatusCode)400).WithDescription("Only for delete"));
         }
     }
+
+    public class ComplexResponseDocumenter : AbstractTypeSpec<ComplexResponse>
+    {
+        public ComplexResponseDocumenter()
+        {
+            Title = "Complex Response Title";
+        }
+    }
 }
