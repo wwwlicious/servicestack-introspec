@@ -16,7 +16,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
 
     public class PropertyEnricherManagerTests
     {
-        private readonly PropertyEnricherManager _nullPropertyManager;
+        private readonly PropertyEnricherManager nullPropertyManager;
         private readonly PropertyEnricherManager manager;
         private readonly IPropertyEnricher propertyEnricher;
 
@@ -34,7 +34,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
 
         public PropertyEnricherManagerTests()
         {
-            _nullPropertyManager = new PropertyEnricherManager(null, ResourceEnricher);
+            nullPropertyManager = new PropertyEnricherManager(null, ResourceEnricher);
 
             propertyEnricher = A.Fake<IPropertyEnricher>();
             manager = new PropertyEnricherManager(propertyEnricher, ResourceEnricher);
@@ -50,7 +50,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichParameters_ReturnsNull_IfParameterEnricherNull_AndPassedParametersNull()
         {
-            var actual = _nullPropertyManager.EnrichParameters(null, typeof(string));
+            var actual = nullPropertyManager.EnrichParameters(null, typeof(string));
             actual.Should().BeNull();
         }
 
@@ -58,7 +58,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [MemberData("TestData")]
         public void EnrichParameters_ReturnsPassedParameters_IfParameterEnricherNull(ApiPropertyDocumention[] properties)
         {
-            var actual = _nullPropertyManager.EnrichParameters(properties, typeof (string));
+            var actual = nullPropertyManager.EnrichParameters(properties, typeof (string));
             actual.Should().BeEquivalentTo(properties);
         }
 
@@ -284,6 +284,19 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
 
             enricherManager.EnrichParameters(new[] { param }, typeof(ComplexProp));
             called.Should().BeTrue();
+        }
+
+        [Fact]
+        public void EnrichParameters_SetsTypeName_WhenCallingEnrichResource()
+        {
+            var param = GetApiParameterDocumention();
+
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type) =>
+            {
+                resource.TypeName.Should().Be("IgnoredProps");
+            });
+
+            enricherManager.EnrichParameters(new[] { param }, typeof(ComplexProp));
         }
 
         [Fact]

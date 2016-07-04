@@ -8,7 +8,6 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using System.Xml;
     using Extensions;
     using Interfaces;
     using Models;
@@ -120,7 +119,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 return;
 
             if (property.EmbeddedResource == null)
-                property.EmbeddedResource = new ApiResourceType();
+                property.EmbeddedResource = new ApiResourceType { TypeName = fieldPropertyType.Name };
 
             enrichResource(property.EmbeddedResource, fieldPropertyType);
         }
