@@ -8,7 +8,7 @@ A plugin for [ServiceStack](https://servicestack.net/) that generates a series o
 
 ![Formats](assets/MultiFormat.png)
 
-The plugin uses introspection on a number of different sources to generate as rich a set of documentation DTOs as possible, containing request/response types, status codes, constraints etc.
+The plugin uses introspection on a number of different sources to generate as rich a set of documentation POCOs as possible, containing request/response types, status codes, constraints etc.
 
 ## Quick Start
 
