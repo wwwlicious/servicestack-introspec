@@ -119,7 +119,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 return;
 
             if (property.EmbeddedResource == null)
-                property.EmbeddedResource = new ApiResourceType { TypeName = fieldPropertyType.Name };
+                property.EmbeddedResource = ApiResourceType.Create(fieldPropertyType.Name);
 
             enrichResource(property.EmbeddedResource, fieldPropertyType);
         }

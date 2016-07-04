@@ -49,7 +49,6 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
         }
 
         private static ApiResourceType CreateApiResourceReturnType(Operation operation)
-            => operation.ResponseType == null ? null : new ApiResourceType { TypeName = operation.ResponseType.Name };
-
+            => operation.ResponseType == null ? null : ApiResourceType.Create(operation.ResponseType.Name);
     }
 }
