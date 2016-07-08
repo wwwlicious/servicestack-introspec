@@ -1,5 +1,5 @@
 # ![Logo](assets/logo_notext.png) ServiceStack.IntroSpec
-[![Build status](https://ci.appveyor.com/api/projects/status/a6wkmyvd0d3072vg/branch/master?svg=true)](https://ci.appveyor.com/project/wwwlicious/servicestack-introspec/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/a6wkmyvd0d3072vg/branch/master?svg=true)](https://ci.appveyor.com/project/MacLeanElectrical/servicestack-introspec/branch/master)
 [![NuGet version](https://badge.fury.io/nu/ServiceStack.IntroSpec.svg)](https://badge.fury.io/nu/ServiceStack.IntroSpec)
 
 A plugin for [ServiceStack](https://servicestack.net/) that generates a series of POCOs documenting all available services as well as request and response DTOs. These POCOs will allow the data to be be visualised in a number of standard API documentation formats (e.g. postman, swagger, RAML).
