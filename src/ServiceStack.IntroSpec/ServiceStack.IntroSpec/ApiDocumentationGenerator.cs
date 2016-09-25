@@ -35,7 +35,8 @@ namespace ServiceStack.IntroSpec
                 ApiVersion = appHost.Config?.ApiVersion,
                 ApiBaseUrl = appHost.Config.WebHostUrl,
                 Contact = config.Contact,
-                Description = config.Description
+                Description = config.Description,
+                Plugins = appHost.Plugins.Select(x => new ApiPlugin { Name = x.GetType().FullName, Version = x.GetType().Assembly.GetName().Version.ToString() }).ToArray()
             };
 
             if (config.LicenseUrl != null)

@@ -7,7 +7,7 @@ namespace ServiceStack.IntroSpec.Models
     using System;
 
     /// <summary>
-    /// Contact details for this api
+    /// Technical contact details for this api
     /// </summary>
     public class ApiContact
     {
