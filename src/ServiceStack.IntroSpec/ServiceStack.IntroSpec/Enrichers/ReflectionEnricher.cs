@@ -30,7 +30,7 @@ namespace ServiceStack.IntroSpec.Enrichers
             apiMemberLookup = new Dictionary<string, ApiMemberAttribute>();
         }
 
-        public string GetTitle(Type type) => type.Name;
+        public string GetTitle(Type type) => type.IsCollection() ? type.GetEnumerableType()?.Name : type.Name;
         public string GetDescription(Type type) => type.GetDescription();
         public string GetTitle(MemberInfo mi) => GetApiMemberAttribute(mi)?.Name;
         public string GetDescription(MemberInfo mi) => GetApiMemberAttribute(mi)?.Description;
@@ -48,7 +48,6 @@ namespace ServiceStack.IntroSpec.Enrichers
         }
 
         public bool? GetAllowMultiple(Type type) => type.IsCollection() ? true : (bool?)null;
-
         public string GetNotes(Type type) => null;
         public string GetCategory(Operation operation) => null;
         public string[] GetTags(Operation operation) => null;
@@ -109,7 +108,7 @@ namespace ServiceStack.IntroSpec.Enrichers
             var availableFormats = HostContext.MetadataPagesConfig.AvailableFormatConfigs.Select(a => a.Format);
 
             // NOTE Restriction can come from either DTO or Service
-            RestrictAttribute restrictedTo = operation.RestrictTo;
+            var restrictedTo = operation.RestrictTo;
             var requestType = operation.RequestType;
 
             var mimeTypes = new List<string>();

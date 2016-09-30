@@ -22,7 +22,8 @@ A collection of attributes and Type information is used as the source of informa
 | --- | --- | --- |
 | Type.Title | Type.Name | |
 | Type Description | `[Api]` -> `[ComponentModel].Description` -> `[DataAnnotations].Description` | |
-| Allow Multiple | If property type is a collection type (e.g. `IEnumerable<>` or `Array`) | |
+| Allow Multiple | A comma separated list of values can be passed via querystring | Only for requests |
+| Is Collection | The response implements `IEnumerable` | Only for responses |
 | Security | `[Authenticate]` + `[RequiresAnyRole]` + `[RequiredRole]` + `[RequiresAnyPermission]` + `[RequiredPermission]` | Per verb |
 | Content Types | `MetadataPagesConfig.AvailableFormatConfigs` + `[AddHeader].ContentType` -> `[AddHeader].DefaultContentType`. Filtered by `[Restrict]` + `[Exclude]` | Per verb |
 | Relative Path | `[Route].Path` or OneWay / Reply URL | Per verb |
@@ -30,7 +31,8 @@ A collection of attributes and Type information is used as the source of informa
 | Route Notes | `[Route].Notes` | Per Verb |
 | Property Title | `[ApiMemberAttribute].Name` | |
 | Property Description | `[ApiMemberAttribute].Description` | |
-| Property Allow Multiple | `[ApiMemberAttribute].AllowMultiple` | |
+| Property Allow Multiple | `[ApiMemberAttribute].AllowMultiple` | Only for requests |
+| Property Is Collection | `IEnumerable<T>` | Only for responses |
 | Property Constraints | Will generate List constraint if property type is `enum` then fallback to `[ApiAllowableValues]` | |
 | Property Is Required | `[ApiMemberAttribute].IsRequired` or true if type is `Nullable<>` | |
 | Property Param Type | `[ApiMemberAttribute].ParameterType` | |

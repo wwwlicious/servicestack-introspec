@@ -8,5 +8,6 @@ namespace ServiceStack.IntroSpec.Models
     {
         ApiResourceType ReturnType { get; set; }
         ApiAction[] Actions { get; set; }
+        bool? AllowMultiple { get; set; } 
     }
 }
