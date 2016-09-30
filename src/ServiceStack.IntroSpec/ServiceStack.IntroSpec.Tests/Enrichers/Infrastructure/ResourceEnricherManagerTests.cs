@@ -107,9 +107,22 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichResource_CallsGetAllowMultiple_IfAllowMultipleHasNoValue()
         {
-            var responseType = typeof(int);
-            manager.EnrichResource(new ApiResourceType { AllowMultiple = null }, new Operation { ResponseType = responseType });
-            A.CallTo(() => resourceEnricher.GetAllowMultiple(responseType)).MustHaveHappened();
+            var reqType = new EnrichTest { AllowMultiple = null };
+            manager.EnrichResource(reqType, new Operation { RequestType = reqType.GetType() });
+            A.CallTo(() => resourceEnricher.GetAllowMultiple(reqType.GetType())).MustHaveHappened();
+        }
+
+        internal class EnrichTest : ApiResourceType, IApiRequest
+        {
+            public string Category { get; set; }
+
+            public string[] Tags { get; set; }
+
+            public ApiResourceType ReturnType { get; set; }
+
+            public ApiAction[] Actions { get; set; }
+
+            public bool? AllowMultiple { get; set; }
         }
     }
 }

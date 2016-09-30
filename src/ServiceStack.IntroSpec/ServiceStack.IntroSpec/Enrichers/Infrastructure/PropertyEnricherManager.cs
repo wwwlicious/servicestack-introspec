@@ -18,16 +18,16 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
     public class PropertyEnricherManager
     {
         private readonly IPropertyEnricher propertyEnricher;
-        private readonly Action<IApiResourceType, Type> enrichResource;
+        private readonly Action<IApiResourceType, Type, bool> enrichResource;
         private static readonly Dictionary<Type, MemberInfo[]> PropertyDictionary = new Dictionary<Type, MemberInfo[]>();
 
-        public PropertyEnricherManager(IPropertyEnricher propertyEnricher, Action<IApiResourceType, Type> enrichResource)
+        public PropertyEnricherManager(IPropertyEnricher propertyEnricher, Action<IApiResourceType, Type, bool> enrichResource)
         {
             this.propertyEnricher = propertyEnricher;
             this.enrichResource = enrichResource;
         }
 
-        public ApiPropertyDocumention[] EnrichParameters(ApiPropertyDocumention[] properties, Type resourceType)
+        public ApiPropertyDocumention[] EnrichParameters(ApiPropertyDocumention[] properties, Type resourceType, bool isRequest)
         {
             if (propertyEnricher == null)
                 return properties;
@@ -35,13 +35,13 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             // There might be a collection of Properties already - if so build up an easy lookup
             Dictionary<string, ApiPropertyDocumention> indexedParams;
             List<ApiPropertyDocumention> parameterDocuments = null;
-            bool newList = false;
+            var newList = false;
 
             // If the type is collection use the element rather than collection type (e.g. if string[] use System.String, not System.Array)
             if (resourceType.IsCollection())
-                resourceType = resourceType.GetElementType();
+                resourceType = resourceType.GetEnumerableType();
 
-            MemberInfo[] allMembers = GetMemberInfo(resourceType);
+            var allMembers = GetMemberInfo(resourceType);
 
             if (properties.IsNullOrEmpty())
             {
@@ -64,7 +64,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                     });
 
                 // Pass it to method to be populated.
-                EnrichParameter(property, mi);
+                EnrichParameter(property, mi, isRequest);
 
                 if (newList)
                     parameterDocuments.Add(property);
@@ -90,7 +90,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 });
         }
 
-        private void EnrichParameter(ApiPropertyDocumention property, MemberInfo mi)
+        private void EnrichParameter(ApiPropertyDocumention property, MemberInfo mi, bool isRequest)
         {
             if (property.Title == property.Id || string.IsNullOrEmpty(property.Title))
                 property.Title = propertyEnricher.GetTitle(mi);
@@ -102,26 +102,34 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
             property.IsRequired = property.IsRequired.GetIfNoValue(() => propertyEnricher.GetIsRequired(mi));
 
-            if (mi.GetFieldPropertyType().IsCollection())
-                property.AllowMultiple = true;
+            if (isRequest)
+            {
+                if (mi.GetFieldPropertyType().IsCollection())
+                    property.AllowMultiple = true;
+                else
+                    property.AllowMultiple =
+                        property.AllowMultiple.GetIfNoValue(
+                            () => propertyEnricher.GetAllowMultiple(mi));
+            }
             else
-                property.AllowMultiple = property.AllowMultiple.GetIfNoValue(() => propertyEnricher.GetAllowMultiple(mi));
-
+            {
+                property.IsCollection = mi.GetFieldPropertyType().IsCollection();
+            }
             property.ExternalLinks = property.ExternalLinks.GetIfNullOrEmpty(() => propertyEnricher.GetExternalLinks(mi));
 
-            EnrichEmbeddedResource(property, mi);
+            EnrichEmbeddedResource(property, mi, isRequest);
         }
 
-        private void EnrichEmbeddedResource(ApiPropertyDocumention property, MemberInfo mi)
+        private void EnrichEmbeddedResource(ApiPropertyDocumention property, MemberInfo mi, bool isRequest)
         {
             var fieldPropertyType = mi.GetFieldPropertyType();
             if (fieldPropertyType.IsSystemType() || fieldPropertyType.IsEnum)
                 return;
 
             if (property.EmbeddedResource == null)
-                property.EmbeddedResource = ApiResourceType.Create(fieldPropertyType.Name);
+                property.EmbeddedResource = ApiResourceType.Create(fieldPropertyType);
 
-            enrichResource(property.EmbeddedResource, fieldPropertyType);
+            enrichResource(property.EmbeddedResource, fieldPropertyType, isRequest);
         }
     }
 }

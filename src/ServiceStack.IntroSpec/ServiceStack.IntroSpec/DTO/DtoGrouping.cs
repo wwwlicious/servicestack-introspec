@@ -9,6 +9,7 @@ namespace ServiceStack.IntroSpec.DTO
     public class DtoGrouping
     {
         public string Key { get; set; }
+
         public IEnumerable<string> DtoNames { get; set; }
     }
 }

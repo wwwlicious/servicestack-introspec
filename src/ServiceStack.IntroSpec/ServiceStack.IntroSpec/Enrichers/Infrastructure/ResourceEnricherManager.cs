@@ -36,10 +36,10 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
             if (type == null) return;
 
-            EnrichResource(resource, type);
+            EnrichResource(resource, type, resource is IApiRequest);
         }
 
-        private void EnrichResource(IApiResourceType resource, Type type)
+        private void EnrichResource(IApiResourceType resource, Type type, bool isRequest)
         {
             if (resourceEnricher != null)
             {
@@ -48,11 +48,19 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
                 resource.Description = resource.Description.GetIfNullOrEmpty(() => resourceEnricher.GetDescription(type));
                 resource.Notes = resource.Notes.GetIfNullOrEmpty(() => resourceEnricher.GetNotes(type));
-                resource.AllowMultiple =
-                    resource.AllowMultiple.GetIfNoValue(() => resourceEnricher.GetAllowMultiple(type));
+                if (isRequest)
+                {
+                    resource.AllowMultiple =
+                        resource.AllowMultiple.GetIfNoValue(
+                            () => resourceEnricher.GetAllowMultiple(type));
+                }
+                else
+                {
+                    resource.IsCollection = type.IsCollection();
+                }
             }
 
-            resource.Properties = propertyEnricherManager.EnrichParameters(resource.Properties, type);
+            resource.Properties = propertyEnricherManager.EnrichParameters(resource.Properties, type, isRequest);
         }
     }
 }

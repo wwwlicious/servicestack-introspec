@@ -51,7 +51,6 @@ namespace ServiceStack.IntroSpec
         private IEnumerable<ApiResourceDocumentation> GenerateResourceDocumentation(IEnumerable<Operation> operations)
         {
             var resourceDocs = new List<ApiResourceDocumentation>();
-
             var enrichers = getEnrichers().ToList();
 
             foreach (var operation in operations ?? Enumerable.Empty<Operation>())

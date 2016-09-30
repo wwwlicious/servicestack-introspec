@@ -4,6 +4,10 @@
 
 namespace ServiceStack.IntroSpec.Models
 {
+    using System;
+
+    using ServiceStack.IntroSpec.Extensions;
+
     public class ApiResourceType : IApiResourceType
     {
         private string title;
@@ -22,6 +26,14 @@ namespace ServiceStack.IntroSpec.Models
         public ApiPropertyDocumention[] Properties { get; set; }
         public bool? AllowMultiple { get; set; }
 
-        public static ApiResourceType Create(string typeName) => new ApiResourceType { TypeName = typeName };
+        public bool? IsCollection { get; set; }
+
+        public static ApiResourceType Create(Type resourceType)
+            =>
+            new ApiResourceType
+                {
+                    TypeName = resourceType.GetDocumentationTypeName(),
+                    IsCollection = resourceType.IsCollection()
+                };
     }
 }

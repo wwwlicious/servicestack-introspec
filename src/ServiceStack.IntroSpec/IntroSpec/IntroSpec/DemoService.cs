@@ -1,6 +1,7 @@
 ﻿namespace DemoService
 {
     using System;
+    using System.Collections.Generic;
     using System.Net;
     using System.Runtime.Serialization;
     using ServiceStack;
@@ -77,6 +78,8 @@
         {
             // no-op }
         }
+
+        public object Any(DtoEnumRequest request) => new List<DemoResponse>[0];
     }
 
     /// <summary>
@@ -155,6 +158,20 @@
     }
 
     public class EmptyDtoRequest : IReturn<DemoResponse>{}
+
+    public class DtoEnumRequest : IReturn<List<DemoResponse>>
+    {
+        public int JustAnInt { get; set; }
+
+        public List<string> ListIfStrings { get; set; }
+
+        public long? ItsALongOrIsIt { get; set; }
+
+        public Dictionary<int, List<string>> DicOfIntWithStringList { get; set; }
+
+        public Func<List<Dictionary<string, object>>, bool>
+            FuncListDicStringObjectswithObjectsThatSayBool { get; set; }
+    }
 
     public class OneWayService : IService
     {
