@@ -17,7 +17,9 @@ Install the package [https://www.nuget.org/packages/ServiceStack.IntroSpec](http
 PM> Install-Package ServiceStack.IntroSpec
 ```
 
-The plugin is added like any other. It has a dependency [Metadata Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Metadata-page) and by default requires that `AppHost.Config.WebHostUrl` is set. It also takes a delegate to create an instance of `ApiSpecConfig` as a constructor argument, as a minimum this must be populated with `Contact.Email`, `Contact.Name` and `Description`. There is a fluent interface which aids in the creation of the`ApiSpecConfig` object.
+The plugin is added like any other. It has a dependency on ServiceStack's [Metadata Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Metadata-page). 
+The `ApiSpecFeature` constructor has a delegate to create an instance of `ApiSpecConfig`, which as a minimum must populate `Contact.Email`, 
+`Contact.Name` and `Description`. There is a fluent interface which aids in the creation of the`ApiSpecConfig` object.
 ```csharp
 public override void Configure(Container container)
 {
