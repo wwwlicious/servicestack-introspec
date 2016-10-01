@@ -5,13 +5,16 @@
 namespace ServiceStack.IntroSpec.Services
 {
     using Models;
+    using ServiceStack.IntroSpec.Extensions;
 
     public class ApiDocumentationProvider : IApiDocumentationProvider
     {
-        public ApiDocumentation GetApiDocumentation()
+        public ApiDocumentation GetApiDocumentation(string appBaseUrl)
         {
+            appBaseUrl.ThrowIfNullOrEmpty(nameof(appBaseUrl));
+
             var apiSpecFeature = HostContext.GetPlugin<ApiSpecFeature>();
-            return apiSpecFeature.Documentation;
+            return apiSpecFeature.Documentation.WithBaseUrl(appBaseUrl);
         }
     }
 }

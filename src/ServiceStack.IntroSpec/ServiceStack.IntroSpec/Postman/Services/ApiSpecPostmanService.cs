@@ -11,7 +11,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
 #if !DEBUG
     [CacheResponse(MaxAge = 300, Duration = 600)]
 #endif
-    public class ApiSpecPostmanService : IService
+    public class ApiSpecPostmanService : Service
     {
         private readonly IApiDocumentationProvider documentationProvider;
 
@@ -25,7 +25,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
         public object Get(PostmanRequest request)
         {
             // Get the filtered documentation object
-            var documentation = documentationProvider.GetApiDocumentation().Filter(request);
+            var documentation = documentationProvider.GetApiDocumentation(Request.GetApplicationUrl()).Filter(request);
             
             var postmanGenerator = new PostmanCollectionGenerator();
             var collection = postmanGenerator.Generate(documentation);

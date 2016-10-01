@@ -24,6 +24,15 @@ namespace ServiceStack.IntroSpec.Extensions
             return documentation;
         }
 
+        public static ApiDocumentation WithBaseUrl(this ApiDocumentation documentation, string appBaseUrl)
+        {
+            documentation.ThrowIfNull(nameof(documentation));
+            appBaseUrl.ThrowIfNullOrEmpty(nameof(appBaseUrl));
+
+            documentation.ApiBaseUrl = appBaseUrl;
+            return documentation;
+        }
+
         private static Expression<Func<ApiResourceDocumentation, bool>> GetFilter(IFilterableSpecRequest request)
         {
             bool hasFilter = false;

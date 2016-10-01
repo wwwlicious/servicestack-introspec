@@ -27,8 +27,7 @@ namespace ServiceStack.IntroSpec.Services
         public object Get(SpecRequest request)
         {
             // Get the filtered documentation to return
-            var documentation = documentationProvider.GetApiDocumentation().Filter(request);
-
+            var documentation = documentationProvider.GetApiDocumentation(Request.GetApplicationUrl()).Filter(request);
             using (JsConfig.BeginScope())
             {
                 // intercept and output any Type's formatted for documentation

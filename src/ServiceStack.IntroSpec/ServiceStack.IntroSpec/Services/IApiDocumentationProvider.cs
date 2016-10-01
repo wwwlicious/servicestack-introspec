@@ -8,6 +8,6 @@ namespace ServiceStack.IntroSpec.Services
 
     public interface IApiDocumentationProvider
     {
-        ApiDocumentation GetApiDocumentation();
+        ApiDocumentation GetApiDocumentation(string appBaseUrl);
     }
 }

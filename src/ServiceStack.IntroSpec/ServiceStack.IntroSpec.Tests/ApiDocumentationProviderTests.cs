@@ -42,7 +42,7 @@ namespace ServiceStack.IntroSpec.Tests
             fixture.AppHost.LoadPlugin(new ApiSpecFeature(config => apiSpecConfig).WithGenerator(generator));
 
             var provider = new ApiDocumentationProvider();
-            provider.GetApiDocumentation().Should().Be(apiDocumentation);
+            provider.GetApiDocumentation("http://anything/").Should().Be(apiDocumentation);
         }
     }
 }

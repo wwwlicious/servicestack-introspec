@@ -10,7 +10,7 @@ namespace ServiceStack.IntroSpec.Services
 #if !DEBUG
     [CacheResponse(MaxAge = 300, Duration = 600)]
 #endif
-    public class ApiSpecMetadataService : IService
+    public class ApiSpecMetadataService : Service
     {
         private readonly IApiDocumentationProvider documentationProvider;
 
@@ -22,8 +22,7 @@ namespace ServiceStack.IntroSpec.Services
 
         public object Get(SpecMetadataRequest request)
         {
-            var documentation = documentationProvider.GetApiDocumentation();
-
+            var documentation = documentationProvider.GetApiDocumentation(Request.GetApplicationUrl());
             return ApiSpecMetadataUtilities.GenerateResponse(documentation);
         }
     }

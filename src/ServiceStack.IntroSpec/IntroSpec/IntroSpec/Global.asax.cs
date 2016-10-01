@@ -15,19 +15,16 @@ namespace IntroSpec
 {
     public class AppHost : AppHostBase
     {
-        private readonly string serviceUrl;
-
-        public AppHost(string serviceUrl) : base("DemoDocumentationService", typeof(DemoService.DemoService).Assembly)
+        public AppHost() : base("DemoDocumentationService", typeof(DemoService.DemoService).Assembly)
         {
-            this.serviceUrl = serviceUrl;
         }
 
         public override void Configure(Container container)
         {
             SetConfig(new HostConfig
             {
-                WebHostUrl = serviceUrl,
-                ApiVersion = "2.0"
+                ApiVersion = "2.0",
+                HandlerFactoryPath = "something"
             });
 
             LogManager.LogFactory = new ConsoleLogFactory();
@@ -67,11 +64,7 @@ namespace IntroSpec
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-#if DEBUG
-            new AppHost("http://localhost:59118/").Init();
-#else
-            new AppHost("http://introspec.servicestack.net").Init();
-#endif
+            new AppHost().Init();
         }
     }
 }

@@ -30,6 +30,7 @@ namespace ServiceStack.IntroSpec.Models
         public ApiContact Contact { get; set; }
 
         public ApiResourceDocumentation[] Resources { get; set; }
+
         public ApiPlugin[] Plugins { get; set; }
 
         public ApiDocumentation CreateCopy(Func<ApiResourceDocumentation, bool> resourcesFilter)

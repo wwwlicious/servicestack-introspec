@@ -61,12 +61,11 @@ namespace ServiceStack.IntroSpec.Tests
         }
 
         [Fact]
-        public void GenerateDocumentation_SetsBaseUrl_FromConfig()
+        public void GenerateDocumentation_DoesNotSetApiBaseUrl()
         {
-            const string hostUrl = "https://127.0.0.5:9090/api";
-            var host = new BasicAppHost { Config = new HostConfig { WebHostUrl = hostUrl } };
+            var host = new BasicAppHost();
             var doc = generator.GenerateDocumentation(null, host, apiSpecConfig);
-            doc.ApiBaseUrl.Should().Be(hostUrl);
+            doc.ApiBaseUrl.Should().BeNull();
         }
 
         [Fact]
@@ -129,38 +128,6 @@ namespace ServiceStack.IntroSpec.Tests
                     A.CallTo(() => enricher1.Enrich(A<ApiResourceDocumentation>.Ignored, operation2)).MustHaveHappened())
                 .Then(
                     A.CallTo(() => enricher2.Enrich(A<ApiResourceDocumentation>.Ignored, operation2)).MustHaveHappened());
-        }
-    }
-
-    [Collection("AppHost")]
-    public class HostlessTests : IDisposable
-    {
-        private readonly AppDomain noAuthDomain;
-        public HostlessTests()
-        {
-            noAuthDomain = AppDomain.CreateDomain("NoAuthDomain", AppDomain.CurrentDomain.Evidence,
-                AppDomain.CurrentDomain.SetupInformation);
-        }
-
-        [Fact]
-        public void GenerateDocumentation_Throws_IfWebHostUrlNull()
-        {
-            noAuthDomain.DoCallBack(() =>
-            {
-                var generator = new ApiDocumentationGenerator(null);
-                var host = new BasicAppHost { Config = new HostConfig() };
-
-                Action action = () => generator.GenerateDocumentation(null, host, new ApiSpecConfig());
-                action.ShouldThrow<ArgumentException>();
-            });
-        }
-
-        public void Dispose()
-        {
-            if (noAuthDomain != null)
-            {
-                AppDomain.Unload(noAuthDomain);
-            }
         }
     }
 }

@@ -21,12 +21,6 @@ The plugin is added like any other. It has a dependency [Metadata Plugin](https:
 ```csharp
 public override void Configure(Container container)
 {
-    SetConfig(new HostConfig
-    {
-        // Required to know base URL
-        WebHostUrl = "http://api.example.com:8001",
-    });
-
 	// Register plugin
     Plugins.Add(new ApiSpecFeature(config =>
         config.WithDescription("This is a demo app host for testing.")
