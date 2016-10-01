@@ -26,16 +26,13 @@ namespace ServiceStack.IntroSpec
         // List of IApiSpecPopulaters to iterate. Could have the XML doc outside of populaters to save doing it
         public ApiDocumentation GenerateDocumentation(IEnumerable<Operation> operations, IAppHost appHost, ApiSpecConfig config)
         {
-            if (appHost.Config?.WebHostUrl == null)
-                throw new ArgumentException("appHost.Config.WebHostUrl must be set to use the ApiDocumentationGenerator. This is used to generate a unique identifier.");
-            
             var apiDoc = new ApiDocumentation
             {
                 Title = (appHost as ServiceStackHost)?.ServiceName,
                 ApiVersion = appHost.Config?.ApiVersion,
-                ApiBaseUrl = appHost.Config.WebHostUrl,
                 Contact = config.Contact,
-                Description = config.Description
+                Description = config.Description,
+                Plugins = appHost.Plugins.Select(x => new ApiPlugin { Name = x.GetType().FullName, Version = x.GetType().Assembly.GetName().Version.ToString() }).ToArray()
             };
 
             if (config.LicenseUrl != null)
@@ -50,7 +47,6 @@ namespace ServiceStack.IntroSpec
         private IEnumerable<ApiResourceDocumentation> GenerateResourceDocumentation(IEnumerable<Operation> operations)
         {
             var resourceDocs = new List<ApiResourceDocumentation>();
-
             var enrichers = getEnrichers().ToList();
 
             foreach (var operation in operations ?? Enumerable.Empty<Operation>())

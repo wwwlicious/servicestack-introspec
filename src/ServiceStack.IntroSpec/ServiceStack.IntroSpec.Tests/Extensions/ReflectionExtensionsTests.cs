@@ -78,11 +78,50 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
         public void IsCollection_False_ForNotCollectionTypes(Type collectionType)
             => collectionType.IsCollection().Should().BeFalse();
 
+        [Fact]
+        public void CorrectTypeReturns_ForGenericLists()
+        {
+            new List<FirstClass>().GetType().GetEnumerableType().Should().Be<FirstClass>();
+        }
+
+        [Fact]
+        public void CorrectTypeReturns_ForArrays()
+        {
+            new FirstClass[0].GetType().GetEnumerableType().Should().Be<FirstClass>();
+        }
+
+        [Fact]
+        public void CorrectTypeReturns_ForEnumInterfaces()
+        {
+            new EnumClass().GetType().GetEnumerableType().Should().Be<FirstClass>();
+        }
+
+        [Fact]
+        public void CorrectTypeReturns_ForEnumNestedInterfaces()
+        {
+            new EnumInherited().GetType().GetEnumerableType().Should().Be<FirstClass>();
+        }
+
         public class FirstClass
         {
             public string Property { get; set; }
             public DateTime Field;
             public void MyMethod() { }
+        }
+
+        public class EnumInherited : EnumClass { }
+
+        public class EnumClass : IEnumerable<FirstClass>
+        {
+            public IEnumerator<FirstClass> GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
         }
 
         public class SecondClass : FirstClass { }

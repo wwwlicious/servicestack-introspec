@@ -17,12 +17,13 @@
     public class Program
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
         static void Main(string[] args)
         {
-            var serviceUrl = "http://127.0.0.1:8090/";
-            var x = new AppHost(serviceUrl).Init().Start("http://*:8090/");
-            $"ServiceStack SelfHost listening at {serviceUrl} ".Print();
-            Process.Start(serviceUrl);
+            var urlBase = "http://*:8090/";
+            var x = new AppHost().Init().Start(urlBase);
+            $"ServiceStack SelfHost listening at {urlBase} ".Print();
+            Process.Start("http://localhost:8090/");
 
             if (x.StartUpErrors.Count > 0)
             {
@@ -36,18 +37,14 @@
 
     public class AppHost : AppSelfHostBase
     {
-        private readonly string serviceUrl;
-
-        public AppHost(string serviceUrl) : base("DemoDocumentationService", typeof(DemoService).Assembly)
+        public AppHost() : base("DemoDocumentationService", typeof(DemoService).Assembly)
         {
-            this.serviceUrl = serviceUrl;
         }
 
         public override void Configure(Container container)
         {
             SetConfig(new HostConfig
             {
-                WebHostUrl = serviceUrl,
                 ApiVersion = "2.0"
             });
 

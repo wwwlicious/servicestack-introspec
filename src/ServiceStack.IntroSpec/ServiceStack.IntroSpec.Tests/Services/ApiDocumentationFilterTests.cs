@@ -28,6 +28,16 @@ namespace ServiceStack.IntroSpec.Tests.Services
             action.ShouldThrow<ArgumentNullException>();
         }
 
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void WithBaseUrl_Throws_IfUrlIsNullOrEmpty(string baseUrl)
+        {
+            ApiDocumentation documentation = new ApiDocumentation();
+            Action action = () => documentation.WithBaseUrl(baseUrl);
+            action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("appBaseUrl");
+        }
+
         [Fact]
         public void GetApiDocumentation_ReturnsWholeObject_IfNoFilterCriteria()
         {
@@ -35,6 +45,13 @@ namespace ServiceStack.IntroSpec.Tests.Services
             var result = documentation.Filter(new Filterable());
 
             result.Should().Be(documentation);
+        }
+
+        [Fact]
+        public void WithBaseUrl_SetsApiBaseUrl()
+        {
+            var documentation = new ApiDocumentation();
+            documentation.WithBaseUrl("test").ApiBaseUrl.Should().Be("test");
         }
 
         [Fact]

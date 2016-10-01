@@ -4,8 +4,12 @@
 
 namespace ServiceStack.IntroSpec.Services
 {
+    using System;
+
     using DTO;
     using Extensions;
+
+    using ServiceStack.Text;
 
 #if !DEBUG
     [CacheResponse(MaxAge = 300, Duration = 600)]
@@ -23,9 +27,14 @@ namespace ServiceStack.IntroSpec.Services
         public object Get(SpecRequest request)
         {
             // Get the filtered documentation to return
-            var documentation = documentationProvider.GetApiDocumentation().Filter(request);
+            var documentation = documentationProvider.GetApiDocumentation(Request.GetApplicationUrl()).Filter(request);
+            using (JsConfig.BeginScope())
+            {
+                // intercept and output any Type's formatted for documentation
+                JsConfig<Type>.SerializeFn = x => x.GetDocumentationTypeName();
+                return new SpecResponse { ApiDocumentation = documentation };
+            }
 
-            return new SpecResponse { ApiDocumentation = documentation };
         }
     }
 }

@@ -39,6 +39,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             {
                 request.Category = request.Category.GetIfNullOrEmpty(() => requestEnricher.GetCategory(operation));
                 request.Tags = request.Tags.GetBasedOnStrategy(() => requestEnricher.GetTags(operation));
+                request.AllowMultiple = true;
             }
 
             request.ReturnType =
@@ -49,6 +50,6 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
         }
 
         private static ApiResourceType CreateApiResourceReturnType(Operation operation)
-            => operation.ResponseType == null ? null : ApiResourceType.Create(operation.ResponseType.Name);
+            => operation.ResponseType == null ? null : ApiResourceType.Create(operation.ResponseType);
     }
 }

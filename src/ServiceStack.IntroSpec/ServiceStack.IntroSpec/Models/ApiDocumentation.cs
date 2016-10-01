@@ -5,6 +5,7 @@
 namespace ServiceStack.IntroSpec.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
@@ -13,16 +14,24 @@ namespace ServiceStack.IntroSpec.Models
     public class ApiDocumentation
     {
         public string Title { get; set; }
+
         public string ApiVersion { get; set; }
+
         public string ApiBaseUrl { get; set; }
 
         public string Description { get; set; }
+
         public string TermsOfService { get; set; }
+
         public string Licence { get; set; }
+
         public string LicenceUrl { get; set; }
+
         public ApiContact Contact { get; set; }
 
         public ApiResourceDocumentation[] Resources { get; set; }
+
+        public ApiPlugin[] Plugins { get; set; }
 
         public ApiDocumentation CreateCopy(Func<ApiResourceDocumentation, bool> resourcesFilter)
         {

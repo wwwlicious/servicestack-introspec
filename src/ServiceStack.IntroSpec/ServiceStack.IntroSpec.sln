@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7654ED39-DF4D-47A5-87E4-F93FC69AD5AD}"
 EndProject
@@ -14,6 +14,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceStack.IntroSpec", "ServiceStack.IntroSpec\ServiceStack.IntroSpec.csproj", "{50FAC613-CC23-493B-AEF8-77277D5B3F3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntroSpec", "IntroSpec\IntroSpec\IntroSpec.csproj", "{D32EB8EE-3954-453B-A3FD-07C605C86160}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3717F572-08FE-418F-835C-5BD6D97B3BA1}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\readme.md = ..\..\readme.md
+		..\..\docs\settings.md = ..\..\docs\settings.md
+		..\..\docs\sources.md = ..\..\docs\sources.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

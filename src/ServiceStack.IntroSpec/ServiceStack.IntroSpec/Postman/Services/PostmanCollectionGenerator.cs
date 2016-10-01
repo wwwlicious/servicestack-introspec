@@ -19,9 +19,16 @@ namespace ServiceStack.IntroSpec.Postman.Services
 
         public Dictionary<string, string> FriendlyTypeNames = new Dictionary<string, string>
         {
+            {"UInt16", "int"},
+            {"Int16", "int"},
+            {"UInt32", "int"},
             {"Int32", "int"},
+            {"UInt64", "long"},
             {"Int64", "long"},
             {"Boolean", "bool"},
+            {"Byte", "string"},
+            {"SByte", "string"},
+            {"Char", "string"},
             {"String", "string"},
             {"Double", "double"},
             {"Single", "float"},
@@ -74,14 +81,14 @@ namespace ServiceStack.IntroSpec.Postman.Services
                     var pathVariableNames = untouchedRelativePath.GetPathParams();
 
                     // Replace pathVariable names so that /api/{name}/ becomes /api/:name/
-                    string relativePath = pathVariableNames.Aggregate(untouchedRelativePath,
+                    var relativePath = pathVariableNames.Aggregate(untouchedRelativePath,
                         (current, match) => current.Replace($"{{{match}}}", $":{match}"));
 
                     if (!pathVariableNames.IsNullOrEmpty())
                         relativePath = relativePath.EnsureEndsWith("/");
 
                     // Add path vars regardless of verb
-                    Dictionary<string, string> pathVars = GetPathVariables(data, pathVariableNames);
+                    var pathVars = GetPathVariables(data, pathVariableNames);
 
                     log.Debug($"Generating PostmanRequest for resource {resource.Title}, {action}");
 
@@ -160,17 +167,22 @@ namespace ServiceStack.IntroSpec.Postman.Services
             if (resource.Properties.IsNullOrEmpty())
                 return Enumerable.Empty<PostmanSpecData>().ToList();
 
-            var data = resource.Properties.Select(r =>
-            {
-                var type = FriendlyTypeNames.SafeGet(r.ClrType.Name, r.ClrType.Name);
-                return new PostmanSpecData
-                {
-                    Enabled = true,
-                    Key = r.Id.UrlEncode(),
-                    Type = type,
-                    Value = $"val-{type}"
-                };
-            }).ToList();
+            var data = resource.Properties.Select(
+                r =>
+                    {
+
+                        var friendlyTypeName = r.ClrType.IsPrimitive
+                                                   ? FriendlyTypeNames.SafeGet(r.ClrType.Name, r.ClrType.Name)
+                                                   : r.ClrType.GetDocumentationTypeName();
+
+                        return new PostmanSpecData
+                                   {
+                                       Enabled = true,
+                                       Key = r.Id.UrlEncode(),
+                                       Type = friendlyTypeName,
+                                       Value = $"val-{friendlyTypeName}"
+                                   };
+                    }).ToList();
             return data;
         }
     }

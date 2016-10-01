@@ -33,6 +33,7 @@ namespace ServiceStack.IntroSpec.Models
         public bool? IsRequired { get; set; }
         public string[] ExternalLinks { get; set; }
         public bool? AllowMultiple { get; set; }
+        public bool? IsCollection { get; set; }
 
         public IApiResourceType EmbeddedResource { get; set; }
 

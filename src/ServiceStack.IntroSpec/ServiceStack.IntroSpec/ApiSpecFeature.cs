@@ -171,6 +171,7 @@ namespace ServiceStack.IntroSpec
 
         private void RegisterDependencies(Container container)
         {
+            container.RegisterAutoWiredAs<ApiDocumentationProvider, IApiDocumentationProvider>();
             container.RegisterAutoWiredAs<XmlDocumentationReader, IXmlDocumentationReader>();
             container.RegisterAutoWiredAs<XmlDocumentationLookup, IXmlDocumentationLookup>();
 
@@ -178,8 +179,6 @@ namespace ServiceStack.IntroSpec
             container.Register<IEnrich>(Constants.ClassEnricherKey, c => new AbstractClassEnricher());
             container.Register<IEnrich>(Constants.XmlEnricherKey, c => new XmlEnricher(c.Resolve<IXmlDocumentationLookup>()));
             container.Register<IEnrich>(Constants.FallbackEnricherKey, c => new FallbackEnricher());
-
-            container.RegisterAs<ApiDocumentationProvider, IApiDocumentationProvider>();
         }
     }
 }
