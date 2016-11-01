@@ -6,6 +6,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using FakeItEasy;
     using FluentAssertions;
     using Host;
@@ -42,7 +43,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichActions_ReturnsObjectPerVerb_UsingAnyReplacementVerbs_IfAnyPresent()
         {
-            var operation = new Operation { Actions = new List<string> { "ANY" } };
+            var operation = new Operation { Actions = new List<string> { "ANY" }, RequestType = typeof(int) };
             using (DocumenterSettings.With(replacementVerbs: new[] { GetVerb, "PUT", "DELETE" }))
             {
                 var result = enricherManager.EnrichActions(null, operation);
@@ -63,6 +64,48 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             result[0].Verb.Should().Be(GetVerb);
             result[1].Verb.Should().Be("PUT");
             result[2].Verb.Should().Be("DELETE");
+        }
+
+        [Fact]
+        public void EnrichActions_ReturnsObjectPerReplacementVerb_PlusRouteAttributeVerb()
+        {
+            var operation = new Operation { Actions = new List<string> { "ANY" }, RequestType = typeof(CustomRouteDto) };
+
+            using (DocumenterSettings.With(replacementVerbs: new[] { "GET", "POST" }))
+            {
+                var result = enricherManager.EnrichActions(null, operation);
+                result.Length.Should().Be(4);
+                var expected = new[] { "GET", "POST", "PUT", "DELETE" };
+                result.Should().OnlyContain(r => expected.Contains(r.Verb));
+            }
+        }
+
+        [Fact]
+        public void EnrichActions_ReturnsObjectPerReplacementVerb_PlusRouteAttributeVerb_AndAdditionalOperationVerbs()
+        {
+            var operation = new Operation { Actions = new List<string> { "ANY", "PATCH" }, RequestType = typeof(CustomRouteDto) };
+
+            using (DocumenterSettings.With(replacementVerbs: new[] { "GET", "POST" }))
+            {
+                var result = enricherManager.EnrichActions(null, operation);
+                result.Length.Should().Be(5);
+                var expected = new[] { "GET", "POST", "PUT", "DELETE", "PATCH" };
+                result.Should().OnlyContain(r => expected.Contains(r.Verb));
+            }
+        }
+
+        [Fact]
+        public void EnrichActions_ReturnsObjectPerReplacementVerb_PlusOperationVerbs()
+        {
+            var operation = new Operation { Actions = new List<string> { "ANY", "PATCH" }, RequestType = typeof(CustomNoRouteDto) };
+
+            using (DocumenterSettings.With(replacementVerbs: new[] { "GET", "POST" }))
+            {
+                var result = enricherManager.EnrichActions(null, operation);
+                result.Length.Should().Be(3);
+                var expected = new[] { "GET", "POST", "PATCH" };
+                result.Should().OnlyContain(r => expected.Contains(r.Verb));
+            }
         }
 
         [Theory]
@@ -189,4 +232,15 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             A.CallTo(() => actionEnricher.GetNotes(operation, GetVerb)).MustNotHaveHappened();
         }
     }
+
+    [Route("/customRoute", "PUT")]
+    [Route("/deleteThing", "DELETE")]
+    [Route("/postThing", "POST")]
+    [FallbackRoute("/foo")]
+    public class CustomRouteDto
+    {
+        public int Id { get; set; }
+    }
+
+    public class CustomNoRouteDto { }
 }

@@ -6,9 +6,11 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Extensions;
     using Host;
     using Interfaces;
+    using Logging;
     using Models;
     using Settings;
 
@@ -16,6 +18,8 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
     {
         private readonly IActionEnricher actionEnricher;
         private readonly ISecurityEnricher securityEnricher;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(ActionEnricherManager));
 
         public ActionEnricherManager(IActionEnricher actionEnricher, ISecurityEnricher securityEnricher)
         {
@@ -80,10 +84,36 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
         private string[] GetVerbs(Operation operation)
         {
-            // TODO - Look at [Restrict] [Route] [Authenticate] to determine if some should be ignored
-            return operation.Actions.Contains("ANY")
-                ? DocumenterSettings.ReplacementVerbs as string[] ?? DocumenterSettings.ReplacementVerbs.ToArray()
-                : operation.Actions.ToArray();
+            // TODO - Look at [Restrict] [Authenticate] to determine if some should be ignored
+            const string anyVerb = "ANY";
+
+            if (!operation.Actions.Contains(anyVerb)) return operation.Actions.ToArray();
+
+            var routeVerbs = GetRouteVerbs(operation);
+            log.Debug($"Got route attribute verbs {routeVerbs.Join(",")} for type {operation.RequestType}");
+
+            var replacementVerbs = DocumenterSettings.ReplacementVerbs as string[] ??
+                                   DocumenterSettings.ReplacementVerbs.ToArray();
+
+            // Available verbs are: ReplacementVerbs + RouteAttribute verbs + Action (from svc methods)
+            string[] verbs = routeVerbs
+                .Union(replacementVerbs)
+                .Union(operation.Actions.Where(s => s != anyVerb))
+                .Distinct()
+                .ToArray();
+
+            log.Debug($"Got verbs {routeVerbs.Join(",")} for type {operation.RequestType}");
+            return verbs;
+        }
+
+        private static List<string> GetRouteVerbs(Operation operation)
+        {
+            // For the request type, get a list of all route attributes (with verb set to discount Fallback route)
+            var routeAttributes =
+                operation.RequestType.GetCustomAttributes<RouteAttribute>().Where(r => !string.IsNullOrEmpty(r.Verbs));
+
+            var routeVerbs = routeAttributes.Select(r => r.Verbs).ToList();
+            return routeVerbs;
         }
     }
 }
