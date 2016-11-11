@@ -61,6 +61,7 @@
     <Compile Include="DTO\DtoGrouping.cs" />
     <Compile Include="DTO\SpecMetadataRequest.cs" />
     <Compile Include="DTO\SpecMetadataResponse.cs" />
+    <Compile Include="Enrichers\Infrastructure\ResourceModel.cs" />
     <Compile Include="Models\ApiPlugin.cs" />
     <Compile Include="Models\RelativePath.cs" />
     <Compile Include="Services\ApiSpecMetadataService.cs" />

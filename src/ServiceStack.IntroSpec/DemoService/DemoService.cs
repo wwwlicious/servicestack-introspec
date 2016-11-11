@@ -130,6 +130,8 @@
         public string Surname { get; set; }
 
         public string[] Attributes { get; set; }
+
+        public Name EmbeddedName { get; set; }
     }
 
     public class MetaDataExcludeService : Service
@@ -202,8 +204,7 @@
             return new SecureResponse();
         }
     }
-
-
+    
     public class MyDtoService : Service
     {
         public object Delete(MyDto request) => new SecureResponse();
@@ -215,5 +216,16 @@
     public class MyDto : IReturn<SecureResponse>
     {
 
+    }
+
+    public class RecursiveDto : IReturnVoid
+    {
+        [ApiMember(Name = "Same type")]
+        public RecursiveDto Child { get; set; }
+    }
+
+    public class RecursiveChild : Service
+    {
+        public object Any(RecursiveDto request) => null;
     }
 }   
