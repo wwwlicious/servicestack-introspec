@@ -75,7 +75,8 @@
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
 
             // From appsettings, see readme
-            // Plugins.Add(new ApiSpecFeature(config => config.FromAppSettings()));
+            Plugins.Add(new ApiSpecFeature(config => config.FromAppSettings()));
+            
             // or using fluent builder
             Plugins.Add(new ApiSpecFeature(config =>
                     config.WithDescription("This is a demo app host setup for testing documentation.")

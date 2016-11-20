@@ -33,12 +33,12 @@ There are two methods of loading the plugin configuration
 ```xml
 <appSettings>
   <!-- Required -->
-  <add key="ServiceStack.Plugins.IntroSpec.ContactName" value="Private Pile"/>
-  <add key="ServiceStack.Plugins.IntroSpec.ContactEmail" value="private@pile.com"/>
+  <add key="ServiceStack.Plugins.IntroSpec.Contact.Name" value="Private Pile"/>
+  <add key="ServiceStack.Plugins.IntroSpec.Contact.Email" value="private@pile.com"/>
   <add key="ServiceStack.Plugins.IntroSpec.Description" value="This is my service, there are many just like it, but this one is mine"/>
 
   <!-- Optional -->
-  <add key="ServiceStack.Plugins.IntroSpec.ContactUrl" value="http://socialnetwork.com/profile/pile"/>
+  <add key="ServiceStack.Plugins.IntroSpec.Contact.Url" value="http://socialnetwork.com/profile/pile"/>
   <add key="ServiceStack.Plugins.IntroSpec.LicenseUrl" value="https://opensource.org/licenses/MPL-2.0"/>
 </appSettings>
 ```
