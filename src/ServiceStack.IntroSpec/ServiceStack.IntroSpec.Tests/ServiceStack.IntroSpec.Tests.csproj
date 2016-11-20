@@ -88,6 +88,7 @@
     <Compile Include="ApiDocumentationProviderTests.cs" />
     <Compile Include="Enrichers\AbstractClassEnricherTests.cs" />
     <Compile Include="Enrichers\Infrastructure\ActionEnricherManagerTests.cs" />
+    <Compile Include="Extensions\ApiSpecConfigExtensionsTests.cs" />
     <Compile Include="Models\RelativePathTests.cs" />
     <Compile Include="Settings\ApiSpecConfigTests.cs" />
     <Compile Include="TypeSpec\ApiDtoSpecTests.cs" />
