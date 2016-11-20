@@ -130,6 +130,8 @@
         public string Surname { get; set; }
 
         public string[] Attributes { get; set; }
+
+        public Name EmbeddedName { get; set; }
     }
 
     public class MetaDataExcludeService : Service
@@ -170,7 +172,7 @@
     public class OneWayRequest { }
 
     public class SecureResponse { }
-
+    
     /// <exception cref="ArgumentException">May throw argument exception</exception>
     /// <exception cref="UnauthorizedAccessException"></exception>
     [Authenticate(ApplyTo.Get | ApplyTo.Put | ApplyTo.Post | ApplyTo.Delete)]
@@ -201,5 +203,29 @@
         {
             return new SecureResponse();
         }
+    }
+    
+    public class MyDtoService : Service
+    {
+        public object Delete(MyDto request) => new SecureResponse();
+        public object Any(MyDto request) => new SecureResponse();
+    }
+
+    [Route("/items/{Name}/", "PUT")]
+    [Route("/items", "POST")]
+    public class MyDto : IReturn<SecureResponse>
+    {
+
+    }
+
+    public class RecursiveDto : IReturnVoid
+    {
+        [ApiMember(Name = "Same type")]
+        public RecursiveDto Child { get; set; }
+    }
+
+    public class RecursiveChild : Service
+    {
+        public object Any(RecursiveDto request) => null;
     }
 }   

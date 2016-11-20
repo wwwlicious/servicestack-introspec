@@ -18,16 +18,16 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
     public class PropertyEnricherManager
     {
         private readonly IPropertyEnricher propertyEnricher;
-        private readonly Action<IApiResourceType, Type, bool> enrichResource;
+        private readonly Action<IApiResourceType, ResourceModel> enrichResource;
         private static readonly Dictionary<Type, MemberInfo[]> PropertyDictionary = new Dictionary<Type, MemberInfo[]>();
 
-        public PropertyEnricherManager(IPropertyEnricher propertyEnricher, Action<IApiResourceType, Type, bool> enrichResource)
+        public PropertyEnricherManager(IPropertyEnricher propertyEnricher, Action<IApiResourceType, ResourceModel> enrichResource)
         {
             this.propertyEnricher = propertyEnricher;
             this.enrichResource = enrichResource;
         }
 
-        public ApiPropertyDocumention[] EnrichParameters(ApiPropertyDocumention[] properties, Type resourceType, bool isRequest)
+        public ApiPropertyDocumention[] EnrichParameters(ApiPropertyDocumention[] properties, ResourceModel resource)
         {
             if (propertyEnricher == null)
                 return properties;
@@ -38,6 +38,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             var newList = false;
 
             // If the type is collection use the element rather than collection type (e.g. if string[] use System.String, not System.Array)
+            var resourceType = resource.ResourceType;
             if (resourceType.IsCollection())
                 resourceType = resourceType.GetEnumerableType();
 
@@ -64,7 +65,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                     });
 
                 // Pass it to method to be populated.
-                EnrichParameter(property, mi, isRequest);
+                EnrichParameter(property, mi, resource);
 
                 if (newList)
                     parameterDocuments.Add(property);
@@ -90,7 +91,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 });
         }
 
-        private void EnrichParameter(ApiPropertyDocumention property, MemberInfo mi, bool isRequest)
+        private void EnrichParameter(ApiPropertyDocumention property, MemberInfo mi, ResourceModel resource)
         {
             if (property.Title == property.Id || string.IsNullOrEmpty(property.Title))
                 property.Title = propertyEnricher.GetTitle(mi);
@@ -102,7 +103,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
             property.IsRequired = property.IsRequired.GetIfNoValue(() => propertyEnricher.GetIsRequired(mi));
 
-            if (isRequest)
+            if (resource.IsRequest)
             {
                 if (mi.GetFieldPropertyType().IsCollection())
                     property.AllowMultiple = true;
@@ -117,19 +118,24 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             }
             property.ExternalLinks = property.ExternalLinks.GetIfNullOrEmpty(() => propertyEnricher.GetExternalLinks(mi));
 
-            EnrichEmbeddedResource(property, mi, isRequest);
+            EnrichEmbeddedResource(property, mi, resource);
         }
 
-        private void EnrichEmbeddedResource(ApiPropertyDocumention property, MemberInfo mi, bool isRequest)
+        private void EnrichEmbeddedResource(ApiPropertyDocumention property, MemberInfo mi, ResourceModel resource)
         {
             var fieldPropertyType = mi.GetFieldPropertyType();
-            if (fieldPropertyType.IsSystemType() || fieldPropertyType.IsEnum)
+            if (!ShouldPopulateEmbeddedResource(fieldPropertyType, resource.ResourceType))
                 return;
 
             if (property.EmbeddedResource == null)
                 property.EmbeddedResource = ApiResourceType.Create(fieldPropertyType);
 
-            enrichResource(property.EmbeddedResource, fieldPropertyType, isRequest);
+            enrichResource(property.EmbeddedResource, new ResourceModel(fieldPropertyType, resource.IsRequest));
         }
+
+        // Avoid populating if SystemType, enum or embedded property type == parent resource type
+        private bool ShouldPopulateEmbeddedResource(Type embeddedType, Type resourceType)
+            => !(embeddedType.IsSystemType() || embeddedType.IsEnum || embeddedType == resourceType);
+
     }
 }

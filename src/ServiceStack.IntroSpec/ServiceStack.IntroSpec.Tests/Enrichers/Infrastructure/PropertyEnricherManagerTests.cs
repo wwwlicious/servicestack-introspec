@@ -50,7 +50,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichParameters_ReturnsNull_IfParameterEnricherNull_AndPassedParametersNull()
         {
-            var actual = nullPropertyManager.EnrichParameters(null, typeof(string), false);
+            var actual = nullPropertyManager.EnrichParameters(null, new ResourceModel(typeof(string), false));
             actual.Should().BeNull();
         }
 
@@ -58,21 +58,21 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [MemberData("TestData")]
         public void EnrichParameters_ReturnsPassedParameters_IfParameterEnricherNull(ApiPropertyDocumention[] properties)
         {
-            var actual = nullPropertyManager.EnrichParameters(properties, typeof (string), false);
+            var actual = nullPropertyManager.EnrichParameters(properties, new ResourceModel(typeof (string), false));
             actual.Should().BeEquivalentTo(properties);
         }
 
         [Fact]
         public void EnrichParameters_ReturnsEmpty_IfNoPropsInType_AndPassedNull()
         {
-            var actual = manager.EnrichParameters(null, typeof (NoProps), false);
+            var actual = manager.EnrichParameters(null, new ResourceModel(typeof (NoProps), false));
             actual.Should().BeEmpty();
         }
 
         [Fact]
         public void EnrichParameters_ReturnsEmpty_IfNoPropsInType_AndEmpty()
         {
-            var actual = manager.EnrichParameters(new ApiPropertyDocumention[0], typeof(NoProps), true);
+            var actual = manager.EnrichParameters(new ApiPropertyDocumention[0], new ResourceModel(typeof(NoProps), true));
             actual.Should().BeEmpty();
         }
 
@@ -80,21 +80,22 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void EnrichParameters_ReturnsPassedParameters_IfNoPropsInType()
         {
             var parameters = new[] { new ApiPropertyDocumention { Id = "yes" } };
-            var actual = manager.EnrichParameters(parameters, typeof(NoProps), true);
+            var actual = manager.EnrichParameters(parameters, new ResourceModel(typeof(NoProps), true));
             actual.Should().BeEquivalentTo(parameters);
         }
 
         [Fact]
         public void EnrichParameters_ReturnsEmpty_IfOnlyIgnoredPropsInType_AndPassedNull()
         {
-            var actual = manager.EnrichParameters(null, typeof(IgnoredProps), true);
+            var actual = manager.EnrichParameters(null, new ResourceModel(typeof(IgnoredProps), true));
             actual.Should().BeEmpty();
         }
 
         [Fact]
         public void EnrichParameters_ReturnsEmpty_IfOnlyIgnoredPropsInType_AndEmpty()
         {
-            var actual = manager.EnrichParameters(new ApiPropertyDocumention[0], typeof(IgnoredProps), true);
+            var actual = manager.EnrichParameters(new ApiPropertyDocumention[0],
+                new ResourceModel(typeof(IgnoredProps), true));
             actual.Should().BeEmpty();
         }
 
@@ -102,7 +103,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void EnrichParameters_ReturnsPassedParameters_IfOnlyIgnoredPropsInType()
         {
             var parameters = new[] { new ApiPropertyDocumention { Id = "yes" } };
-            var actual = manager.EnrichParameters(parameters, typeof(IgnoredProps), true);
+            var actual = manager.EnrichParameters(parameters, new ResourceModel(typeof(IgnoredProps), true));
             actual.Should().BeEquivalentTo(parameters);
         }
         
@@ -111,14 +112,15 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void EnrichParameters_ReturnsParamPerProperty(ApiPropertyDocumention[] properties)
         {
             var count = properties?.Length ?? 0;
-            var actual = manager.EnrichParameters(properties, typeof(SingleProp), false);
+            var actual = manager.EnrichParameters(properties, new ResourceModel(typeof(SingleProp), false));
             actual.Length.Should().Be(count + 1);
         }
 
         [Fact]
         public void EnrichParameters_DoesNotAddToReturn_IfPopulated()
         {
-            var actual = manager.EnrichParameters(new[] { new ApiPropertyDocumention { Id = "X" } }, typeof(SingleProp), false);
+            var actual = manager.EnrichParameters(new[] { new ApiPropertyDocumention { Id = "X" } },
+                new ResourceModel(typeof(SingleProp), false));
             actual.Length.Should().Be(1);
         }
 
@@ -129,7 +131,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Title = title;
-            manager.EnrichParameters(new[] { param }, typeof (SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof (SingleProp), false));
             A.CallTo(() => propertyEnricher.GetTitle(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -138,7 +140,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Title = "put in the work";
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetTitle(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -149,7 +151,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Description = desc;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetDescription(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -158,7 +160,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Description = "put in the work";
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetDescription(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -169,7 +171,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Notes = notes;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetNotes(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -178,7 +180,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Notes = "put in the work";
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetNotes(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -189,7 +191,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.ParamType = paramType;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetParamType(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -198,7 +200,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.ParamType = "put in the work";
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetParamType(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -207,7 +209,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Contraints = null;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetConstraints(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -216,7 +218,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.Contraints = new PropertyConstraint();
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetConstraints(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
         
@@ -225,7 +227,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.IsRequired = null;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetIsRequired(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -234,7 +236,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.IsRequired = false;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetIsRequired(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -243,7 +245,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.AllowMultiple = null;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), true);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), true));
             A.CallTo(() => propertyEnricher.GetAllowMultiple(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -252,7 +254,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.AllowMultiple = null;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetAllowMultiple(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -261,7 +263,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.AllowMultiple = false;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetAllowMultiple(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -270,7 +272,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.ExternalLinks = null;
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetExternalLinks(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
 
@@ -279,7 +281,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
             param.ExternalLinks = new[] { "http://example.com" };
-            manager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetExternalLinks(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
 
@@ -289,9 +291,9 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             var param = GetApiParameterDocumention();
 
             bool called = false;
-            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type, isRequest) => { called = true; });
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, resourceModel) => { called = true; });
 
-            enricherManager.EnrichParameters(new[] { param }, typeof(ComplexProp), false);
+            enricherManager.EnrichParameters(new[] { param }, new ResourceModel(typeof(ComplexProp), false));
             called.Should().BeTrue();
         }
 
@@ -300,12 +302,12 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         {
             var param = GetApiParameterDocumention();
 
-            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type, isRequest) =>
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, resourceModel) =>
             {
                 resource.TypeName.Should().Be("IgnoredProps");
             });
 
-            enricherManager.EnrichParameters(new[] { param }, typeof(ComplexProp), false);
+            enricherManager.EnrichParameters(new[] { param }, new ResourceModel(typeof(ComplexProp), false));
         }
 
         [Fact]
@@ -314,9 +316,21 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             var param = GetApiParameterDocumention();
             
             bool called = false;
-            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type, isRequest) => { called = true; });
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, resourceModel) => { called = true; });
 
-            enricherManager.EnrichParameters(new[] { param }, typeof(SingleProp), false);
+            enricherManager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
+            called.Should().BeFalse();
+        }
+
+        [Fact]
+        public void EnrichParameters_DoesNotCallEnrichResource_IfIsSelfReferencingType()
+        {
+            var param = GetApiParameterDocumention();
+
+            bool called = false;
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, resourceModel) => { called = true; });
+
+            enricherManager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SelfReference), false));
             called.Should().BeFalse();
         }
 
@@ -326,23 +340,23 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             var param = GetApiParameterDocumention();
 
             bool called = false;
-            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, type, isRequest) => { called = true; });
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, resourceModel) => { called = true; });
 
-            enricherManager.EnrichParameters(new[] { param }, typeof(MyEnum), false);
+            enricherManager.EnrichParameters(new[] { param }, new ResourceModel(typeof(MyEnum), false));
             called.Should().BeFalse();
         }
 
         [Fact]
         public void EnrichParameters_ArrayType_ReturnsPropertiesOfType()
         {
-            var actual = manager.EnrichParameters(null, typeof(ComplexProp[]), false);
+            var actual = manager.EnrichParameters(null, new ResourceModel(typeof(ComplexProp[]), false));
             actual[0].ClrType.Should().Be<IgnoredProps>();
         }
 
         [Fact]
         public void EnrichParameters_IsCollectionTrue_IfIsCollectionTypeAndNotRequest()
         {
-            var actual = manager.EnrichParameters(null, typeof(ContainsArray[]), false);
+            var actual = manager.EnrichParameters(null, new ResourceModel(typeof(ContainsArray[]), false));
             actual[0].ClrType.Should().Be<ComplexProp[]>();
             actual[0].IsCollection.Should().BeTrue();
             actual[0].AllowMultiple.Should().NotHaveValue();
@@ -351,14 +365,14 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichParameters_IsCollectionFalse_IfIsCollectionTypeAndRequest()
         {
-            var actual = manager.EnrichParameters(null, typeof(ContainsArray[]), true);
+            var actual = manager.EnrichParameters(null, new ResourceModel(typeof(ContainsArray[]), true));
             actual[0].ClrType.Should().Be<ComplexProp[]>();
             actual[0].IsCollection.Should().NotHaveValue();
             actual[0].AllowMultiple.Should().BeTrue();
         }
 
         private static ApiPropertyDocumention GetApiParameterDocumention() => new ApiPropertyDocumention { Id = "X" };
-        private void ResourceEnricher(IApiResourceType resource, Type type, bool isRequest) { }
+        private void ResourceEnricher(IApiResourceType resource, ResourceModel resourceModel) { }
     }
 
     public class NoProps { }
@@ -390,5 +404,10 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
     public class MasterClass
     {
         public ContainsArray[] Array { get; set; }
+    }
+
+    public class SelfReference
+    {
+        public SelfReference Child { get; set; }
     }
 }
