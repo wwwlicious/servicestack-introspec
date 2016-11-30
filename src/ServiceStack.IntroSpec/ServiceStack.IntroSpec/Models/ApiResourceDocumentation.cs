@@ -31,7 +31,9 @@ namespace ServiceStack.IntroSpec.Models
         public string Notes { get; set; }
         public ApiPropertyDocumention[] Properties { get; set; }
         public bool? AllowMultiple { get; set; }
+        public bool? HasValidator { get; set; }
         public bool? IsCollection { get; set; }
+
         // From IApiRequest
         public ApiAction[] Actions { get; set; }
         public ApiResourceType ReturnType { get; set; }

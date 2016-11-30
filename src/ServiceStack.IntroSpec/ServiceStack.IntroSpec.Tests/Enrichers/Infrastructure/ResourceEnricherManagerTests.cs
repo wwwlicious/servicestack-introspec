@@ -123,6 +123,8 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             public ApiAction[] Actions { get; set; }
 
             public bool? AllowMultiple { get; set; }
+
+            public bool? HasValidator { get; set; }
         }
     }
 }

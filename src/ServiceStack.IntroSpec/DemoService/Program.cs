@@ -7,12 +7,14 @@
     using Funq;
     using ServiceStack;
     using ServiceStack.Api.Swagger;
+    using ServiceStack.FluentValidation;
     using ServiceStack.IntroSpec;
     using ServiceStack.IntroSpec.Models;
     using ServiceStack.IntroSpec.Settings;
     using ServiceStack.Logging;
     using ServiceStack.MsgPack;
     using ServiceStack.Text;
+    using ServiceStack.Validation;
 
     public class Program
     {
@@ -51,6 +53,8 @@
             LogManager.LogFactory = new ConsoleLogFactory();
 
             SetupPlugins();
+         
+            container.RegisterValidators(typeof(MyDtoValidator).Assembly);
         }
 
         private void SetupPlugins()

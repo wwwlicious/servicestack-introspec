@@ -5,6 +5,7 @@
     using System.Runtime.Serialization;
     using ServiceStack;
     using ServiceStack.DataAnnotations;
+    using ServiceStack.FluentValidation;
 
     public enum Names
     {
@@ -215,7 +216,15 @@
     [Route("/items", "POST")]
     public class MyDto : IReturn<SecureResponse>
     {
+        public string ToValidate { get; set; }
+    }
 
+    public class MyDtoValidator : AbstractValidator<MyDto>
+    {
+        public MyDtoValidator()
+        {
+            RuleFor(x => x.ToValidate).NotEmpty();
+        }
     }
 
     public class RecursiveDto : IReturnVoid

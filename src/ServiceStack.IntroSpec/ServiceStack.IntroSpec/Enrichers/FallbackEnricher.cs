@@ -23,6 +23,7 @@ namespace ServiceStack.IntroSpec.Enrichers
         public string GetNotes(Type type) => DocumenterSettings.FallbackNotes;
 
         public bool? GetAllowMultiple(Type type) => null;
+        public bool? GetHasValidator(Type type) => null;
 
         public string[] GetContentTypes(Operation operation, string verb) => DocumenterSettings.DefaultContentTypes?.ToArray();
 

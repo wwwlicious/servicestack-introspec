@@ -4,6 +4,7 @@
 
 namespace ServiceStack.IntroSpec.Enrichers.Interfaces
 {
+    using System;
     using Host;
 
     /// <summary>
@@ -13,5 +14,6 @@ namespace ServiceStack.IntroSpec.Enrichers.Interfaces
     {
         string GetCategory(Operation operation);
         string[] GetTags(Operation operation);
+        bool? GetHasValidator(Type requestType);
     }
 }
