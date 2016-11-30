@@ -27,9 +27,8 @@ namespace ServiceStack.IntroSpec.Extensions
         public static ApiDocumentation WithBaseUrl(this ApiDocumentation documentation, string appBaseUrl)
         {
             documentation.ThrowIfNull(nameof(documentation));
-            appBaseUrl.ThrowIfNullOrEmpty(nameof(appBaseUrl));
 
-            documentation.ApiBaseUrl = appBaseUrl;
+            documentation.ApiBaseUrl = appBaseUrl.ThrowIfNullOrEmpty(nameof(appBaseUrl));
             return documentation;
         }
 

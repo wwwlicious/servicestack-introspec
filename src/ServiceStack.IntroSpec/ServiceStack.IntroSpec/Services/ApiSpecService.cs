@@ -20,8 +20,7 @@ namespace ServiceStack.IntroSpec.Services
 
         public ApiSpecService(IApiDocumentationProvider documentationProvider)
         {
-            documentationProvider.ThrowIfNull(nameof(documentationProvider));
-            this.documentationProvider = documentationProvider;
+            this.documentationProvider = documentationProvider.ThrowIfNull(nameof(documentationProvider));
         }
 
         public object Get(SpecRequest request)
