@@ -23,34 +23,53 @@ The plugin is added like any other. It has a dependency on ServiceStack's [Metad
 
 ### Config 
 
-The plugin configuration requires values for the following: `Contact.Email`, 
-`Contact.Name` and `Description`. 
+The plugin configuration requires values for the following: `ContactEmail`, 
+`ContactName` and `Description`. 
 
-There are two methods of loading the plugin configuration
+There are two methods of loading the plugin configuration:
 
 #### AppSettings
+
+This method uses the `IAppSettings` implementation registered in the AppHost to read any configuration values. If a custom `IAppSettings` implementation is to be used it must be registered prior to instantiating the plugin.
 
 ```xml
 <appSettings>
   <!-- Required -->
-  <add key="ServiceStack.Plugins.IntroSpec.Contact.Name" value="Private Pile"/>
-  <add key="ServiceStack.Plugins.IntroSpec.Contact.Email" value="private@pile.com"/>
-  <add key="ServiceStack.Plugins.IntroSpec.Description" value="This is my service, there are many just like it, but this one is mine"/>
+  <add key="servicestack.plugins.introSpec.contact.name" value="Private Pile"/>
+  <add key="servicestack.plugins.introSpec.contact.email" value="private@pile.com"/>
+  <add key="servicestack.plugins.introSpec.description" value="This is my service, there are many just like it, but this one is mine"/>
 
   <!-- Optional -->
-  <add key="ServiceStack.Plugins.IntroSpec.Contact.Url" value="http://socialnetwork.com/profile/pile"/>
-  <add key="ServiceStack.Plugins.IntroSpec.LicenseUrl" value="https://opensource.org/licenses/MPL-2.0"/>
+  <add key="servicestack.plugins.introSpec.contact.url" value="http://socialnetwork.com/profile/pile"/>
+  <add key="servicestack.plugins.introSpec.licenseurl" value="https://opensource.org/licenses/MPL-2.0"/>
 </appSettings>
 ```
 
 ```csharp
 public override void Configure(Container container)
 {
-    Plugins.Add(new ApiSpecFeature(config => config.FromAppSettings()));
+    Plugins.Add(new ApiSpecFeature()));
 }
 ```
 
-#### Fluent Builder
+#### Public Properties
+This method can be used in conjunction with the above `AppSettings` approach - any values explicitly set will be used and `AppSettings` used as fallback.
+
+```csharp
+public override void Configure(Container container)
+{
+    Plugins.Add(new ApiSpecFeature
+    {
+        Description = "Desc will override anything in appSettings",
+        LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/"),
+        ContactName = "Joe Bloggs",
+        ContactEmail = "email@address.com"
+    }));
+}
+```
+
+#### Fluent Builder (Obsolete)
+Although supported this method is now marked as obsolete to bring plugin into line with other ServiceStack plugins.
 
 ```csharp
 public override void Configure(Container container)

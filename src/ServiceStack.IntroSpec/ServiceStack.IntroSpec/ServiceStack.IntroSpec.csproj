@@ -61,8 +61,9 @@
     <Compile Include="DTO\DtoGrouping.cs" />
     <Compile Include="DTO\SpecMetadataRequest.cs" />
     <Compile Include="DTO\SpecMetadataResponse.cs" />
-    <Compile Include="Extensions\ApiSpecConfigExtensions.cs" />
     <Compile Include="Enrichers\Infrastructure\ResourceModel.cs" />
+    <Compile Include="ConfigKeys.cs" />
+    <Compile Include="IApiSpecSettings.cs" />
     <Compile Include="Models\ApiPlugin.cs" />
     <Compile Include="Models\RelativePath.cs" />
     <Compile Include="Services\ApiSpecMetadataService.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Utilities\MimeTypeUtilities.cs" />
     <Compile Include="Validators\ApiContactValidator.cs" />
     <Compile Include="Validators\ApiSpecConfigValidator.cs" />
+    <Compile Include="Validators\ApiSpecSettingsValidator.cs" />
     <Compile Include="XmlDocumentation\IXmlDocumentationLookup.cs" />
     <Compile Include="XmlDocumentation\IXmlDocumentationReader.cs" />
     <Compile Include="XmlDocumentation\MemberInfoExtensions.cs" />

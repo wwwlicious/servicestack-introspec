@@ -88,7 +88,6 @@
     <Compile Include="ApiDocumentationProviderTests.cs" />
     <Compile Include="Enrichers\AbstractClassEnricherTests.cs" />
     <Compile Include="Enrichers\Infrastructure\ActionEnricherManagerTests.cs" />
-    <Compile Include="Extensions\ApiSpecConfigExtensionsTests.cs" />
     <Compile Include="Models\RelativePathTests.cs" />
     <Compile Include="Settings\ApiSpecConfigTests.cs" />
     <Compile Include="TypeSpec\ApiDtoSpecTests.cs" />
@@ -124,12 +123,12 @@
     <Compile Include="ResultTests\ResultTests.cs" />
     <Compile Include="Settings\DocumenterSettingsTests.cs" />
     <Compile Include="Utilities\MimeTypeUtilitiesTests.cs" />
-    <Compile Include="Validators\ApiContactValidatorTests.cs" />
-    <Compile Include="Validators\ApiSpecConfigValidatorTests.cs" />
+    <Compile Include="Validators\ApiSpecSettingsValidatorTest.cs" />
     <Compile Include="XmlDocumentation\MemberInfoExtensionsTests.cs" />
     <Compile Include="XmlDocumentation\XmlDocumentationLookupTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

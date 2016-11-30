@@ -7,6 +7,7 @@ namespace ServiceStack.IntroSpec.Tests
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Configuration;
     using DataAnnotations;
     using FakeItEasy;
     using Fixtures;
@@ -17,12 +18,13 @@ namespace ServiceStack.IntroSpec.Tests
     using IntroSpec.Services;
     using IntroSpec.Settings;
     using NativeTypes;
-    using Testing;
     using Xunit;
+    using static FakeItEasy.A;
 
     [Collection("AppHost")]
     public class ApiSpecFeatureTests
     {
+        private readonly IAppSettings settings;
         private readonly ApiSpecFeature feature;
         private readonly ApiSpecConfig apiSpecConfig;
         private readonly IApiDocumentationGenerator generator;
@@ -38,11 +40,15 @@ namespace ServiceStack.IntroSpec.Tests
                 Contact = new ApiContact { Email = "ronald.macdonald@macdonalds.hq", Name = "ronnie mcd" },
                 Description = "great api"
             };
-            generator = A.Fake<IApiDocumentationGenerator>();
+            settings = Fake<IAppSettings>();
+            CallTo(() => settings.GetString(A<string>.Ignored)).Returns("valid@value.net");
+            CallTo(() => settings.Get<Uri>(A<string>.Ignored)).Returns(new Uri("http://test.com"));
 
-            filter = A.Fake<Func<KeyValuePair<Type, Operation>, bool>>();
+            generator = Fake<IApiDocumentationGenerator>();
 
-            feature = new ApiSpecFeature(config => apiSpecConfig)
+            filter = Fake<Func<KeyValuePair<Type, Operation>, bool>>();
+
+            feature = new ApiSpecFeature()
                 .WithGenerator(generator)
                 .WithOperationsFilter(filter);
         }
@@ -53,20 +59,23 @@ namespace ServiceStack.IntroSpec.Tests
             Action action = () => new ApiSpecFeature(config => null);
             action.ShouldThrow<ArgumentNullException>();
         }
-
-        [Fact]
-        public void Ctor_Throws_IfConfigInvalid()
-        {
-            Action action = () => new ApiSpecFeature(config => config);
-            action.ShouldThrow<ArgumentException>();
-        }
-
+        
         [Fact]
         public void Register_Throws_IfNoMetadata()
         {
-            Action action = () => feature.Register(A.Fake<IAppHost>());
+            var appHost = Fake<IAppHost>();
+            CallTo(() => appHost.AppSettings).Returns(settings);
+            Action action = () => feature.Register(appHost);
             action.ShouldThrow<ArgumentException>()
                   .WithMessage("The Metadata Feature must be enabled to use the ApiSpec Feature");
+        }
+
+        [Fact]
+        public void Register_Throws_IfConfigInvalid()
+        {
+            Action action = () => feature.Register(Fake<IAppHost>());
+            action.ShouldThrow<ArgumentException>().WithMessage(
+                "Validation failed: \r\n -- 'Contact Name' should not be empty.\r\n -- 'Contact Email' should not be empty.\r\n -- 'Contact Email' is not a valid email address.\r\n -- 'Description' should not be empty.");
         }
 
         [Fact]
@@ -112,18 +121,107 @@ namespace ServiceStack.IntroSpec.Tests
             result[0].RequestType.Should().Be<int>();
         }
 
-        [Fact(Skip = "This is proving harder than expected. Will pick up again")]
-        public void Register_CallsOperationsMapFilter()
+        [Fact]
+        public void ContactName_Get_GetsFromAppSettings()
         {
-            var basicAppHost = new BasicAppHost(); // A.Fake<IAppHost>();
-            basicAppHost.Plugins.Add(new MetadataFeature());
+            const string name = "Kyle Reese";
+            CallTo(() => settings.GetString(ConfigKeys.ContactName)).Returns(name);
 
-            /*A.CallTo(() => generator.GenerateDocumentation(A<IEnumerable<Operation>>.Ignored, basicAppHost))
-                .Invokes((IEnumerable<Operation> ops, IAppHost apphost) => { ops.ToList(); });*/
+            GetFeature().ContactName.Should().Be(name);
+            CallTo(() => settings.GetString(ConfigKeys.ContactName)).MustHaveHappened();
+        }
 
-            feature.Register(basicAppHost);
+        [Fact]
+        public void ContactName_Set_SetsInAppSettings()
+        {
+            const string name = "Kyle Reese";
 
-            A.CallTo(() => filter.Invoke(A<KeyValuePair<Type, Operation>>.Ignored)).MustHaveHappened();
+            GetFeature().ContactName = name;
+            CallTo(() => settings.Set(ConfigKeys.ContactName, name)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void ContactEmail_Get_GetsFromAppSettings()
+        {
+            const string email = "test@example.com";
+            CallTo(() => settings.GetString(ConfigKeys.ContactEmail)).Returns(email);
+
+            GetFeature().ContactEmail.Should().Be(email);
+            CallTo(() => settings.GetString(ConfigKeys.ContactEmail)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void ContactEmail_Set_SetsInAppSettings()
+        {
+            const string email = "test@example.com";
+
+            GetFeature().ContactEmail = email;
+            CallTo(() => settings.Set(ConfigKeys.ContactEmail, email)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void ContactUrl_Get_GetsFromAppSettings()
+        {
+            var url = new Uri("http://here.com");
+            CallTo(() => settings.Get<Uri>(ConfigKeys.ContactUrl)).Returns(url);
+
+            GetFeature().ContactUrl.Should().Be(url);
+            CallTo(() => settings.Get<Uri>(ConfigKeys.ContactUrl)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void ContactUrl_Set_SetsInAppSettings()
+        {
+            var url = new Uri("http://here.com");
+
+            GetFeature().ContactUrl = url;
+            CallTo(() => settings.Set(ConfigKeys.ContactUrl, url)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void Description_Get_GetsFromAppSettings()
+        {
+            const string description = "foo bar";
+            CallTo(() => settings.GetString(ConfigKeys.Description)).Returns(description);
+
+            GetFeature().Description.Should().Be(description);
+            CallTo(() => settings.GetString(ConfigKeys.Description)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void Description_Set_SetsInAppSettings()
+        {
+            const string description = "foo bar";
+
+            GetFeature().Description = description;
+            CallTo(() => settings.Set(ConfigKeys.Description, description)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void LicenseUrl_Get_GetsFromAppSettings()
+        {
+            var url = new Uri("http://here.com");
+            CallTo(() => settings.Get<Uri>(ConfigKeys.LicenseUrl)).Returns(url);
+
+            GetFeature().LicenseUrl.Should().Be(url);
+            CallTo(() => settings.Get<Uri>(ConfigKeys.LicenseUrl)).MustHaveHappened();
+        }
+
+        [Fact]
+        public void LicenseUrl_Set_SetsInAppSettings()
+        {
+            var url = new Uri("http://here.com");
+
+            GetFeature().LicenseUrl = url;
+            CallTo(() => settings.Set(ConfigKeys.LicenseUrl, url)).MustHaveHappened();
+        }
+
+        private ApiSpecFeature GetFeature()
+        {
+            var apiSpecFeature = new ApiSpecFeature();
+            fixture.AppHost.AppSettings = settings;
+            apiSpecFeature.Register(fixture.AppHost);
+            return apiSpecFeature;
         }
     }
 

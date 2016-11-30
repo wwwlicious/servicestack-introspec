@@ -8,6 +8,7 @@ namespace ServiceStack.IntroSpec
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using Configuration;
     using Enrichers;
     using Enrichers.Infrastructure;
     using Enrichers.Interfaces;
@@ -23,16 +24,47 @@ namespace ServiceStack.IntroSpec
     using Validators;
     using XmlDocumentation;
 
-    public class ApiSpecFeature : IPlugin
+    public class ApiSpecFeature : IPlugin, IApiSpecSettings
     {
+        private IAppSettings appSettings;
         private readonly ILog log = LogManager.GetLogger(typeof (ApiSpecFeature));
-        private static readonly ApiSpecConfigValidator ConfigValidator = new ApiSpecConfigValidator();
+        private static readonly ApiSpecSettingsValidator ConfigValidator = new ApiSpecSettingsValidator();
 
         private readonly ApiSpecConfig config;
 
-        public ApiDocumentation Documentation { get; private set; }
-        public IApiDocumentationGenerator DocumentationGenerator { get; private set; }
-        public Func<IEnumerable<IApiResourceEnricher>> Enrichers { get; private set; }
+        public ApiDocumentation Documentation { get; set; }
+        public IApiDocumentationGenerator DocumentationGenerator { get; set; }
+        public Func<IEnumerable<IApiResourceEnricher>> Enrichers { get; set; }
+
+        public string ContactName
+        {
+            get { return appSettings.GetString(ConfigKeys.ContactName); }
+            set { appSettings.Set(ConfigKeys.ContactName, value); }
+        }
+
+        public string ContactEmail
+        {
+            get { return appSettings.GetString(ConfigKeys.ContactEmail); }
+            set { appSettings.Set(ConfigKeys.ContactEmail, value); }
+        }
+
+        public Uri ContactUrl
+        {
+            get { return appSettings.Get<Uri>(ConfigKeys.ContactUrl); }
+            set { appSettings.Set(ConfigKeys.ContactUrl, value); }
+        }
+
+        public string Description
+        {
+            get { return appSettings.GetString(ConfigKeys.Description); }
+            set { appSettings.Set(ConfigKeys.Description, value); }
+        }
+
+        public Uri LicenseUrl
+        {
+            get { return appSettings.Get<Uri>(ConfigKeys.LicenseUrl); }
+            set { appSettings.Set(ConfigKeys.LicenseUrl, value); }
+        }
 
         public delegate ApiSpecConfig ApiConfigDelegate(ApiSpecConfig config);
 
@@ -62,16 +94,29 @@ namespace ServiceStack.IntroSpec
             !kvp.Key.ExcludesFeature(Feature.Metadata) &&
             !kvp.Key.ExcludesFeature(Feature.ServiceDiscovery);
 
-        public ApiSpecFeature(ApiConfigDelegate config)
+        [Obsolete("Use parameterless ctor and set public properties")]
+        public ApiSpecFeature(ApiConfigDelegate config) : this()
         {
             this.config = config(new ApiSpecConfig());
             this.config.ThrowIfNull(nameof(this.config));
 
-            ConfigValidator.ValidateAndThrow(this.config);
+            this.config.PopulateProperties(this);
+        }
+
+        public ApiSpecFeature()
+        {
+            appSettings = AppHostBase.Instance.AppSettings;
+
+            if (log.IsDebugEnabled)
+                log.Debug($"Using {appSettings.GetType().Name} appSettings for appSettings provider");
         }
 
         public void Register(IAppHost appHost)
         {
+            appSettings = appHost.AppSettings ?? new AppSettings();
+
+            ConfigValidator.ValidateAndThrow(this);
+
             if (!appHost.Plugins.Any(p => p is MetadataFeature))
                 throw new ArgumentException("The Metadata Feature must be enabled to use the ApiSpec Feature");
 
@@ -91,7 +136,7 @@ namespace ServiceStack.IntroSpec
                 s.Start();
             }
 
-            Documentation = DocumentationGenerator.GenerateDocumentation(operations, appHost, config);
+            Documentation = DocumentationGenerator.GenerateDocumentation(operations, appHost, this);
 
             if (log.IsDebugEnabled)
             {

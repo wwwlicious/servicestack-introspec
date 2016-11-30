@@ -8,7 +8,6 @@
     using ServiceStack;
     using ServiceStack.Api.Swagger;
     using ServiceStack.IntroSpec;
-    using ServiceStack.IntroSpec.Extensions;
     using ServiceStack.IntroSpec.Models;
     using ServiceStack.IntroSpec.Settings;
     using ServiceStack.Logging;
@@ -74,15 +73,22 @@
             DocumenterSettings.DefaultTags = new[] { "DefaultTag" };
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
 
-            // From appsettings, see readme
-            Plugins.Add(new ApiSpecFeature(config => config.FromAppSettings()));
-            
-            // or using fluent builder
-            Plugins.Add(new ApiSpecFeature(config =>
+            // Read settings from appsettings, see readme
+            Plugins.Add(new ApiSpecFeature());
+
+            // or directly setting properties builder
+            /*Plugins.Add(new ApiSpecFeature
+            {
+                Description = "This is a demo app host setup for testing documentation.",
+                LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/")
+            });*/
+
+            // or using the fluent builder (deprecated)
+            /*Plugins.Add(new ApiSpecFeature(config =>
                     config.WithDescription("This is a demo app host setup for testing documentation.")
                           .WithLicenseUrl(new Uri("http://mozilla.org/MPL/2.0/"))
                           .WithContactName("Joe Bloggs")
-                          .WithContactEmail("email@address.com")));
+                          .WithContactEmail("email@address.com")));*/
         }
     }
 }

@@ -11,7 +11,6 @@ namespace ServiceStack.IntroSpec
     using Host;
     using Logging;
     using Models;
-    using Settings;
 
     public class ApiDocumentationGenerator : IApiDocumentationGenerator
     {
@@ -23,24 +22,42 @@ namespace ServiceStack.IntroSpec
             this.getEnrichers = getEnrichers;
         }
 
-        // List of IApiSpecPopulaters to iterate. Could have the XML doc outside of populaters to save doing it
-        public ApiDocumentation GenerateDocumentation(IEnumerable<Operation> operations, IAppHost appHost, ApiSpecConfig config)
+        public ApiDocumentation GenerateDocumentation(IEnumerable<Operation> operations, IAppHost appHost, IApiSpecSettings settings)
+        {
+            var apiDoc = GetApiDocumentation(appHost, settings);
+
+            var resourceDocs = GenerateResourceDocumentation(operations);
+            apiDoc.Resources = resourceDocs.ToArray();
+
+            return apiDoc;
+        }
+
+        private static ApiDocumentation GetApiDocumentation(IAppHost appHost, IApiSpecSettings settings)
         {
             var apiDoc = new ApiDocumentation
             {
                 Title = (appHost as ServiceStackHost)?.ServiceName,
                 ApiVersion = appHost.Config?.ApiVersion,
-                Contact = config.Contact,
-                Description = config.Description,
-                Plugins = appHost.Plugins.Select(x => new ApiPlugin { Name = x.GetType().FullName, Version = x.GetType().Assembly.GetName().Version.ToString() }).ToArray()
+                Contact =
+                    new ApiContact
+                    {
+                        Email = settings.ContactEmail,
+                        Name = settings.ContactName,
+                        Url = settings.ContactUrl
+                    },
+                Description = settings.Description,
+                Plugins =
+                    appHost.Plugins.Select(
+                        x =>
+                        new ApiPlugin
+                        {
+                            Name = x.GetType().FullName,
+                            Version = x.GetType().Assembly.GetName().Version.ToString()
+                        }).ToArray()
             };
 
-            if (config.LicenseUrl != null)
-                apiDoc.LicenceUrl = config.LicenseUrl.ToString();
-
-            var resourceDocs = GenerateResourceDocumentation(operations);
-            apiDoc.Resources = resourceDocs.ToArray();
-
+            if (settings.LicenseUrl != null)
+                apiDoc.LicenceUrl = settings.LicenseUrl.ToString();
             return apiDoc;
         }
 
