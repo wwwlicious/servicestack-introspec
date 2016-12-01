@@ -96,7 +96,7 @@
     <Compile Include="TypeSpec\PropertyMetadataTests.cs" />
     <Compile Include="TypeSpec\AbstractRequestSpecTests.cs" />
     <Compile Include="ApiDocumentationGeneratorTests.cs" />
-    <Compile Include="ApiSpecFeatureTests.cs" />
+    <Compile Include="IntroSpecFeatureTests.cs" />
     <Compile Include="DTO\SpecRequestTests.cs" />
     <Compile Include="Enrichers\FallbackEnricherTests.cs" />
     <Compile Include="Enrichers\Infrastructure\PropertyEnricherManagerTests.cs" />

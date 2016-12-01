@@ -64,6 +64,7 @@
     <Compile Include="Enrichers\Infrastructure\ResourceModel.cs" />
     <Compile Include="ConfigKeys.cs" />
     <Compile Include="IApiSpecSettings.cs" />
+    <Compile Include="IntroSpecFeature.cs" />
     <Compile Include="Models\ApiPlugin.cs" />
     <Compile Include="Models\RelativePath.cs" />
     <Compile Include="Services\ApiSpecMetadataService.cs" />

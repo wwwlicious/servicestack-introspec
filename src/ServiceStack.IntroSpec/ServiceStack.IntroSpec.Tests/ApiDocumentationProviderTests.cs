@@ -30,7 +30,7 @@ namespace ServiceStack.IntroSpec.Tests
             var generator = A.Fake<IApiDocumentationGenerator>();
             var apiDocumentation = new ApiDocumentation();
 
-            var apiSpecFeature = new ApiSpecFeature().WithGenerator(generator);
+            var apiSpecFeature = new IntroSpecFeature().WithGenerator(generator);
             A.CallTo(() =>
                      generator.GenerateDocumentation(A<IEnumerable<Operation>>.Ignored, fixture.AppHost, apiSpecFeature))
              .Returns(apiDocumentation);

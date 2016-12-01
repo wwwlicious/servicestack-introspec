@@ -22,16 +22,16 @@ namespace ServiceStack.IntroSpec.Tests
     using static FakeItEasy.A;
 
     [Collection("AppHost")]
-    public class ApiSpecFeatureTests
+    public class IntroSpecFeatureTests
     {
         private readonly IAppSettings settings;
-        private readonly ApiSpecFeature feature;
+        private readonly IntroSpecFeature feature;
         private readonly ApiSpecConfig apiSpecConfig;
         private readonly IApiDocumentationGenerator generator;
         private readonly Func<KeyValuePair<Type, Operation>, bool> filter;
         private readonly AppHostFixture fixture;
 
-        public ApiSpecFeatureTests(AppHostFixture fixture)
+        public IntroSpecFeatureTests(AppHostFixture fixture)
         {
             this.fixture = fixture;
 
@@ -48,7 +48,7 @@ namespace ServiceStack.IntroSpec.Tests
 
             filter = Fake<Func<KeyValuePair<Type, Operation>, bool>>();
 
-            feature = new ApiSpecFeature()
+            feature = new IntroSpecFeature()
                 .WithGenerator(generator)
                 .WithOperationsFilter(filter);
         }
@@ -216,9 +216,9 @@ namespace ServiceStack.IntroSpec.Tests
             CallTo(() => settings.Set(ConfigKeys.LicenseUrl, url)).MustHaveHappened();
         }
 
-        private ApiSpecFeature GetFeature()
+        private IntroSpecFeature GetFeature()
         {
-            var apiSpecFeature = new ApiSpecFeature();
+            var apiSpecFeature = new IntroSpecFeature();
             fixture.AppHost.AppSettings = settings;
             apiSpecFeature.Register(fixture.AppHost);
             return apiSpecFeature;

@@ -48,7 +48,7 @@ This method uses the `IAppSettings` implementation registered in the AppHost to 
 ```csharp
 public override void Configure(Container container)
 {
-    Plugins.Add(new ApiSpecFeature()));
+    Plugins.Add(new IntroSpecFeature()));
 }
 ```
 
@@ -58,7 +58,7 @@ This method can be used in conjunction with the above `AppSettings` approach - a
 ```csharp
 public override void Configure(Container container)
 {
-    Plugins.Add(new ApiSpecFeature
+    Plugins.Add(new IntroSpecFeature
     {
         Description = "Desc will override anything in appSettings",
         LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/"),
@@ -69,7 +69,7 @@ public override void Configure(Container container)
 ```
 
 #### Fluent Builder (Obsolete)
-Although supported this method is now marked as obsolete to bring plugin into line with other ServiceStack plugins.
+Although supported this method is now marked as obsolete to bring plugin into line with other ServiceStack plugins. The feature has been renamed to `IntroSpecFeature` from `ApiSpecFeature`.
 
 ```csharp
 public override void Configure(Container container)
@@ -239,7 +239,7 @@ DocumenterSettings.DefaultStatusCodes = new List<StatusCode>
 {
    ((StatusCode)429).WithDescription("This is rate limited"),
 };
-Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+Plugins.Add(new IntroSpecFeature());
 ```
 The `.With()` method can be used to set multiple values:
 ```csharp
@@ -249,11 +249,11 @@ DocumenterSettings.With(fallbackNotes: "Default notes",
     defaultStatusCodes: new List<StatusCode>{
         ((StatusCode) 429).WithDescription("This is rate limited")
     });
-Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+Plugins.Add(new IntroSpecFeature());
 ```
 
 ## Customising
-The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` objects that contain the requests to be documented. This filter can be customised by providing a predicate to the plugin using the `ApiSpecFeature.WithOperationsFilter()` method. The default filter excludes any types that have `[Exclude(Feature.Metadata]` or `[Exclude(Feature.ServiceDiscovery]` or any restrictions.
+The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` objects that contain the requests to be documented. This filter can be customised by providing a predicate to the plugin using the `IntroSpecFeature.WithOperationsFilter()` method. The default filter excludes any types that have `[Exclude(Feature.Metadata]` or `[Exclude(Feature.ServiceDiscovery]` or any restrictions.
 
 
 ## Output

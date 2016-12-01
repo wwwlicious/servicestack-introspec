@@ -7,7 +7,6 @@
     using Funq;
     using ServiceStack;
     using ServiceStack.Api.Swagger;
-    using ServiceStack.FluentValidation;
     using ServiceStack.IntroSpec;
     using ServiceStack.IntroSpec.Models;
     using ServiceStack.IntroSpec.Settings;
@@ -78,10 +77,10 @@
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
 
             // Read settings from appsettings, see readme
-            Plugins.Add(new ApiSpecFeature());
+            Plugins.Add(new IntroSpecFeature());
 
             // or directly setting properties builder
-            /*Plugins.Add(new ApiSpecFeature
+            /*Plugins.Add(new IntroSpecFeature
             {
                 Description = "This is a demo app host setup for testing documentation.",
                 LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/")
