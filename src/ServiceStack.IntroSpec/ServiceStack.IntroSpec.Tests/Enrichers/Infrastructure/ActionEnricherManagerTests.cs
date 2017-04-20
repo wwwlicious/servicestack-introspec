@@ -233,7 +233,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
     }
 
-    [Route("/customRoute", "PUT,POST")]
+    [Route("/customRoute", "PUT, POST")]
     [Route("/deleteThing", "DELETE")]
     [Route("/postThing", "POST")]
     [FallbackRoute("/foo")]

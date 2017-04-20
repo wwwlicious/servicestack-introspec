@@ -112,7 +112,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             var routeAttributes =
                 operation.RequestType.GetCustomAttributes<RouteAttribute>().Where(r => !string.IsNullOrEmpty(r.Verbs));
 
-            var routeVerbs = routeAttributes.SelectMany(r => r.Verbs.Split(',')).ToList();
+            var routeVerbs = routeAttributes.SelectMany(r => r.Verbs.Split(',')).Select(v => v.Trim()).ToList();
             return routeVerbs;
         }
     }
