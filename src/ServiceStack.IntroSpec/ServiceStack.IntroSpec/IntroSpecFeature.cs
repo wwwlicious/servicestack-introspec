@@ -199,9 +199,9 @@ namespace ServiceStack.IntroSpec
             appHost.RegisterService<ApiSpecPostmanService>();
             appHost.RegisterService<ApiSpecMetadataService>();
 
-            metadataFeature.AddPluginLink(Constants.SpecUri, "Raw API Spec");
-            metadataFeature.AddPluginLink(Constants.PostmanSpecUri, "Postman API Metadata");
-            metadataFeature.AddPluginLink(Constants.SpecSummaryUri, "API Spec Metadata");
+            metadataFeature.AddPluginLink(Constants.SpecSummaryUri, "IntroSpec API Summary");
+            metadataFeature.AddPluginLink(Constants.SpecUri, "IntroSpec API Spec");
+            metadataFeature.AddPluginLink(Constants.PostmanSpecUri, "IntroSpec Postman");
         }
 
         private void RegisterDependencies(Container container)
