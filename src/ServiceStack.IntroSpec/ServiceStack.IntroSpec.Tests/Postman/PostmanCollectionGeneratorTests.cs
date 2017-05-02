@@ -153,7 +153,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         }
                     },
                     Properties = new[]
-                    { new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) } }
+                    { new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) } }
                 }
             };
 
@@ -194,7 +194,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         }
                     },
                     Properties = new[]
-                    { new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) } }
+                    { new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) } }
                 }
             };
 
@@ -234,8 +234,8 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                     },
                     Properties = new[]
                     {
-                        new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) },
-                        new ApiPropertyDocumention { Id = "Age", Title = "Age", ClrType = typeof(int) }
+                        new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) },
+                        new ApiPropertyDocumentation { Id = "Age", Title = "Age", ClrType = typeof(int) }
                     }
                 }
             };
@@ -277,8 +277,8 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                     },
                     Properties = new[]
                     {
-                        new ApiPropertyDocumention { Id = "Name", Title = "Name", ClrType = typeof(string) },
-                        new ApiPropertyDocumention { Id = "Age", Title = "Age", ClrType = typeof(int) }
+                        new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) },
+                        new ApiPropertyDocumentation { Id = "Age", Title = "Age", ClrType = typeof(int) }
                     }
                 }
             };

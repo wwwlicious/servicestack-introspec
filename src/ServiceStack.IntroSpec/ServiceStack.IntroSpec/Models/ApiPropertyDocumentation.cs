@@ -9,7 +9,7 @@ namespace ServiceStack.IntroSpec.Models
     /// <summary>
     /// Each request property within a DTO
     /// </summary>
-    public class ApiPropertyDocumention : IApiSpec
+    public class ApiPropertyDocumentation : IApiSpec
     {
         // Set when instantiated
         public string Id { get; set; }
@@ -37,6 +37,6 @@ namespace ServiceStack.IntroSpec.Models
 
         public IApiResourceType EmbeddedResource { get; set; }
 
-        public PropertyConstraint Contraints { get; set; }
+        public PropertyConstraint Constraints { get; set; }
     }
 }

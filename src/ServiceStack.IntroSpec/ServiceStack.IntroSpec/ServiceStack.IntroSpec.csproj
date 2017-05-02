@@ -84,7 +84,7 @@
     <Compile Include="Linq\PredicateBuilder.cs" />
     <Compile Include="Models\ApiAction.cs" />
     <Compile Include="Models\ApiContact.cs" />
-    <Compile Include="Models\ApiPropertyDocumention.cs" />
+    <Compile Include="Models\ApiPropertyDocumentation.cs" />
     <Compile Include="Models\ApiResourceDocumentation.cs" />
     <Compile Include="Models\ApiResourceType.cs" />
     <Compile Include="Models\ApiSecurity.cs" />

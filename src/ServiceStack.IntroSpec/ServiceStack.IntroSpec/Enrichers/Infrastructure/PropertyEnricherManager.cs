@@ -27,14 +27,14 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             this.enrichResource = enrichResource;
         }
 
-        public ApiPropertyDocumention[] EnrichParameters(ApiPropertyDocumention[] properties, ResourceModel resource)
+        public ApiPropertyDocumentation[] EnrichParameters(ApiPropertyDocumentation[] properties, ResourceModel resource)
         {
             if (propertyEnricher == null)
                 return properties;
 
             // There might be a collection of Properties already - if so build up an easy lookup
-            Dictionary<string, ApiPropertyDocumention> indexedParams;
-            List<ApiPropertyDocumention> parameterDocuments = null;
+            Dictionary<string, ApiPropertyDocumentation> indexedParams;
+            List<ApiPropertyDocumentation> parameterDocuments = null;
             var newList = false;
 
             // If the type is collection use the element rather than collection type (e.g. if string[] use System.String, not System.Array)
@@ -47,9 +47,9 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             if (properties.IsNullOrEmpty())
             {
                 //? Make this static to avoid needing to populate multiple times
-                indexedParams = new Dictionary<string, ApiPropertyDocumention>();
+                indexedParams = new Dictionary<string, ApiPropertyDocumentation>();
                 newList = true;
-                parameterDocuments = new List<ApiPropertyDocumention>(allMembers.Length);
+                parameterDocuments = new List<ApiPropertyDocumentation>(allMembers.Length);
             }
             else
                 indexedParams = properties.ToDictionary(k => k.Id, v => v);
@@ -58,7 +58,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             {
                 // Check if the property already exists. if so get it, If not create it 
                 var property = indexedParams.SafeGet(mi.Name, () =>
-                    new ApiPropertyDocumention
+                    new ApiPropertyDocumentation
                     {
                         Id = mi.Name,
                         ClrType = mi.GetFieldPropertyType()
@@ -91,7 +91,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 });
         }
 
-        private void EnrichParameter(ApiPropertyDocumention property, MemberInfo mi, ResourceModel resource)
+        private void EnrichParameter(ApiPropertyDocumentation property, MemberInfo mi, ResourceModel resource)
         {
             if (property.Title == property.Id || string.IsNullOrEmpty(property.Title))
                 property.Title = propertyEnricher.GetTitle(mi);
@@ -99,7 +99,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             property.Description = property.Description.GetIfNullOrEmpty(() => propertyEnricher.GetDescription(mi));
             property.Notes = property.Notes.GetIfNullOrEmpty(() => propertyEnricher.GetNotes(mi));
             property.ParamType = property.ParamType.GetIfNullOrEmpty(() => propertyEnricher.GetParamType(mi));
-            property.Contraints = property.Contraints.GetIfNull(() => propertyEnricher.GetConstraints(mi));
+            property.Constraints = property.Constraints.GetIfNull(() => propertyEnricher.GetConstraints(mi));
 
             property.IsRequired = property.IsRequired.GetIfNoValue(() => propertyEnricher.GetIsRequired(mi));
 
@@ -121,7 +121,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             EnrichEmbeddedResource(property, mi, resource);
         }
 
-        private void EnrichEmbeddedResource(ApiPropertyDocumention property, MemberInfo mi, ResourceModel resource)
+        private void EnrichEmbeddedResource(ApiPropertyDocumentation property, MemberInfo mi, ResourceModel resource)
         {
             var fieldPropertyType = mi.GetFieldPropertyType();
             if (!ShouldPopulateEmbeddedResource(fieldPropertyType, resource.ResourceType))

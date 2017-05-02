@@ -20,16 +20,16 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         private readonly PropertyEnricherManager manager;
         private readonly IPropertyEnricher propertyEnricher;
 
-        public static TheoryData<ApiPropertyDocumention[]> TestData = new TheoryData<ApiPropertyDocumention[]>
+        public static TheoryData<ApiPropertyDocumentation[]> TestData = new TheoryData<ApiPropertyDocumentation[]>
         {
-            new ApiPropertyDocumention[0],
-            new[] { new ApiPropertyDocumention() }
+            new ApiPropertyDocumentation[0],
+            new[] { new ApiPropertyDocumentation() }
         };
 
-        public static TheoryData<ApiPropertyDocumention[]> TestDataEmpty = new TheoryData<ApiPropertyDocumention[]>
+        public static TheoryData<ApiPropertyDocumentation[]> TestDataEmpty = new TheoryData<ApiPropertyDocumentation[]>
         {
             null,
-            new ApiPropertyDocumention[0]
+            new ApiPropertyDocumentation[0]
         };
 
         public PropertyEnricherManagerTests()
@@ -56,7 +56,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
 
         [Theory]
         [MemberData("TestData")]
-        public void EnrichParameters_ReturnsPassedParameters_IfParameterEnricherNull(ApiPropertyDocumention[] properties)
+        public void EnrichParameters_ReturnsPassedParameters_IfParameterEnricherNull(ApiPropertyDocumentation[] properties)
         {
             var actual = nullPropertyManager.EnrichParameters(properties, new ResourceModel(typeof (string), false));
             actual.Should().BeEquivalentTo(properties);
@@ -72,14 +72,14 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichParameters_ReturnsEmpty_IfNoPropsInType_AndEmpty()
         {
-            var actual = manager.EnrichParameters(new ApiPropertyDocumention[0], new ResourceModel(typeof(NoProps), true));
+            var actual = manager.EnrichParameters(new ApiPropertyDocumentation[0], new ResourceModel(typeof(NoProps), true));
             actual.Should().BeEmpty();
         }
 
         [Fact]
         public void EnrichParameters_ReturnsPassedParameters_IfNoPropsInType()
         {
-            var parameters = new[] { new ApiPropertyDocumention { Id = "yes" } };
+            var parameters = new[] { new ApiPropertyDocumentation { Id = "yes" } };
             var actual = manager.EnrichParameters(parameters, new ResourceModel(typeof(NoProps), true));
             actual.Should().BeEquivalentTo(parameters);
         }
@@ -94,7 +94,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichParameters_ReturnsEmpty_IfOnlyIgnoredPropsInType_AndEmpty()
         {
-            var actual = manager.EnrichParameters(new ApiPropertyDocumention[0],
+            var actual = manager.EnrichParameters(new ApiPropertyDocumentation[0],
                 new ResourceModel(typeof(IgnoredProps), true));
             actual.Should().BeEmpty();
         }
@@ -102,14 +102,14 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichParameters_ReturnsPassedParameters_IfOnlyIgnoredPropsInType()
         {
-            var parameters = new[] { new ApiPropertyDocumention { Id = "yes" } };
+            var parameters = new[] { new ApiPropertyDocumentation { Id = "yes" } };
             var actual = manager.EnrichParameters(parameters, new ResourceModel(typeof(IgnoredProps), true));
             actual.Should().BeEquivalentTo(parameters);
         }
         
         [Theory]
         [MemberData("TestDataEmpty")]
-        public void EnrichParameters_ReturnsParamPerProperty(ApiPropertyDocumention[] properties)
+        public void EnrichParameters_ReturnsParamPerProperty(ApiPropertyDocumentation[] properties)
         {
             var count = properties?.Length ?? 0;
             var actual = manager.EnrichParameters(properties, new ResourceModel(typeof(SingleProp), false));
@@ -119,7 +119,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         [Fact]
         public void EnrichParameters_DoesNotAddToReturn_IfPopulated()
         {
-            var actual = manager.EnrichParameters(new[] { new ApiPropertyDocumention { Id = "X" } },
+            var actual = manager.EnrichParameters(new[] { new ApiPropertyDocumentation { Id = "X" } },
                 new ResourceModel(typeof(SingleProp), false));
             actual.Length.Should().Be(1);
         }
@@ -208,7 +208,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void EnrichParameters_CallsGetContraints_IfContraintsNull()
         {
             var param = GetApiParameterDocumention();
-            param.Contraints = null;
+            param.Constraints = null;
             manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetConstraints(A<PropertyInfo>.Ignored)).MustHaveHappened();
         }
@@ -217,7 +217,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void EnrichParameters_DoesNotCallGetContraints_IfHasContraints()
         {
             var param = GetApiParameterDocumention();
-            param.Contraints = new PropertyConstraint();
+            param.Constraints = new PropertyConstraint();
             manager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleProp), false));
             A.CallTo(() => propertyEnricher.GetConstraints(A<PropertyInfo>.Ignored)).MustNotHaveHappened();
         }
@@ -371,7 +371,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             actual[0].AllowMultiple.Should().BeTrue();
         }
 
-        private static ApiPropertyDocumention GetApiParameterDocumention() => new ApiPropertyDocumention { Id = "X" };
+        private static ApiPropertyDocumentation GetApiParameterDocumention() => new ApiPropertyDocumentation { Id = "X" };
         private void ResourceEnricher(IApiResourceType resource, ResourceModel resourceModel) { }
     }
 
