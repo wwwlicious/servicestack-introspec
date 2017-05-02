@@ -56,7 +56,7 @@ namespace ServiceStack.IntroSpec.Settings
         [Obsolete("Use ContactUrl property of ApiSpecFeature")]
         public ApiSpecConfig WithContactUrl(Uri url)
         {
-            Contact.Url = url;
+            Contact.Url = url.OriginalString;
             return this;
         }
 
@@ -75,7 +75,7 @@ namespace ServiceStack.IntroSpec.Settings
 
             if (!string.IsNullOrWhiteSpace(contact?.Email)) feature.ContactEmail = contact.Email;
 
-            if (contact?.Url != null) feature.ContactUrl = contact.Url;
+            if (contact?.Url != null) feature.ContactUrl = new Uri(contact.Url);
 
             if (LicenseUrl != null) feature.LicenseUrl = LicenseUrl;
         }

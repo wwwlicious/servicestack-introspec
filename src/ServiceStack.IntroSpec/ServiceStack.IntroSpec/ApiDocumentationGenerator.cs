@@ -43,7 +43,7 @@ namespace ServiceStack.IntroSpec
                     {
                         Email = settings.ContactEmail,
                         Name = settings.ContactName,
-                        Url = settings.ContactUrl
+                        Url = settings.ContactUrl.OriginalString
                     },
                 Description = settings.Description,
                 Plugins =

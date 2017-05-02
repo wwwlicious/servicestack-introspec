@@ -8,6 +8,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
     using FluentAssertions;
     using IntroSpec.Models;
     using IntroSpec.Postman.Services;
+    using ServiceStack.IntroSpec.Extensions;
     using Xunit;
 
     public class PostmanCollectionGeneratorTests
@@ -153,7 +154,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         }
                     },
                     Properties = new[]
-                    { new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) } }
+                    { new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string).ToApiClrType() } }
                 }
             };
 
@@ -194,7 +195,7 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                         }
                     },
                     Properties = new[]
-                    { new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) } }
+                    { new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string).ToApiClrType() } }
                 }
             };
 
@@ -234,8 +235,8 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                     },
                     Properties = new[]
                     {
-                        new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) },
-                        new ApiPropertyDocumentation { Id = "Age", Title = "Age", ClrType = typeof(int) }
+                        new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string).ToApiClrType() },
+                        new ApiPropertyDocumentation { Id = "Age", Title = "Age", ClrType = typeof(int).ToApiClrType() }
                     }
                 }
             };
@@ -277,8 +278,8 @@ namespace ServiceStack.IntroSpec.Tests.Postman
                     },
                     Properties = new[]
                     {
-                        new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string) },
-                        new ApiPropertyDocumentation { Id = "Age", Title = "Age", ClrType = typeof(int) }
+                        new ApiPropertyDocumentation { Id = "Name", Title = "Name", ClrType = typeof(string).ToApiClrType() },
+                        new ApiPropertyDocumentation { Id = "Age", Title = "Age", ClrType = typeof(int).ToApiClrType() }
                     }
                 }
             };

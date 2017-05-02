@@ -49,19 +49,19 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
             {
                 var type = resourceModel.ResourceType;
                 if (resource.Title == resource.TypeName)
-                    resource.Title = resourceEnricher.GetTitle(type);
+                    resource.Title = resourceEnricher.GetTitle(type.OriginalType);
 
-                resource.Description = resource.Description.GetIfNullOrEmpty(() => resourceEnricher.GetDescription(type));
-                resource.Notes = resource.Notes.GetIfNullOrEmpty(() => resourceEnricher.GetNotes(type));
+                resource.Description = resource.Description.GetIfNullOrEmpty(() => resourceEnricher.GetDescription(type.OriginalType));
+                resource.Notes = resource.Notes.GetIfNullOrEmpty(() => resourceEnricher.GetNotes(type.OriginalType));
                 if (resourceModel.IsRequest)
                 {
                     resource.AllowMultiple =
                         resource.AllowMultiple.GetIfNoValue(
-                            () => resourceEnricher.GetAllowMultiple(type));
+                            () => resourceEnricher.GetAllowMultiple(type.OriginalType));
                 }
                 else
                 {
-                    resource.IsCollection = type.IsCollection();
+                    resource.IsCollection = type.OriginalType.IsCollection();
                 }
             }
 

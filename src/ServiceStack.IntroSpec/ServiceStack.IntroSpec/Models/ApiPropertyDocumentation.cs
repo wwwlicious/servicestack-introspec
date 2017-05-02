@@ -13,7 +13,7 @@ namespace ServiceStack.IntroSpec.Models
     {
         // Set when instantiated
         public string Id { get; set; }
-        public Type ClrType { get; set; }
+        public ApiClrType ClrType { get; set; }
 
         // From IApiSpec
         private string title;
@@ -23,9 +23,10 @@ namespace ServiceStack.IntroSpec.Models
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    title = value; 
+                    title = value;
             }
         }
+
         public string Description { get; set; }
         public string Notes { get; set; }
     

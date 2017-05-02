@@ -350,14 +350,14 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void EnrichParameters_ArrayType_ReturnsPropertiesOfType()
         {
             var actual = manager.EnrichParameters(null, new ResourceModel(typeof(ComplexProp[]), false));
-            actual[0].ClrType.Should().Be<IgnoredProps>();
+            actual[0].ClrType.OriginalType.Should().Be<IgnoredProps>();
         }
 
         [Fact]
         public void EnrichParameters_IsCollectionTrue_IfIsCollectionTypeAndNotRequest()
         {
             var actual = manager.EnrichParameters(null, new ResourceModel(typeof(ContainsArray[]), false));
-            actual[0].ClrType.Should().Be<ComplexProp[]>();
+            actual[0].ClrType.OriginalType.Should().Be<ComplexProp[]>();
             actual[0].IsCollection.Should().BeTrue();
             actual[0].AllowMultiple.Should().NotHaveValue();
         }
@@ -366,7 +366,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void EnrichParameters_IsCollectionFalse_IfIsCollectionTypeAndRequest()
         {
             var actual = manager.EnrichParameters(null, new ResourceModel(typeof(ContainsArray[]), true));
-            actual[0].ClrType.Should().Be<ComplexProp[]>();
+            actual[0].ClrType.OriginalType.Should().Be<ComplexProp[]>();
             actual[0].IsCollection.Should().NotHaveValue();
             actual[0].AllowMultiple.Should().BeTrue();
         }

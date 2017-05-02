@@ -39,10 +39,10 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
             // If the type is collection use the element rather than collection type (e.g. if string[] use System.String, not System.Array)
             var resourceType = resource.ResourceType;
-            if (resourceType.IsCollection())
-                resourceType = resourceType.GetEnumerableType();
+            if (resourceType.OriginalType.IsCollection())
+                resourceType = resourceType.OriginalType.GetEnumerableType().ToApiClrType();
 
-            var allMembers = GetMemberInfo(resourceType);
+            var allMembers = GetMemberInfo(resourceType.OriginalType);
 
             if (properties.IsNullOrEmpty())
             {
@@ -61,7 +61,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                     new ApiPropertyDocumentation
                     {
                         Id = mi.Name,
-                        ClrType = mi.GetFieldPropertyType()
+                        ClrType = mi.GetFieldPropertyType().ToApiClrType()
                     });
 
                 // Pass it to method to be populated.
@@ -124,7 +124,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
         private void EnrichEmbeddedResource(ApiPropertyDocumentation property, MemberInfo mi, ResourceModel resource)
         {
             var fieldPropertyType = mi.GetFieldPropertyType();
-            if (!ShouldPopulateEmbeddedResource(fieldPropertyType, resource.ResourceType))
+            if (!ShouldPopulateEmbeddedResource(fieldPropertyType, resource.ResourceType.OriginalType))
                 return;
 
             if (property.EmbeddedResource == null)
