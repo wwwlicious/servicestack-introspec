@@ -13,7 +13,7 @@ namespace ServiceStack.IntroSpec.Services
         {
             appBaseUrl.ThrowIfNullOrEmpty(nameof(appBaseUrl));
 
-            var apiSpecFeature = HostContext.GetPlugin<ApiSpecFeature>();
+            var apiSpecFeature = HostContext.GetPlugin<IntroSpecFeature>();
             return apiSpecFeature.Documentation.WithBaseUrl(appBaseUrl);
         }
     }

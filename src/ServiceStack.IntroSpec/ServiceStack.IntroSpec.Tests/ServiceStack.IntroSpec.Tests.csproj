@@ -45,24 +45,24 @@
       <HintPath>..\packages\FluentAssertions.4.14.0\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.4.5.0\lib\net45\ServiceStack.dll</HintPath>
+    <Reference Include="ServiceStack, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.4.5.4\lib\net45\ServiceStack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Client.4.5.0\lib\net45\ServiceStack.Client.dll</HintPath>
+    <Reference Include="ServiceStack.Client, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Client.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Common.4.5.0\lib\net45\ServiceStack.Common.dll</HintPath>
+    <Reference Include="ServiceStack.Common, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.4.5.4\lib\net45\ServiceStack.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Interfaces.4.5.0\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.4.5.0\lib\net45\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Text, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -88,6 +88,7 @@
     <Compile Include="ApiDocumentationProviderTests.cs" />
     <Compile Include="Enrichers\AbstractClassEnricherTests.cs" />
     <Compile Include="Enrichers\Infrastructure\ActionEnricherManagerTests.cs" />
+    <Compile Include="Extensions\AccessExtensionsTests.cs" />
     <Compile Include="Models\RelativePathTests.cs" />
     <Compile Include="Settings\ApiSpecConfigTests.cs" />
     <Compile Include="TypeSpec\ApiDtoSpecTests.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="TypeSpec\PropertyMetadataTests.cs" />
     <Compile Include="TypeSpec\AbstractRequestSpecTests.cs" />
     <Compile Include="ApiDocumentationGeneratorTests.cs" />
-    <Compile Include="ApiSpecFeatureTests.cs" />
+    <Compile Include="IntroSpecFeatureTests.cs" />
     <Compile Include="DTO\SpecRequestTests.cs" />
     <Compile Include="Enrichers\FallbackEnricherTests.cs" />
     <Compile Include="Enrichers\Infrastructure\PropertyEnricherManagerTests.cs" />
@@ -123,12 +124,12 @@
     <Compile Include="ResultTests\ResultTests.cs" />
     <Compile Include="Settings\DocumenterSettingsTests.cs" />
     <Compile Include="Utilities\MimeTypeUtilitiesTests.cs" />
-    <Compile Include="Validators\ApiContactValidatorTests.cs" />
-    <Compile Include="Validators\ApiSpecConfigValidatorTests.cs" />
+    <Compile Include="Validators\ApiSpecSettingsValidatorTest.cs" />
     <Compile Include="XmlDocumentation\MemberInfoExtensionsTests.cs" />
     <Compile Include="XmlDocumentation\XmlDocumentationLookupTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

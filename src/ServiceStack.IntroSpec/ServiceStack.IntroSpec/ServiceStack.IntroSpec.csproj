@@ -31,24 +31,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ServiceStack, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.4.5.0\lib\net45\ServiceStack.dll</HintPath>
+    <Reference Include="ServiceStack, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.4.5.4\lib\net45\ServiceStack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Client.4.5.0\lib\net45\ServiceStack.Client.dll</HintPath>
+    <Reference Include="ServiceStack.Client, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Client.4.5.4\lib\net45\ServiceStack.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Common.4.5.0\lib\net45\ServiceStack.Common.dll</HintPath>
+    <Reference Include="ServiceStack.Common, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.4.5.4\lib\net45\ServiceStack.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Interfaces.4.5.0\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\packages\ServiceStack.Interfaces.4.5.4\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.4.5.0\lib\net45\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Text, Version=4.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.5.4\lib\net45\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -61,6 +61,10 @@
     <Compile Include="DTO\DtoGrouping.cs" />
     <Compile Include="DTO\SpecMetadataRequest.cs" />
     <Compile Include="DTO\SpecMetadataResponse.cs" />
+    <Compile Include="Enrichers\Infrastructure\ResourceModel.cs" />
+    <Compile Include="ConfigKeys.cs" />
+    <Compile Include="IApiSpecSettings.cs" />
+    <Compile Include="IntroSpecFeature.cs" />
     <Compile Include="Models\ApiPlugin.cs" />
     <Compile Include="Models\RelativePath.cs" />
     <Compile Include="Services\ApiSpecMetadataService.cs" />
@@ -142,6 +146,7 @@
     <Compile Include="Utilities\MimeTypeUtilities.cs" />
     <Compile Include="Validators\ApiContactValidator.cs" />
     <Compile Include="Validators\ApiSpecConfigValidator.cs" />
+    <Compile Include="Validators\ApiSpecSettingsValidator.cs" />
     <Compile Include="XmlDocumentation\IXmlDocumentationLookup.cs" />
     <Compile Include="XmlDocumentation\IXmlDocumentationReader.cs" />
     <Compile Include="XmlDocumentation\MemberInfoExtensions.cs" />

@@ -16,8 +16,7 @@ namespace ServiceStack.IntroSpec.Services
 
         public ApiSpecMetadataService(IApiDocumentationProvider documentationProvider)
         {
-            documentationProvider.ThrowIfNull(nameof(documentationProvider));
-            this.documentationProvider = documentationProvider;
+            this.documentationProvider = documentationProvider.ThrowIfNull(nameof(documentationProvider));
         }
 
         public object Get(SpecMetadataRequest request)

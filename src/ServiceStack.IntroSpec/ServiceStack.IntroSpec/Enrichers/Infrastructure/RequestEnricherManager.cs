@@ -40,6 +40,8 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 request.Category = request.Category.GetIfNullOrEmpty(() => requestEnricher.GetCategory(operation));
                 request.Tags = request.Tags.GetBasedOnStrategy(() => requestEnricher.GetTags(operation));
                 request.AllowMultiple = true;
+
+                request.HasValidator = request.HasValidator.GetIfNoValue(() => requestEnricher.GetHasValidator(operation.RequestType));
             }
 
             request.ReturnType =

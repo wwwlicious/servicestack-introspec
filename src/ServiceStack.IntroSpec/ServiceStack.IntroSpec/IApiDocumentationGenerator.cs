@@ -7,7 +7,6 @@ namespace ServiceStack.IntroSpec
     using System.Collections.Generic;
     using Host;
     using Models;
-    using Settings;
 
     /// <summary>
     /// Basic signature used to generate documentation POCO
@@ -15,12 +14,13 @@ namespace ServiceStack.IntroSpec
     public interface IApiDocumentationGenerator
     {
         /// <summary>
-        /// Generate documentation object from supplied values
+        /// Generate documentation object from registered service operations
         /// </summary>
         /// <param name="operations">List of metadata operations</param>
         /// <param name="appHost">Running IAppHost</param>
-        /// <param name="config">Extra configuration values</param>
+        /// <param name="settings">The main ApiSpec settings class</param>
         /// <returns></returns>
-        ApiDocumentation GenerateDocumentation(IEnumerable<Operation> operations, IAppHost appHost, ApiSpecConfig config);
+        ApiDocumentation GenerateDocumentation(IEnumerable<Operation> operations, IAppHost appHost,
+            IApiSpecSettings settings);
     }
 }

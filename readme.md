@@ -10,6 +10,8 @@ A plugin for [ServiceStack](https://servicestack.net/) that generates a series o
 
 The plugin uses introspection on a number of different sources to generate as rich a set of documentation POCOs as possible, containing request/response types, status codes, constraints etc.
 
+When the service starts up, this plugin will generate documentation that is accessible via service endpoints.
+
 ## Quick Start
 
 Install the package [https://www.nuget.org/packages/ServiceStack.IntroSpec](https://www.nuget.org/packages/ServiceStack.IntroSpec/)
@@ -17,7 +19,58 @@ Install the package [https://www.nuget.org/packages/ServiceStack.IntroSpec](http
 PM> Install-Package ServiceStack.IntroSpec
 ```
 
-The plugin is added like any other. It has a dependency [Metadata Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Metadata-page) and by default requires that `AppHost.Config.WebHostUrl` is set. It also takes a delegate to create an instance of `ApiSpecConfig` as a constructor argument, as a minimum this must be populated with `Contact.Email`, `Contact.Name` and `Description`. There is a fluent interface which aids in the creation of the`ApiSpecConfig` object.
+The plugin is added like any other. It has a dependency on ServiceStack's [Metadata Plugin](https://github.com/ServiceStack/ServiceStack/wiki/Metadata-page). 
+
+### Config 
+
+The plugin configuration requires values for the following: `ContactEmail`, 
+`ContactName` and `Description`. 
+
+There are two methods of loading the plugin configuration:
+
+#### AppSettings
+
+This method uses the `IAppSettings` implementation registered in the AppHost to read any configuration values. If a custom `IAppSettings` implementation is to be used it must be registered prior to instantiating the plugin.
+
+```xml
+<appSettings>
+  <!-- Required -->
+  <add key="servicestack.plugins.introSpec.contact.name" value="Private Pile"/>
+  <add key="servicestack.plugins.introSpec.contact.email" value="private@pile.com"/>
+  <add key="servicestack.plugins.introSpec.description" value="This is my service, there are many just like it, but this one is mine"/>
+
+  <!-- Optional -->
+  <add key="servicestack.plugins.introSpec.contact.url" value="http://socialnetwork.com/profile/pile"/>
+  <add key="servicestack.plugins.introSpec.licenseurl" value="https://opensource.org/licenses/MPL-2.0"/>
+</appSettings>
+```
+
+```csharp
+public override void Configure(Container container)
+{
+    Plugins.Add(new IntroSpecFeature()));
+}
+```
+
+#### Public Properties
+This method can be used in conjunction with the above `AppSettings` approach - any values explicitly set will be used and `AppSettings` used as fallback.
+
+```csharp
+public override void Configure(Container container)
+{
+    Plugins.Add(new IntroSpecFeature
+    {
+        Description = "Desc will override anything in appSettings",
+        LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/"),
+        ContactName = "Joe Bloggs",
+        ContactEmail = "email@address.com"
+    }));
+}
+```
+
+#### Fluent Builder (Obsolete)
+Although supported this method is now marked as obsolete to bring plugin into line with other ServiceStack plugins. The feature has been renamed to `IntroSpecFeature` from `ApiSpecFeature`.
+
 ```csharp
 public override void Configure(Container container)
 {
@@ -30,12 +83,18 @@ public override void Configure(Container container)
 }
 ```
 
-There is a `DocumenterSettings` class that can be used to configure certain behaviours and provide fallback values. See [Settings](docs/settings.md) for details of options.
+### Setting documentation defaults
 
-When the service starts up this will generate a list of all documentation.
+There is a `DocumenterSettings` class that can be used to configure certain behaviours and provide fallback values. 
+
+See [Settings](docs/settings.md) for more details of these options.
+
 
 ## Documenting DTOs
-The plugin uses the `Metadata Plugin` as the seed for all operations then uses a series of 'enrichers' to generate documentation, these are called in the order listed below. The general approach is to use Reflection to get as much information as possible which can then be augmented (with descriptions, notes etc) from further sources.
+
+The plugin uses the `Metadata Plugin` as the seed for all operations, then uses a series of 'enrichers' to generate documentation, these are called in the order listed below. 
+
+The general approach is to use Reflection to get as much information as possible which can then be augmented (with descriptions, notes etc) from further sources.
 
 ### Enrichment
 ![Enrichment](assets/Enrichment.png)
@@ -72,12 +131,14 @@ public class DemoResponse
 	public string Message { get; set; }
 }
 ```
-This approach uses a combination of attributes, DTO and service types and implemented interfaces to generate a good description of a service.
+This approach uses a combination of attributes, DTO, service types and any implemented interfaces to generate a good description of a service.
 
 ### AbstractClassEnricher
-This uses an approach similar to [FluentValidation](https://github.com/ServiceStack/ServiceStack/wiki/Validation#fluentvalidation-for-request-dtos) to provide additional information about objects.
 
-The enricher scans for implementations of `AbstractRequestSpec<T>` (for Request DTOs) `AbstractTypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
+This uses an approach similar to [FluentValidation](https://github.com/ServiceStack/ServiceStack/wiki/Validation#fluentvalidation-for-request-dtos) to provide additional information 
+about objects and avoid decorating DTO's with a lot of attributes needed only for metadata, documentation or specification generation.
+
+The enricher scans for all implementations of `AbstractRequestSpec<T>` (for Request DTOs) `AbstractTypeSpec<T>` (any other classes to be documented, e.g. embedded classes or Response DTOs) and generates documentation based on this. E.g.
 
 ```csharp
 public class DemoRequestSpec : AbstractRequestSpec<DemoRequest>
@@ -127,7 +188,10 @@ public class DemoResponseSpec : AbstractTypeSpec<DemoResponse>
     }
 }
 ```
-This approach allows for very explicit setting of properties. Whilst they will have no effect to the processing of requests it provides the ability to generate rich documentation about DTOs.
+This approach allows for very explicit setting of properties and separates documentation concerns from your DTO's. 
+
+Whilst they will have no effect to the processing of requests it provides the ability to generate rich documentation about DTOs.
+
 ### XmlEnricher
 This uses the standard [C# Xml Documentation Comments](https://msdn.microsoft.com/en-us/library/b2s063f7(v=vs.140).aspx) to generate documentation. 
 
@@ -163,6 +227,8 @@ The XML documentation comments are for general documentation about classes and n
 
 __Note:__ for this to work the XML documentation file must be generated for the service. To do so RMC project -> Properties -> Build -> check "XML documentation file" box.
 
+![Enable Xml Documentation](assets/enablexmldocumentation.png)
+
 ### FallbackEnricher
 This will use global settings within the `DocumenterSetting` object for setting both fallback values (e.g. `.FallbackNotes` for if no other `Notes` are found) or default values (e.g. `.DefaultTags` which are combined with tags from other sources).
 ```csharp
@@ -173,7 +239,7 @@ DocumenterSettings.DefaultStatusCodes = new List<StatusCode>
 {
    ((StatusCode)429).WithDescription("This is rate limited"),
 };
-Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+Plugins.Add(new IntroSpecFeature());
 ```
 The `.With()` method can be used to set multiple values:
 ```csharp
@@ -183,11 +249,11 @@ DocumenterSettings.With(fallbackNotes: "Default notes",
     defaultStatusCodes: new List<StatusCode>{
         ((StatusCode) 429).WithDescription("This is rate limited")
     });
-Plugins.Add(new ApiSpecFeature(apiSpecConfig));
+Plugins.Add(new IntroSpecFeature());
 ```
 
 ## Customising
-The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` objects that contain the requests to be documented. This filter can be customised by providing a predicate to the plugin using the `ApiSpecFeature.WithOperationsFilter()` method. The default filter excludes any types that have `[Exclude(Feature.Metadata]` or `[Exclude(Feature.ServiceDiscovery]` or any restrictions.
+The plugin filters the `Metadata.OperationsMap` to get a list of `Operation` objects that contain the requests to be documented. This filter can be customised by providing a predicate to the plugin using the `IntroSpecFeature.WithOperationsFilter()` method. The default filter excludes any types that have `[Exclude(Feature.Metadata]` or `[Exclude(Feature.ServiceDiscovery]` or any restrictions.
 
 
 ## Output

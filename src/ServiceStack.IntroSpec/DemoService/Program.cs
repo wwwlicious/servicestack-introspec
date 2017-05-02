@@ -13,6 +13,7 @@
     using ServiceStack.Logging;
     using ServiceStack.MsgPack;
     using ServiceStack.Text;
+    using ServiceStack.Validation;
 
     public class Program
     {
@@ -51,6 +52,8 @@
             LogManager.LogFactory = new ConsoleLogFactory();
 
             SetupPlugins();
+         
+            container.RegisterValidators(typeof(MyDtoValidator).Assembly);
         }
 
         private void SetupPlugins()
@@ -73,11 +76,22 @@
             DocumenterSettings.DefaultTags = new[] { "DefaultTag" };
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
 
-            Plugins.Add(new ApiSpecFeature(config =>
+            // Read settings from appsettings, see readme
+            Plugins.Add(new IntroSpecFeature());
+
+            // or directly setting properties builder
+            /*Plugins.Add(new IntroSpecFeature
+            {
+                Description = "This is a demo app host setup for testing documentation.",
+                LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/")
+            });*/
+
+            // or using the fluent builder (deprecated)
+            /*Plugins.Add(new ApiSpecFeature(config =>
                     config.WithDescription("This is a demo app host setup for testing documentation.")
                           .WithLicenseUrl(new Uri("http://mozilla.org/MPL/2.0/"))
                           .WithContactName("Joe Bloggs")
-                          .WithContactEmail("email@address.com")));
+                          .WithContactEmail("email@address.com")));*/
         }
     }
 }

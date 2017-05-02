@@ -10,6 +10,7 @@ namespace ServiceStack.IntroSpec.Enrichers
     using System.Net;
     using System.Reflection;
     using Extensions;
+    using FluentValidation;
     using Host;
     using Interfaces;
     using Logging;
@@ -48,6 +49,13 @@ namespace ServiceStack.IntroSpec.Enrichers
         }
 
         public bool? GetAllowMultiple(Type type) => type.IsCollection() ? true : (bool?)null;
+
+        public bool? GetHasValidator(Type type)
+        {
+            var validatorType = typeof(IValidator<>).MakeGenericType(type);
+            return HostContext.Container.TryResolve(validatorType) != null;
+        }
+
         public string GetNotes(Type type) => null;
         public string GetCategory(Operation operation) => null;
         public string[] GetTags(Operation operation) => null;

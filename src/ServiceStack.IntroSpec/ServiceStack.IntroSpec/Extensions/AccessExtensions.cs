@@ -9,13 +9,13 @@ namespace ServiceStack.IntroSpec.Extensions
     using DataAnnotations;
     using Infrastructure;
 
-    internal static class AccessExtensions
+    public static class AccessExtensions
     {
-        internal static bool CanAccess(this RestrictAttribute restrictAttribute, Result<RequestAttributes> request)
+        public static bool CanAccess(this RestrictAttribute restrictAttribute, Result<RequestAttributes> request)
             => restrictAttribute == null || (request.IsSuccess && restrictAttribute.HasAccessTo(request.Value));
 
-        internal static bool HasAccessToFeature(this Type requestType, Result<Feature> feature)
-            => feature.IsSuccess &&
+        public static bool HasAccessToFeature(this Type requestType, Result<Feature> feature)
+            => !feature.IsSuccess ||
                !requestType.AllAttributes<ExcludeAttribute>().Any(t => t.Feature.HasFlag(feature.Value));
     }
 }

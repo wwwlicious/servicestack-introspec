@@ -11,9 +11,11 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
     using DataAnnotations;
     using Fixtures;
     using FluentAssertions;
+    using FluentValidation;
     using Host;
     using IntroSpec.Enrichers;
     using IntroSpec.Models;
+    using Validation;
     using Xunit;
 
     [Collection("AppHost")]
@@ -435,6 +437,20 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         [InlineData(typeof(AllAttributes))]
         public void GetAllowMultiple_Null_ForNonCollectionTypes(Type collectionType)
             => enricher.GetAllowMultiple(collectionType).Should().NotHaveValue();
+
+        [Fact]
+        public void GetHasValidator_True_IfValidatorRegisteredForType()
+        {
+            fixture.AppHost.Container.RegisterValidators(typeof(OneWayValidator).Assembly);
+            enricher.GetHasValidator(typeof(OneWay)).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(typeof(int))]
+        [InlineData(typeof(string))]
+        [InlineData(typeof(AllAttributes))]
+        public void GetHasValidator_False_IfNoValidatorRegisteredForType(Type type)
+            => enricher.GetHasValidator(type).Should().BeFalse();
     }
 
     [Api("ApiDescription")]
@@ -507,5 +523,9 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
         One,
         Two,
         Three
+    }
+
+    public class OneWayValidator : AbstractValidator<OneWay>
+    {
     }
 }

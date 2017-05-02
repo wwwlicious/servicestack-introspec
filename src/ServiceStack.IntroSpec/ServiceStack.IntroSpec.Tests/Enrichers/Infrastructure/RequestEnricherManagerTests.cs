@@ -183,6 +183,21 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
             apiResourceDocumentation.Category.Should().Be(returnCat);
         }
 
-        
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void EnrichRequest_DoesNotCallGetHasValidator_IfHasValidatorHasValue(bool val)
+        {
+            manager.EnrichRequest(new ApiResourceDocumentation { HasValidator = val }, new Operation());
+            A.CallTo(() => requestEnricher.GetHasValidator(A<Type>.Ignored)).MustNotHaveHappened();
+        }
+
+        [Fact]
+        public void EnrichResource_CallsGetHasValidator_IfHasValidatorHasNoValue()
+        {
+            var reqType = new ApiResourceDocumentation { HasValidator = null };
+            manager.EnrichRequest(reqType, new Operation { RequestType = reqType.GetType() });
+            A.CallTo(() => requestEnricher.GetHasValidator(reqType.GetType())).MustHaveHappened();
+        }
     }
 }

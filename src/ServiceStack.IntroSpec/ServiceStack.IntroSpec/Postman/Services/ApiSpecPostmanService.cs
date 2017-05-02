@@ -17,8 +17,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
 
         public ApiSpecPostmanService(IApiDocumentationProvider documentationProvider)
         {
-            documentationProvider.ThrowIfNull(nameof(documentationProvider));
-            this.documentationProvider = documentationProvider;
+            this.documentationProvider = documentationProvider.ThrowIfNull(nameof(documentationProvider));
         }
 
         [AddHeader(ContentType = MimeTypes.Json)]

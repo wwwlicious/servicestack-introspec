@@ -4,7 +4,6 @@
 
 namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 {
-    using System;
     using Extensions;
     using Host;
     using Interfaces;
@@ -32,23 +31,29 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
         public void EnrichResource(IApiResourceType resource, Operation operation)
         {
             // The object that has ResponseStatus is built up from request object
-            var type = resource is IApiRequest ? operation.RequestType : operation.ResponseType;
+            var resourceModel = GetResourceModel(resource, operation);
 
-            if (type == null) return;
+            if (resourceModel?.ResourceType == null) return;
 
-            EnrichResource(resource, type, resource is IApiRequest);
+            EnrichResource(resource, resourceModel);
         }
 
-        private void EnrichResource(IApiResourceType resource, Type type, bool isRequest)
+        private static ResourceModel GetResourceModel(IApiResourceType resource, Operation operation)
+            => resource is IApiRequest
+                   ? new ResourceModel(operation.RequestType, true)
+                   : new ResourceModel(operation.ResponseType, false);
+
+        private void EnrichResource(IApiResourceType resource, ResourceModel resourceModel)
         {
             if (resourceEnricher != null)
             {
+                var type = resourceModel.ResourceType;
                 if (resource.Title == resource.TypeName)
                     resource.Title = resourceEnricher.GetTitle(type);
 
                 resource.Description = resource.Description.GetIfNullOrEmpty(() => resourceEnricher.GetDescription(type));
                 resource.Notes = resource.Notes.GetIfNullOrEmpty(() => resourceEnricher.GetNotes(type));
-                if (isRequest)
+                if (resourceModel.IsRequest)
                 {
                     resource.AllowMultiple =
                         resource.AllowMultiple.GetIfNoValue(
@@ -60,7 +65,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
                 }
             }
 
-            resource.Properties = propertyEnricherManager.EnrichParameters(resource.Properties, type, isRequest);
+            resource.Properties = propertyEnricherManager.EnrichParameters(resource.Properties, resourceModel);
         }
     }
 }

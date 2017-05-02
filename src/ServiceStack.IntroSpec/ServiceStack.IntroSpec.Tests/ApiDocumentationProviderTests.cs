@@ -12,7 +12,6 @@ namespace ServiceStack.IntroSpec.Tests
     using IntroSpec;
     using IntroSpec.Models;
     using IntroSpec.Services;
-    using IntroSpec.Settings;
     using Xunit;
 
     [Collection("AppHost")]
@@ -28,18 +27,15 @@ namespace ServiceStack.IntroSpec.Tests
         [Fact]
         public void GetApiDocumentation_ReturnsDocumentationFromApiSpecFeature()
         {
-            var apiSpecConfig = new ApiSpecConfig
-            {
-                Contact = new ApiContact { Email = "test@example.com", Name = "Joe Bloggs" },
-                Description = "Test"
-            };
             var generator = A.Fake<IApiDocumentationGenerator>();
             var apiDocumentation = new ApiDocumentation();
-            A.CallTo(() =>
-                generator.GenerateDocumentation(A<IEnumerable<Operation>>.Ignored, fixture.AppHost,
-                    A<ApiSpecConfig>.Ignored)).Returns(apiDocumentation);
 
-            fixture.AppHost.LoadPlugin(new ApiSpecFeature(config => apiSpecConfig).WithGenerator(generator));
+            var apiSpecFeature = new IntroSpecFeature().WithGenerator(generator);
+            A.CallTo(() =>
+                     generator.GenerateDocumentation(A<IEnumerable<Operation>>.Ignored, fixture.AppHost, apiSpecFeature))
+             .Returns(apiDocumentation);
+
+            fixture.AppHost.LoadPlugin(apiSpecFeature);
 
             var provider = new ApiDocumentationProvider();
             provider.GetApiDocumentation("http://anything/").Should().Be(apiDocumentation);
