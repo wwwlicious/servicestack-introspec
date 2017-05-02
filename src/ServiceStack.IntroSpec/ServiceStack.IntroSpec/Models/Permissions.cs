@@ -15,17 +15,17 @@ namespace ServiceStack.IntroSpec.Models
         /// <summary>
         /// Specifies that Any of these permissions are required for access
         /// </summary>
-        public IList<string> AnyOf { get; set; }
+        public string[] AnyOf { get; set; }
 
         /// <summary>
         /// A list of permissions, all of which must be present for access
         /// </summary>
-        public IList<string> AllOf { get; set; }
+        public string[] AllOf { get; set; }
 
         public static Permissions Create(IList<string> anyOf, IList<string> allOf)
         {
-            var any = anyOf.IsNullOrEmpty() ? null : anyOf;
-            var all = allOf.IsNullOrEmpty() ? null : allOf;
+            var any = anyOf.IsNullOrEmpty() ? null : anyOf.ToArray();
+            var all = allOf.IsNullOrEmpty() ? null : allOf.ToArray();
 
             if (any == null && all == null)
                 return null;
