@@ -3,11 +3,11 @@
   <metadata>
     <id>ServiceStack.IntroSpec</id>
     <version>$version$</version>
-    <authors>Donald Gray (@donaldgray)</authors>
+    <authors>Donald Gray (@donaldgray); Scott Mackay (@wwwlicious)</authors>
     <description>ServiceStack plugin that uses introspection to generate documentation about services in AppHost</description>
-    <projectUrl>https://github.com/MacLeanElectrical/ServiceStack-IntroSpec</projectUrl>
+    <projectUrl>https://github.com/wwwlicious/ServiceStack-IntroSpec</projectUrl>
     <licenseUrl>https://opensource.org/licenses/MPL-2.0</licenseUrl>
-    <iconUrl>https://github.com/MacLeanElectrical/ServiceStack-IntroSpec/master/assets/logo_notext.png</iconUrl>
+    <iconUrl>https://github.com/wwwlicious/ServiceStack-IntroSpec/master/assets/logo_notext.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>servicestack microservices introspection documentation spec specification api postman</tags>
     <releaseNotes>See github project for details</releaseNotes>
