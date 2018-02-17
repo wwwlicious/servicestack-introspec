@@ -7,7 +7,7 @@ namespace ServiceStack.IntroSpec.Models
     public interface IApiResourceType : IApiSpec
     {
         string TypeName { get; set; }
-        ApiPropertyDocumention[] Properties { get; set; }
+        ApiPropertyDocumentation[] Properties { get; set; }
         bool? AllowMultiple { get; set; }
         bool? IsCollection { get; set; }
     }

@@ -5,6 +5,8 @@
 namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 {
     using System;
+    using ServiceStack.IntroSpec.Extensions;
+    using ServiceStack.IntroSpec.Models;
 
     /// <summary>
     /// Represents details of resource being processed
@@ -19,12 +21,12 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
         /// <summary>
         /// ClrType of current resource
         /// </summary>
-        public Type ResourceType { get; }
+        public ApiClrType ResourceType { get; }
 
         public ResourceModel(Type resourceType, bool isRequest)
         {
             IsRequest = isRequest;
-            ResourceType = resourceType;
+            ResourceType = resourceType?.ToApiClrType();
         }
     }
 }

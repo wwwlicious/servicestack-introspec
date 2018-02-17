@@ -29,7 +29,7 @@ namespace ServiceStack.IntroSpec.Models
 
         public string Description { get; set; }
         public string Notes { get; set; }
-        public ApiPropertyDocumention[] Properties { get; set; }
+        public ApiPropertyDocumentation[] Properties { get; set; }
         public bool? AllowMultiple { get; set; }
         public bool? HasValidator { get; set; }
         public bool? IsCollection { get; set; }

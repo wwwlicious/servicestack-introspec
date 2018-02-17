@@ -10,6 +10,7 @@ namespace ServiceStack.IntroSpec.Extensions
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using ServiceStack.IntroSpec.Models;
 
     public static class ReflectionExtensions
     {
@@ -91,6 +92,20 @@ namespace ServiceStack.IntroSpec.Extensions
             return sb.ToString();
         }
 
-
+        /// <summary>
+        /// Converts a CLR Native System.Type to an ApiClrType to work with other languages (typescript etc)
+        /// </summary>
+        /// <param name="type">The CLR Type</param>
+        /// <returns>A x-plat type poco</returns>
+        public static ApiClrType ToApiClrType(this Type type)
+        {
+            return new ApiClrType
+            {
+                AssemblyName = type.AssemblyQualifiedName,
+                IsPrimitive = type.IsPrimitive,
+                Name = type.Name,
+                OriginalType = type
+            };
+        }
     }
 }

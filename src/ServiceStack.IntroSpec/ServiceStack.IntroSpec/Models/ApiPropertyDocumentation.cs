@@ -9,11 +9,11 @@ namespace ServiceStack.IntroSpec.Models
     /// <summary>
     /// Each request property within a DTO
     /// </summary>
-    public class ApiPropertyDocumention : IApiSpec
+    public class ApiPropertyDocumentation : IApiSpec
     {
         // Set when instantiated
         public string Id { get; set; }
-        public Type ClrType { get; set; }
+        public ApiClrType ClrType { get; set; }
 
         // From IApiSpec
         private string title;
@@ -23,9 +23,10 @@ namespace ServiceStack.IntroSpec.Models
             set
             {
                 if (!string.IsNullOrEmpty(value))
-                    title = value; 
+                    title = value;
             }
         }
+
         public string Description { get; set; }
         public string Notes { get; set; }
     
@@ -37,6 +38,6 @@ namespace ServiceStack.IntroSpec.Models
 
         public IApiResourceType EmbeddedResource { get; set; }
 
-        public PropertyConstraint Contraints { get; set; }
+        public PropertyConstraint Constraints { get; set; }
     }
 }

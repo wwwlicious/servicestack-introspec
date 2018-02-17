@@ -37,7 +37,7 @@ namespace ServiceStack.IntroSpec.Tests.Settings
 
             var contact = spec.Contact;
             contact.Name.Should().Be(name);
-            contact.Url.Should().Be(uri);
+            contact.Url.Should().Be(uri.OriginalString);
             contact.Email.Should().Be(email);
         }
     }

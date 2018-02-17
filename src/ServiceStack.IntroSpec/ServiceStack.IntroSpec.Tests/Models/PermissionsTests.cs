@@ -41,7 +41,7 @@ namespace ServiceStack.IntroSpec.Tests.Models
         [MemberData("SingleNullEmpty")]
         public void Create_ReturnsAll_IfAnyNullOrEmpty(IList<string> theOther)
         {
-            var list = new List<string> { "foo" };
+            var list = new[] { "foo" };
             var permission = Permissions.Create(theOther, list);
 
             permission.AllOf.Should().BeEquivalentTo(list);

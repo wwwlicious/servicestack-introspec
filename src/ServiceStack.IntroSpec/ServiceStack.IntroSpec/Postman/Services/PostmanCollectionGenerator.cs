@@ -173,7 +173,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
 
                         var friendlyTypeName = r.ClrType.IsPrimitive
                                                    ? FriendlyTypeNames.SafeGet(r.ClrType.Name, r.ClrType.Name)
-                                                   : r.ClrType.GetDocumentationTypeName();
+                                                   : r.ClrType.OriginalType.GetDocumentationTypeName();
 
                         return new PostmanSpecData
                                    {
