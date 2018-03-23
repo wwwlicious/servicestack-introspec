@@ -68,7 +68,7 @@ namespace ServiceStack.IntroSpec.Extensions
             return Permissions.Create(any, all);
         }
 
-        private static IEnumerable<T> GetRequestAttr<T>(this Operation operation) where T : IHasRequestFilter
+        private static IEnumerable<T> GetRequestAttr<T>(this Operation operation) where T : IRequestFilterBase
             => operation.RequestFilterAttributes?.OfType<T>();
 
         private static List<string> GetRoles<T>(this Operation operation, string verb,

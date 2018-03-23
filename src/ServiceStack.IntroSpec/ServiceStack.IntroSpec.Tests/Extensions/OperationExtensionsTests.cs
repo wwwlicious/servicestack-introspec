@@ -60,7 +60,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
         {
             var operation = new Operation
             {
-                RequestFilterAttributes = new List<IHasRequestFilter> { new AuthenticateAttribute() }
+                RequestFilterAttributes = new List<IRequestFilterBase> { new AuthenticateAttribute() }
             };
             operation.AuthenticationAppliesForVerb("GET").Should().BeTrue();
         }
@@ -74,7 +74,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
         {
             var operation = new Operation
             {
-                RequestFilterAttributes = new List<IHasRequestFilter> { new AuthenticateAttribute(applyTo) }
+                RequestFilterAttributes = new List<IRequestFilterBase> { new AuthenticateAttribute(applyTo) }
             };
             operation.AuthenticationAppliesForVerb(verb).Should().BeTrue();
         }
@@ -84,7 +84,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
         {
             var operation = new Operation
             {
-                RequestFilterAttributes = new List<IHasRequestFilter> { new AuthenticateAttribute(ApplyTo.Get) }
+                RequestFilterAttributes = new List<IRequestFilterBase> { new AuthenticateAttribute(ApplyTo.Get) }
             };
             operation.AuthenticationAppliesForVerb("POST").Should().BeFalse();
         }
@@ -94,7 +94,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
         {
             var operation = new Operation
             {
-                RequestFilterAttributes = new List<IHasRequestFilter> { new AuthenticateAttribute(ApplyTo.Get) }
+                RequestFilterAttributes = new List<IRequestFilterBase> { new AuthenticateAttribute(ApplyTo.Get) }
             };
             operation.AuthenticationAppliesForVerb("FOO").Should().BeFalse();
         }
@@ -132,7 +132,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiresAnyRoleAttribute(ApplyTo.Delete),
                         new RequiredRoleAttribute(ApplyTo.Get)
@@ -149,7 +149,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiresAnyRoleAttribute(ApplyTo.Delete, roles)
                     }
@@ -167,7 +167,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiredRoleAttribute(ApplyTo.Delete, roles)
                     }
@@ -185,7 +185,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiredRoleAttribute(ApplyTo.Delete, roles),
                         new RequiresAnyRoleAttribute(ApplyTo.Delete, roles)
@@ -206,7 +206,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiresAnyPermissionAttribute(ApplyTo.Delete),
                         new RequiredPermissionAttribute(ApplyTo.Get)
@@ -223,7 +223,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiresAnyPermissionAttribute(ApplyTo.Delete, roles)
                     }
@@ -241,7 +241,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiredPermissionAttribute(ApplyTo.Delete, roles)
                     }
@@ -259,7 +259,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
             var operation = new Operation
             {
                 RequestFilterAttributes =
-                    new List<IHasRequestFilter>
+                    new List<IRequestFilterBase>
                     {
                         new RequiredPermissionAttribute(ApplyTo.Delete, roles),
                         new RequiresAnyPermissionAttribute(ApplyTo.Delete, roles)

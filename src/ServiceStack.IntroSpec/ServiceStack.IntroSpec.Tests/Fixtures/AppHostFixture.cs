@@ -30,6 +30,8 @@ namespace ServiceStack.IntroSpec.Tests.Fixtures
                 ServiceName = ServiceName
             };
 
+            AppHost.Plugins.Add(new MetadataFeature());
+
             AppHost.Init();
             AppHost.Config.WebHostUrl = WebHostUrl;
             var hal = "hal+json";
