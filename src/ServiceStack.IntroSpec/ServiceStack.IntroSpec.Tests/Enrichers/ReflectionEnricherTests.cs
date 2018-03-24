@@ -320,13 +320,10 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(SomeAttributes) };
             var contentTypes = enricher.GetContentTypes(operation, Verb);
 
-            contentTypes.Length.Should().Be(6);
+            contentTypes.Length.Should().Be(3);
             contentTypes.Should().Contain(MimeTypes.Xml)
                         .And.Contain(MimeTypes.Json)
-                        .And.Contain(MimeTypes.Jsv)
-                        .And.Contain(MimeTypes.Soap11)
-                        .And.Contain(MimeTypes.Soap12)
-                        .And.Contain(MimeTypes.Csv);
+                        .And.Contain(MimeTypes.Jsv);
         }
 
         [Fact]
@@ -351,11 +348,10 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers
             var operation = new Operation { RequestType = typeof(AllAttributes) };
             var contentTypes = enricher.GetContentTypes(operation, Verb);
 
-            contentTypes.Length.Should().Be(4);
+            contentTypes.Length.Should().Be(3);
             contentTypes.Should().Contain(MimeTypes.Xml)
                         .And.Contain(MimeTypes.Json)
-                        .And.Contain(MimeTypes.Jsv)
-                        .And.Contain(MimeTypes.Csv);
+                        .And.Contain(MimeTypes.Jsv);
         }
 
         [Fact]

@@ -12,7 +12,7 @@
     <tags>servicestack microservices introspection documentation spec specification api postman</tags>
     <releaseNotes>See github project for details</releaseNotes>
     <dependencies>
-      <dependency id="ServiceStack" version="[4.0.56, 5)" />
+      <dependency id="ServiceStack" version="[5, 6)" />
     </dependencies>
   </metadata>
 </package>

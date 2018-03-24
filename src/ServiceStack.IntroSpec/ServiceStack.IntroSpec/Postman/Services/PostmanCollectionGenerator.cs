@@ -92,7 +92,7 @@ namespace ServiceStack.IntroSpec.Postman.Services
 
                     log.Debug($"Generating PostmanRequest for resource {resource.Title}, {action}");
 
-                    var hasRequestBody = action.Verb.HasRequestBody();
+                    var hasRequestBody = HttpUtils.HasRequestBody(action.Verb);
                     if (!hasRequestBody)
                         relativePath = ProcessQueryStringParams(data, pathVariableNames, relativePath);
 
