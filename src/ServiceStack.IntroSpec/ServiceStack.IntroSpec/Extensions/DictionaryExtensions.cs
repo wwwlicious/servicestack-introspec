@@ -21,9 +21,7 @@ namespace ServiceStack.IntroSpec.Extensions
         public static IEnumerable<TValue> FilterValues<TKey, TValue>(this Dictionary<TKey, TValue> dictionary,
             Func<KeyValuePair<TKey, TValue>, bool> filter)
         {
-            return dictionary == null
-                ? Enumerable.Empty<TValue>()
-                : dictionary.Where(filter).Select(o => o.Value);
+            return dictionary?.Where(filter).Select(o => o.Value) ?? Enumerable.Empty<TValue>();
         }
 
         /// <summary>

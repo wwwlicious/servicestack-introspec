@@ -8,7 +8,6 @@ using ServiceStack.IntroSpec;
 using ServiceStack.IntroSpec.Models;
 using ServiceStack.IntroSpec.Settings;
 using ServiceStack.Logging;
-using ServiceStack.MsgPack;
 using ServiceStack.Text;
 
 namespace IntroSpec
@@ -34,12 +33,9 @@ namespace IntroSpec
 
         private void SetupPlugins()
         {
-            Plugins.Add(new MsgPackFormat());
+            Plugins.Add(new MetadataFeature());
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new SwaggerFeature());
-
-            //DocumenterSettings.ReplacementVerbs = new[] { "GET", "PUT", "POST", "DELETE" };
-            //DocumenterSettings.CollectionStrategy = EnrichmentStrategy.SetIfEmpty;
 
             JsConfig.IncludePublicFields = true; // Serialize Fields 
             DocumenterSettings.DefaultStatusCodes = new List<StatusCode>
@@ -52,11 +48,13 @@ namespace IntroSpec
             DocumenterSettings.DefaultTags = new[] { "DefaultTag" };
             DocumenterSettings.FallbackNotes = "Default notes, set at a global level";
 
-            Plugins.Add(new ApiSpecFeature(config =>
-                    config.WithDescription("This is a demo app host setup for testing documentation.")
-                          .WithLicenseUrl(new Uri("http://mozilla.org/MPL/2.0/"))
-                          .WithContactName("Joe Bloggs")
-                          .WithContactEmail("email@address.com")));
+            Plugins.Add(new IntroSpecFeature
+            {
+                Description = "This is a demo app host setup for testing documentation.",
+                ContactName = "Joe Bloggs",
+                ContactEmail = "email@address.com",
+                LicenseUrl = new Uri("http://mozilla.org/MPL/2.0/")
+            });
         }
     }
 

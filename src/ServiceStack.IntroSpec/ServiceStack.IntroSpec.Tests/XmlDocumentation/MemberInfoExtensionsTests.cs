@@ -22,7 +22,7 @@ namespace ServiceStack.IntroSpec.Tests.XmlDocumentation
         {
             MemberInfo mi = null;
             Action act = () => mi.GetMemberElementName();
-            act.ShouldThrow<ArgumentNullException>();
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]

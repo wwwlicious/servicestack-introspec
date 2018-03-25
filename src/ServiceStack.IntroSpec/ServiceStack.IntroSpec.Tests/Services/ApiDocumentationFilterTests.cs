@@ -17,7 +17,7 @@ namespace ServiceStack.IntroSpec.Tests.Services
         public void GetApiDocumentation_Throws_IfRequestNull()
         {
             Action action = () => new ApiDocumentation().Filter(null);
-            action.ShouldThrow<ArgumentNullException>();
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace ServiceStack.IntroSpec.Tests.Services
         {
             ApiDocumentation documentation = null;
             Action action = () => documentation.Filter(new Filterable());
-            action.ShouldThrow<ArgumentNullException>();
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Theory]
@@ -35,7 +35,7 @@ namespace ServiceStack.IntroSpec.Tests.Services
         {
             ApiDocumentation documentation = new ApiDocumentation();
             Action action = () => documentation.WithBaseUrl(baseUrl);
-            action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("appBaseUrl");
+            action.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("appBaseUrl");
         }
 
         [Fact]

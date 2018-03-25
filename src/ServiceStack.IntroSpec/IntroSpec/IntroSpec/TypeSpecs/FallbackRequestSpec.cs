@@ -1,7 +1,7 @@
 ﻿
 namespace DemoService.TypeSpecs
 {
-    using ServiceStack.Html;
+    using ServiceStack.IntroSpec;
     using ServiceStack.IntroSpec.Models;
     using ServiceStack.IntroSpec.TypeSpec;
 

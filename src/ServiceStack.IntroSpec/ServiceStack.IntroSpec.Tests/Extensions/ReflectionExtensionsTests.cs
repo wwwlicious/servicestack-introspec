@@ -45,7 +45,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
         public void GetFieldPropertyType_Throws_IfNotPropertyInfoOrFieldInfo()
         {
             Action action = () => typeof(FirstClass).GetMethod("MyMethod").GetFieldPropertyType();
-            action.ShouldThrow<ArgumentException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [Fact]

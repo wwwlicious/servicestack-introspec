@@ -1,184 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{50FAC613-CC23-493B-AEF8-77277D5B3F3C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServiceStack.IntroSpec</RootNamespace>
-    <AssemblyName>ServiceStack.IntroSpec</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Description>ServiceStack plugin that uses introspection to generate documentation about services in AppHost</Description>
+    <Copyright>Copyright © 2016 - Present</Copyright>
+    <PackageTags>servicestack microservices introspection documentation spec specification api postman</PackageTags>
+    <RepositoryUrl>https://github.com/wwwlicious/servicestack-introspec</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/wwwlicious/servicestack-introspec</PackageProjectUrl>
+    <PackageLicenseUrl>https://opensource.org/licenses/MPL-2.0</PackageLicenseUrl>
+    <PackageIconUrl>https://github.com/wwwlicious/ServiceStack-IntroSpec/master/assets/logo_notext.png</PackageIconUrl>
+    <Authors>Donald Gray (@donaldgray); Scott Mackay (@wwwlicious)</Authors>
+    <ReleaseNotes>https://github.com/wwwlicious/servicestack-introspec</ReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>NETSTANDARD2_0;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net452'">
+    <DefineConstants>NET452;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\ServiceStack.Introspec.xml</DocumentationFile>
     <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net452|AnyCPU'">
+    <DocumentationFile>bin\Release\net452\ServiceStack.Introspec.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ServiceStack, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.5.0.0\lib\net45\ServiceStack.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Client.5.0.0\lib\net45\ServiceStack.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Common, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Common.5.0.0\lib\net45\ServiceStack.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Interfaces.5.0.0\lib\net45\ServiceStack.Interfaces.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.OrmLite.5.0.0\lib\net45\ServiceStack.OrmLite.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Razor, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Razor.5.0.0\lib\net45\ServiceStack.Razor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=5.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.5.0.0\lib\net45\ServiceStack.Text.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml" />
+    <PackageReference Include="ServiceStack.Server" Version="[5, 6)" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\DtoGrouping.cs" />
-    <Compile Include="DTO\SpecMetadataRequest.cs" />
-    <Compile Include="DTO\SpecMetadataResponse.cs" />
-    <Compile Include="Enrichers\Infrastructure\ResourceModel.cs" />
-    <Compile Include="ConfigKeys.cs" />
-    <Compile Include="IApiSpecSettings.cs" />
-    <Compile Include="IntroSpecFeature.cs" />
-    <Compile Include="Models\ApiClrType.cs" />
-    <Compile Include="Models\ApiPlugin.cs" />
-    <Compile Include="Models\RelativePath.cs" />
-    <Compile Include="Services\ApiSpecMetadataService.cs" />
-    <Compile Include="TypeSpec\AbstractTypeSpec.cs" />
-    <Compile Include="TypeSpec\DocumentationClassLocator.cs" />
-    <Compile Include="DTO\IFilterableSpecRequest.cs" />
-    <Compile Include="DTO\SpecRequest.cs" />
-    <Compile Include="DTO\SpecResponse.cs" />
-    <Compile Include="Enrichers\Infrastructure\ActionEnricherManager.cs" />
-    <Compile Include="Enrichers\Infrastructure\IActionEnricherManager.cs" />
-    <Compile Include="Enrichers\Interfaces\IActionEnricher.cs" />
-    <Compile Include="Enrichers\Interfaces\ISecurityEnricher.cs" />
-    <Compile Include="Extensions\AccessExtensions.cs" />
-    <Compile Include="Enrichers\FallbackEnricher.cs" />
-    <Compile Include="Extensions\OperationExtensions.cs" />
-    <Compile Include="Extensions\UrlExtensions.cs" />
-    <Compile Include="Linq\PredicateBuilder.cs" />
-    <Compile Include="Models\ApiAction.cs" />
-    <Compile Include="Models\ApiContact.cs" />
-    <Compile Include="Models\ApiPropertyDocumentation.cs" />
-    <Compile Include="Models\ApiResourceDocumentation.cs" />
-    <Compile Include="Models\ApiResourceType.cs" />
-    <Compile Include="Models\ApiSecurity.cs" />
-    <Compile Include="Models\IApiAction.cs" />
-    <Compile Include="Models\IApiMetadata.cs" />
-    <Compile Include="Models\IApiResourceType.cs" />
-    <Compile Include="Models\IApiRequest.cs" />
-    <Compile Include="Models\IApiSpec.cs" />
-    <Compile Include="Models\ISecured.cs" />
-    <Compile Include="Models\Permissions.cs" />
-    <Compile Include="Postman\Models\Postman.cs" />
-    <Compile Include="Postman\DTO\PostmanRequest.cs" />
-    <Compile Include="Postman\DTO\PostmanResponse.cs" />
-    <Compile Include="Postman\Models\PostmanFolder.cs" />
-    <Compile Include="Postman\Models\PostmanSpecCollection.cs" />
-    <Compile Include="Postman\Models\PostmanSpecData.cs" />
-    <Compile Include="Postman\Models\PostmanSpecRequest.cs" />
-    <Compile Include="Postman\Services\PostmanCollectionGenerator.cs" />
-    <Compile Include="Extensions\ApiDocumentationExtensions.cs" />
-    <Compile Include="Postman\Services\ApiSpecPostmanService.cs" />
-    <Compile Include="Services\ApiDocumentationProvider.cs" />
-    <Compile Include="Services\IApiDocumentationProvider.cs" />
-    <Compile Include="Utilities\ApiSpecMetadataUtilities.cs" />
-    <Compile Include="Utilities\EnumUtilities.cs" />
-    <Compile Include="Infrastructure\Result.cs" />
-    <Compile Include="Models\PropertyConstraint.cs" />
-    <Compile Include="Models\StatusCode.cs" />
-    <Compile Include="Services\ApiSpecService.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Settings\ApiSpecConfig.cs" />
-    <Compile Include="ApiSpecFeature.cs" />
-    <Compile Include="TypeSpec\AbstractRequestSpec.cs" />
-    <Compile Include="TypeSpec\IApiResource.cs" />
-    <Compile Include="TypeSpec\IFluentInterface.cs" />
-    <Compile Include="TypeSpec\IProperty.cs" />
-    <Compile Include="TypeSpec\IPropertyMetadata.cs" />
-    <Compile Include="TypeSpec\PropertyMetadata.cs" />
-    <Compile Include="Settings\DocumenterSettings.cs" />
-    <Compile Include="Settings\DocumenterSettingsScope.cs" />
-    <Compile Include="Enrichers\AbstractClassEnricher.cs" />
-    <Compile Include="Enrichers\Infrastructure\ResourceEnricherManager.cs" />
-    <Compile Include="Enrichers\Infrastructure\EnricherCoordinator.cs" />
-    <Compile Include="Enrichers\Infrastructure\RequestEnricherManager.cs" />
-    <Compile Include="Enrichers\Interfaces\IPropertyEnricher.cs" />
-    <Compile Include="Enrichers\Interfaces\IResourceEnricher.cs" />
-    <Compile Include="Enrichers\Interfaces\IRequestEnricher.cs" />
-    <Compile Include="Settings\EnrichmentStrategy.cs" />
-    <Compile Include="Extensions\CollectionExtensions.cs" />
-    <Compile Include="Extensions\GetValueExtensions.cs" />
-    <Compile Include="Enrichers\Interfaces\IEnrich.cs" />
-    <Compile Include="Extensions\DictionaryExtensions.cs" />
-    <Compile Include="Extensions\ReflectionExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="ApiDocumentationGenerator.cs" />
-    <Compile Include="Enrichers\Infrastructure\PropertyEnricherManager.cs" />
-    <Compile Include="Enrichers\ReflectionEnricher.cs" />
-    <Compile Include="Enrichers\Interfaces\IApiResourceEnricher.cs" />
-    <Compile Include="IApiDocumentationGenerator.cs" />
-    <Compile Include="Utilities\MimeTypeUtilities.cs" />
-    <Compile Include="Validators\ApiContactValidator.cs" />
-    <Compile Include="Validators\ApiSpecConfigValidator.cs" />
-    <Compile Include="Validators\ApiSpecSettingsValidator.cs" />
-    <Compile Include="XmlDocumentation\IXmlDocumentationLookup.cs" />
-    <Compile Include="XmlDocumentation\IXmlDocumentationReader.cs" />
-    <Compile Include="XmlDocumentation\MemberInfoExtensions.cs" />
-    <Compile Include="XmlDocumentation\XmlDocumentationReader.cs" />
-    <Compile Include="XmlDocumentation\XmlDocumentationLookup.cs" />
-    <Compile Include="Enrichers\XmlEnricher.cs" />
-    <Compile Include="Models\ApiDocumentation.cs" />
-    <Compile Include="XmlDocumentation\XmlDocumentation.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Reference Include="System.Web" Condition="'$(TargetFramework)' == 'net452'" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

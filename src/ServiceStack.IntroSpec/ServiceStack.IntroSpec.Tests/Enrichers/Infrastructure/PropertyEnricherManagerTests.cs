@@ -44,7 +44,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void Ctor_AllowsNullResourceEnricher()
         {
             Action action = () => new PropertyEnricherManager(null, ResourceEnricher);
-            action.ShouldNotThrow<ArgumentNullException>();
+            action.Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]

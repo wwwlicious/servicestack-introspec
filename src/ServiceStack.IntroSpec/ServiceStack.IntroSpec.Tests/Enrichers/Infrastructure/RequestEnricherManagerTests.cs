@@ -41,21 +41,21 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void Ctor_AllowsNullResourceEnricher()
         {
             Action action = () => new RequestEnricherManager(null, null, ResourceEnricher);
-            action.ShouldNotThrow<ArgumentNullException>();
+            action.Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]
         public void Ctor_AllowsNullActionEnricherManager()
         {
             Action action = () => new RequestEnricherManager(requestEnricher, null, ResourceEnricher);
-            action.ShouldNotThrow<ArgumentNullException>();
+            action.Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]
         public void EnrichRequest_HandlesNullResourceAndActionEnricher()
         {
             Action action = () => nullParameterManager.EnrichRequest(new ApiResourceDocumentation(), new Operation());
-            action.ShouldNotThrow<ArgumentNullException>();
+            action.Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]

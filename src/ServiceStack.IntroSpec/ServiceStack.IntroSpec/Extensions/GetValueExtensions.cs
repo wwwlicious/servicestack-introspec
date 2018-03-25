@@ -23,6 +23,6 @@ namespace ServiceStack.IntroSpec.Extensions
 
         public static T? GetIfNoValue<T>(this T? value, Func<T?> getValue) 
             where T : struct
-            => !value.HasValue ? getValue() : value;
+            => value ?? getValue();
     }
 }

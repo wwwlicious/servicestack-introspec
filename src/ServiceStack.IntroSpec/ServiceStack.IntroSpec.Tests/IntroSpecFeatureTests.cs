@@ -57,7 +57,7 @@ namespace ServiceStack.IntroSpec.Tests
         public void Ctor_Throws_IfConfigNull()
         {
             Action action = () => new ApiSpecFeature(config => null);
-            action.ShouldThrow<ArgumentNullException>();
+            action.Should().Throw<ArgumentNullException>();
         }
         
         [Fact]
@@ -66,7 +66,7 @@ namespace ServiceStack.IntroSpec.Tests
             var appHost = Fake<IAppHost>();
             CallTo(() => appHost.AppSettings).Returns(settings);
             Action action = () => feature.Register(appHost);
-            action.ShouldThrow<ArgumentException>()
+            action.Should().Throw<ArgumentException>()
                   .WithMessage("The Metadata Feature must be enabled to use the ApiSpec Feature");
         }
 
@@ -74,7 +74,7 @@ namespace ServiceStack.IntroSpec.Tests
         public void Register_Throws_IfConfigInvalid()
         {
             Action action = () => feature.Register(Fake<IAppHost>());
-            action.ShouldThrow<ArgumentException>().WithMessage(
+            action.Should().Throw<ArgumentException>().WithMessage(
                 "Validation failed: \r\n -- 'Contact Name' should not be empty.\r\n -- 'Contact Email' should not be empty.\r\n -- 'Contact Email' is not a valid email address.\r\n -- 'Description' should not be empty.");
         }
 

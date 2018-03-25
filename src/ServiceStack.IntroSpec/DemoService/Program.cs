@@ -11,7 +11,6 @@
     using ServiceStack.IntroSpec.Models;
     using ServiceStack.IntroSpec.Settings;
     using ServiceStack.Logging;
-    using ServiceStack.MsgPack;
     using ServiceStack.Text;
     using ServiceStack.Validation;
 
@@ -58,7 +57,6 @@
 
         private void SetupPlugins()
         {
-            Plugins.Add(new MsgPackFormat());
             Plugins.Add(new PostmanFeature());
             Plugins.Add(new SwaggerFeature());
 

@@ -17,14 +17,14 @@ namespace ServiceStack.IntroSpec.Tests.Models
         public void CreateRangeConstraint_Throws_IfMinAndMaxNull()
         {
             Action action = () => PropertyConstraint.RangeConstraint(name, null, null);
-            action.ShouldThrow<InvalidOperationException>().WithMessage("You must supply either a Min or Max value");
+            action.Should().Throw<InvalidOperationException>().WithMessage("You must supply either a Min or Max value");
         }
 
         [Fact]
         public void CreateRangeConstraint_Throws_IfMinGreaterThanMax()
         {
             Action action = () => PropertyConstraint.RangeConstraint(name, 10, 9);
-            action.ShouldThrow<ArgumentOutOfRangeException>();
+            action.Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Theory]
@@ -47,7 +47,7 @@ namespace ServiceStack.IntroSpec.Tests.Models
         public void CreateListConstraint_Throws_IfValuesNullOrEmpty(string[] values)
         {
             Action action = () => PropertyConstraint.ListConstraint(name, values);
-            action.ShouldThrow<ArgumentException>();
+            action.Should().Throw<ArgumentException>();
         }
 
         [Fact]

@@ -217,7 +217,7 @@ namespace ServiceStack.IntroSpec.Tests.Extensions
         {
             Dictionary<string, List<int>> dict = null;
             Action action = () => dict.UpdateList("hi", 1, 2, 3);
-            action.ShouldNotThrow<ArgumentNullException>();
+            action.Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]

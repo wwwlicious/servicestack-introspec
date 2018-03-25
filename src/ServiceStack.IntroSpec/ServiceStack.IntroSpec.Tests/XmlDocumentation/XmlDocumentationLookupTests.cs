@@ -20,7 +20,7 @@ namespace ServiceStack.IntroSpec.Tests.XmlDocumentation
         public void Ctor_ThrowsException_IfDocumentationReaderNull()
         {
             Action action = () => new XmlDocumentationLookup(null);
-            action.ShouldThrow<ArgumentNullException>();
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]

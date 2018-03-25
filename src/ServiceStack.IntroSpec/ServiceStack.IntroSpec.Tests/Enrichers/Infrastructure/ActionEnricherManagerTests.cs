@@ -37,7 +37,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void Ctor_AllowsNullEnrichers()
         {
             Action action = () => new ActionEnricherManager(null, null);
-            action.ShouldNotThrow();
+            action.Should().NotThrow();
         }
 
         [Fact]

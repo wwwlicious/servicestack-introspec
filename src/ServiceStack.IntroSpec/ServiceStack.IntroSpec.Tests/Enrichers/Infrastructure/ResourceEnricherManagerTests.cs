@@ -32,14 +32,14 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         public void Ctor_AllowsNullResourceEnricher()
         {
             Action action = () => new ResourceEnricherManager(null, propertyEnricher);
-            action.ShouldNotThrow<ArgumentNullException>();
+            action.Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]
         public void Ctor_AllowsNullParameterEnricher()
         {
             Action action = () => new ResourceEnricherManager(resourceEnricher, null);
-            action.ShouldNotThrow<ArgumentNullException>();
+            action.Should().NotThrow<ArgumentNullException>();
         }
 
         [Fact]
