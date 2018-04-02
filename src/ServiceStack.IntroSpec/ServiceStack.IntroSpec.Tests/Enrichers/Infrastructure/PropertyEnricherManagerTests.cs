@@ -13,6 +13,7 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
     using IntroSpec.Enrichers.Interfaces;
     using IntroSpec.Models;
     using Xunit;
+    using System.Collections.Generic;
 
     public class PropertyEnricherManagerTests
     {
@@ -298,6 +299,18 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
         }
 
         [Fact]
+        public void EnrichParameters_CallsEnrichResource_IfTypeIsSystemTypeButHasAGenericArgumentThatIsNot()
+        {
+            var param = GetApiParameterDocumention();
+
+            bool called = false;
+            var enricherManager = new PropertyEnricherManager(propertyEnricher, (resource, resourceModel) => { called = true; });
+
+            enricherManager.EnrichParameters(new[] { param }, new ResourceModel(typeof(SingleGenericProp), false));
+            called.Should().BeTrue();
+        }
+
+        [Fact]
         public void EnrichParameters_SetsTypeName_WhenCallingEnrichResource()
         {
             var param = GetApiParameterDocumention();
@@ -409,5 +422,13 @@ namespace ServiceStack.IntroSpec.Tests.Enrichers.Infrastructure
     public class SelfReference
     {
         public SelfReference Child { get; set; }
+    }
+
+    public class SingleGenericProp
+    {
+        [IgnoreDataMember]
+        public string S { get; set; }
+
+        public List<NoProps> X { get; set; }
     }
 }

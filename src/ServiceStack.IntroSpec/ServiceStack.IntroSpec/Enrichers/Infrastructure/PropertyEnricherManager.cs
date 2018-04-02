@@ -135,7 +135,7 @@ namespace ServiceStack.IntroSpec.Enrichers.Infrastructure
 
         // Avoid populating if SystemType, enum or embedded property type == parent resource type
         private bool ShouldPopulateEmbeddedResource(Type embeddedType, Type resourceType)
-            => !(embeddedType.IsSystemType() || embeddedType.IsEnum || embeddedType == resourceType);
+            => !((embeddedType.IsGenericType ? embeddedType.IsSystemType() && embeddedType.GenericTypeArguments.All(t => t.IsSystemType()) : embeddedType.IsSystemType()) || embeddedType.IsEnum || embeddedType == resourceType);
 
     }
 }
